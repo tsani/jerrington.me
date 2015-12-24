@@ -1,3 +1,7 @@
+html {
+    text-rendering: optimizeLegibility;
+}
+
 body {
     color: #333;
     font-size: 16px;
@@ -5,8 +9,8 @@ body {
     font-family: serif;
 }
 
-code {
-    background-color: #efeffc;
+code, pre {
+    background-color: #dedef0;
 }
 
 ul {
