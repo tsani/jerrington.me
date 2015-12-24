@@ -1,0 +1,109 @@
+body {
+    color: #333;
+    font-size: 16px;
+    margin: 0px auto 0px auto;
+    font-family: serif;
+}
+
+code {
+    background-color: #efeffc;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 1em;
+    margin: 0;
+}
+
+a {
+    color: #40A2F4;
+    text-decoration: none;
+}
+
+a:hover {
+    color: black;
+}
+
+p {
+    line-height: 1.82em;
+}
+
+div#header {
+    padding: 1em 0;
+    text-align: center;
+}
+
+div#title {
+    font-size: 2em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+div#header ul#navigation a {
+    text-decoration: none;
+    color: black;
+}
+
+div#header ul#navigation > li {
+    padding: 0 0.5em;
+    display: inline-block;
+}
+
+.page-center {
+    max-width: 8.5in;
+    margin: 0 auto;
+}
+
+div#content {
+    padding: 1em 0;
+    border-top: 1px solid #555;
+    border-bottom: 1px solid #555;
+}
+
+div#content p {
+    text-align: justify;
+}
+
+div#footer {
+    padding: 1em 0;
+    text-align: right;
+    font-size: small;
+}
+
+h1 {
+    font-size: 2.2em;
+    color: black;
+}
+
+h2 {
+    font-size: 1.8em;
+    color: black;
+}
+
+h3 {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: black;
+}
+
+h4 {
+    font-size: 1em;
+    font-weight: normal;
+    font-style: italic;
+    color: black;
+}
+
+div.info {
+    color: #555;
+    font-style: italic;
+}
+
+ul.post > li {
+    margin: 0.5em 0;
+}
+
+ul.post span.date {
+    color: #555;
+    font-size: small;
+}
+
