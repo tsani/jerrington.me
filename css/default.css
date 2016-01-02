@@ -111,3 +111,30 @@ ul.post span.date {
     font-size: small;
 }
 
+img.figure-natural {
+}
+
+img.figure-huge {
+    max-width: 180%;
+}
+
+img.figure-very-big {
+    max-width: 150%;
+}
+
+img.figure-big {
+    max-width: 120%;
+}
+
+img.figure-textwidth {
+    max-width: 100%;
+}
+
+img.figure {
+    display: block;
+    position: relative;
+    max-width: 95vw;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
