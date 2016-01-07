@@ -188,7 +188,7 @@ different events that occur in the program such as the program starting and
 ending, loading and releasing DLLs, creating and destroying threads, and
 throwing exceptions. The latter kind of event is the one that interests us the
 most because breakpoints are implemented as exceptions. In fact, a breakpoint
-is nothing more than a special kind of instruction, `int 3`, affectionally
+is nothing more than a special kind of instruction, `int 3`, affectionately
 called "trap to debugger", that when handled by Windows will cause the running
 program to throw a special kind of debug exception which can then be handled by
 a debugger.
@@ -434,11 +434,11 @@ that we can actually do the text extraction.
 The key function is `WaitForDebugEvent`. This function will block execution of
 the debugger until a debug event is received, and write it to an out parameter.
 We can then dispatch to a specialized event handler according to the type of
-event. In our case, we dispatch to an specialized event handler for debug
-exceptions (created by the `int 3` instruction we wrote into the code) and
-ignore all other events. When we're done processing the event, we call
-`ContinueDebugEvent`. Until we call `ContinueDebugEvent`, the thread that
-triggered the event will be suspended.
+event. In our case, we dispatch to a handler for debug exceptions (created by
+the `int 3` instruction we wrote into the code) and ignore all other events.
+When we're done processing the event, we call `ContinueDebugEvent`. Until we
+call `ContinueDebugEvent`, the thread that triggered the event will be
+suspended.
 
     void debug_loop()
     {
