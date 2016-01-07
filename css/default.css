@@ -19,7 +19,6 @@ pre {
     margin-left: -1ex;
     padding: 1ex;
     border: 1px solid #fff0f0;
-    /* -webkit-transform: translateX(-25%); /* */
 }
 
 pre code {
@@ -33,7 +32,6 @@ p code {
 }
 
 ul {
-    list-style-type: none;
     padding-left: 1em;
     margin: 0;
 }
@@ -123,6 +121,7 @@ div.info {
 
 ul.post > li {
     margin: 0.5em 0;
+    list-style-type: none;
 }
 
 ul.post span.date {
