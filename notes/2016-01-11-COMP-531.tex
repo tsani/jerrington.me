@@ -1,0 +1,181 @@
+---
+title: Advanced theory of computation - Lecture 1
+---
+
+\section{Basic definitions}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+
+Hartmanis and Sterns formalized the \emph{difficulty} of computational problems
+in terms of the resources they need, e.g.
+\begin{enumerate}
+    \item time
+    \item space
+    \item random bits
+    \item messages
+\end{enumerate}
+
+\begin{definition}
+    The \emph{time complexity} of a Turing machine $M$, denoted $t_M$ is a
+    function
+    $$
+    t_M : \mathbb{N} \to \mathbb{N}
+    $$
+    mapping a natural $n$ to the maximal number of steps needed by $M$ to reach
+    a halting state for any input of length $n$, \emph{discounting
+    nontermination}.
+\end{definition}
+
+The discounting of nontermination is essential, because Turing machines may run
+forever. Since we're interesting in studying algorithms, which are those Turing
+machines that implement total computable functions.
+
+A similar definition applies for the space complexity denoted $s_M$.
+
+\section{Complexity classes}
+
+We can classify computational problems into broad categories identified with
+functions that describe the growth of an associated complexity measure such as
+time or space.
+
+\begin{definition}
+    If $f : \mathbb{N} \to \mathbb{N}$, then the complexity class $DTIME(f)$ is
+    the set of all languages that can be decided by a Turing machine of time
+    complexity $O(f)$.
+\end{definition}
+
+The big $O$ is precisely how we construct the classes: by ignoring constant
+multiples. Recall that $f \in O(g)$ means that there exists some $n_0 \in
+\mathbb{N}$ and some $c \in \mathbb{R}$ such that for all $n \geq n_0$, $f(n)
+\leq c g(n)$.
+
+\begin{definition}
+    By analogy with $DTIME$, there is the class $NTIME$, which is the set of
+    all languages that can be decided by a \empth{nondeterministic} Turing
+    machine of time complexity $O(f)$ for $f : \mathbb{N} \to \mathbb{N}$.
+\end{definition}
+
+The time complexity of a nondeterministic Turing machine is calculated by
+assuming that nondeterministic choice always leads to the fastest computational
+paths. More precisely, the time complexity of a nondeterministic Turing machine
+is given by the number of steps in the shortest path leading to an accepting
+state.
+
+Similar definitions apply for the space complexity classes $DSPACE$ and
+$NSPACE$.
+
+In our formalization of Turing machines, we will separate the work tape from
+the input tape. Then we will consider the space complexity to be the number of
+\emph{work} cells used. Consequently, we can have sublinear space complexity.
+This will allow us to have a more fine-grained analysis of space complexity.
+
+\section{Some elementary results}
+
+Of course, $DTIME(f) \subseteq NTIME(f)$ for all $f$, since deterministic
+machines are just special cases of nondeterministic machines. Likewise,
+$DSPACE(f) \subseteq NSPACE(f)$.
+
+Next, $DTIME(f) \subseteq DSPACE(f)$, as in order to write $f(n)$ cells to the
+tape, the machine needs at least $f(n)$ steps. Likewise, $NTIME(f) \subseteq
+NSPACE(f)$.
+
+\begin{definition}
+    The \emph{configuration} of a Turing machine $M$ at step $i$ on some input
+    $x$ of length $n$ is a snapshot of its current state. It consists
+    specifically of the following things.
+    \begin{itemize}
+        \item
+            the input head position for which there are $n$ possible values;
+        \item
+            the control state for which there are $|Q|$ possible values;
+        \item
+            for each work tape, the head position, for which there are $s_M(n)$
+            possible values, and the contents of the tape, for which there are
+            $|\Gamma|^{s_M(n)}$ possible values.
+    \end{itemize}
+\end{definition}
+
+Overall, there are $n\, (s(n)\, |\Gamma|^{s_n})^k\, |Q|$ possible
+configurations for $M$ running on $x$.
+
+\begin{definition}
+    The \emph{configuration graph} of a Turing machine $M$ running on $x$ of
+    length $n$ is such that
+    \begin{itemize}
+        \item
+            each vertex in the graph represents a possible configuration of $M$
+            on $x$;
+        \item
+            and each edge is determined by the transition function $\delta$ of
+            $M$ (or transition \emph{relation} in the case of a
+            nondeterministic Turing machine).
+    \end{itemize}
+\end{definition}
+
+Notice that for all Turing machines $M$, the configuration graph of $M$ running
+on input of length $n$ has an \emph{exponential} number of vertices, provided
+that $s_M(n) \geq \log n$. That's because in the calculation of the total
+number of configurations, the dominating factor is the one identified with the
+contents of the work tapes; the other elements of the configuration are
+significantly smaller.
+
+\begin{proposition}
+    $$
+    DSPACE(f) \subseteq \bigcup_c DTIME(c^f)
+    $$
+\end{proposition}
+
+\begin{proof}
+    If a machine $M$ runs in $DSPACE$, then its configuration graph has
+    $c^{s_M(n)}$ vertices for some $c$, and we can just use depth-first search
+    to simulate the $DSPACE$ algorithm in $DTIME(c^f)$.
+\end{proof}
+
+In fact, it turns out that $NSPACE(f) \subseteq \bigcup_c DTIME(c^f)$, since
+nondeterminism simply adds more edges to the configuration graph.
+
+Notice then that $NTIME(f) \subseteq \bigcup_c DTIME(c^f)$ since $NTIME(f)
+\subseteq NSPACE(f)$ and $NSPACE(f) \subseteq \bigcup_c DTIME(c^f)$.
+
+\subsection{Some complexity classes}
+
+\begin{itemize}
+    \item $L = DSPACE(\log n)$
+    \item $NL = NSPACE(\log n)$
+    \item $P = \bigcup_k DTIME(n^k)$
+    \item $NP = \bigcup_k NTIME(n^k)$
+\end{itemize}
+
+These classes are related in the following way.
+
+$$
+L \subseteq NL \subseteq P \subseteq NP
+$$
+
+And nobody knows whether the inclusions are strict !
+
+\subsection{A note on $NP$}
+
+I've seen in the past that the class $NP$ is the set of all decision problems
+for which there exist solution \emph{certificate} can be checked in polynomial
+time. In those discussions of $NP$, we were always talking about deterministic
+Turing machines. 
+
+I suppose that formulation of $NP$ relates to nondeterministic Turing machines
+in the sense that a nondeterministic machine would in fact be able to
+\emph{solve} the problem precisely by guessing where to go next in the problem,
+ultimately producing exactly the certificate that could be verified by a
+deterministic machine.
+
+For example, in the three-colorability problem, we can consider a naive
+backtracking algorithm implemented on a deterministic Turing machine.
+Obviously, that will take up to exponential time. However, in a
+nondeterministic Turing machine, rather than having to backtrack when a path
+reaches a dead end, we can simply try all the paths simultaneously. We can
+equivalently say that the machine will pick the shortest path that leads to an
+accepting state. Of course, if there is no such path for a given graph, the
+machine will immediately enter a rejecting state. Now, since the machine just
+moves from vertex to vertex always correctly guessing in the case that the
+graph is in fact three-colorable, it needs only a number of steps $O(|V| +
+|E|)$. Hence graph three-colorability is in $NP$.
