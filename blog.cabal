@@ -5,7 +5,9 @@ cabal-version:      >= 1.10
 
 executable site
   main-is:          site.hs
-  build-depends:    base == 4.*
-                  , hakyll == 4.7.*
+  build-depends:
+    base == 4.*,
+    hakyll == 4.7.*,
+    pandoc >=1.15 && <1.16
   ghc-options:      -threaded
   default-language: Haskell2010
