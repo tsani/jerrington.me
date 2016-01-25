@@ -1,0 +1,147 @@
+\documentclass{article}
+
+\author{Jacob Thomas Errington}
+\title{Advanced theory of computation}
+\date{18 January 2016}
+
+\usepackage[margin=2.5cm]{geometry}
+
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\begin{document}
+
+\maketitle
+
+Recall that $NP \subseteq P$ because a nondeterministic logspace machine gives
+rise to a configuration graph with only \emph{polynomially} many vertices. Then
+it suffices to traverse the graph with depth-first search, which is a polytime
+algorithm.
+
+\section{Space complexity and regular languages}
+
+For the assignment, we need to prove the following theorem.
+
+\begin{theorem}
+    $DSPACE(o(\log \log n)) = DSPACE(1) = REGULAR$
+\end{theorem}
+
+Notice that the space hierarchy theorem doesn't hold in this case, since it
+requires needs the premise that $s_M(n) < \log n$.
+
+Here's a related theorem, whose main argument can be reused more or less as is
+to prove that theorem.
+
+\begin{theorem}
+    If a language $L$ can be decided by an online Turing machine $M$ in space
+    $o(\log n)$, then $L$ is regular.
+\end{theorem}
+
+\begin{proof}
+    Because $M$ is online, its read head is always moving to the right, and
+    never back to the left; we don't need to keep track of the read head's
+    position in our Turing machine serialization.
+
+    \begin{definition}
+        A \emph{$j$-configuration} of a Turing machine $M$ is a configuration
+        of $M$ in which the work tape of $M$ contains less than $j$ symbols.
+    \end{definition}
+
+    Notice that if $M$ has $q$ states and $k$ symbols in its alphabet $\Gamma$,
+    then there are $q i k^i$ possible configurations using $i$ cells. To get
+    the number of possible $j$-configurations, it suffices to sum up over all
+    $i$ until we get to $j$. Hence there are
+    $$
+    \sum_{i = 1}^{j-i} {q i k^i} < j q k^j
+    $$
+    $j$-configurations.
+
+    Now choose an integer $p$ such that $$ p^j > j q k^j k $$
+
+    For any length $n$, let $$ w = a_1 a_2 \cdots a_m $$ be a word of minimal
+    length on which $M$ will use $j$ cells. Notice that from the definition of
+    $p$, this equivalently means that the machine will use $\log_p n$ cells.
+
+    If there is no such word, then $M$ is using $O(1)$ memory, so $L$ must be
+    regular.
+
+    Else, in processing $w$, $M$ will visit cell $j$ as it reads $a_m$, i.e.
+    the machine is using less than $j$ cells on the substring up to $a_m$.
+
+    If $a_r = a_s$ for some $r < s$, then the configuration at the time of
+    reading $a_r$ must be different than the one when reading $a_s$. Otherwise,
+    there is a loop in machine and we could conclude that $a_1 \cdots a_r
+    a_{s+1} \cdots a_m$ would be a shorted word using $j$ cells.
+
+    Thus,
+    $$
+    m-1 \leq |\Gamma| \#j\text{-configurations} < k j q k^j < p^j < n
+    $$
+
+    Hence, for every length $n$, there is a word of length at most $n$ that
+    uses $\log_p n$ memory cells, i.e. $s_M(n) \leq \log_p n$.
+\end{proof}
+
+\section{Reductions}
+
+\begin{definition}
+    For two problems $A$ and $B$, we write $$ A \leq B $$ if given an algorithm
+    for $B$, we can construct an algorithm for $A$. Problem $B$ can be
+    intuitively thought of as being \emph{harder}. We say that $A$ is
+    \emph{reducible} to $B$.
+\end{definition}
+
+Reducibility relations can be classified. For example, $\leq_p$ is polytime
+reducibility. We say that $A \leq_p B$ if there exists a polytime total
+computable function $f : \Sigma^* \to \Sigma^*$ such that for all $w \in
+\Sigma^*$, $w \in A \iff f(w) \in B$.
+
+Polytime reducibility is a partial order on problems rather obviously.
+
+Note that when we discuss the space complexity of a computable \emph{function},
+we ignore the output size; we just care about the number of work cells that are
+used.
+
+Another interesting reducibility is logpsace reducibility, $\leq_{\log{}}$. A
+problem $A$ is logspace reducible to $B$ if there is a function
+$f : \Sigma^* \to \Sigma^*$ that can be computed by a Turing machine $M$ such
+that $s_M(n) \in O(\log n)$.
+
+Logspace reducibility is also a partial order on problems. However, the naive
+way of proving transitivity by just chaining the Turing machines to compute the
+mapping reduction from $A$ to $C$ doesn't work. When computing $f(w)$, the
+output might have blown up polynomially, so even if computing $g(f(w))$ will
+only require logarithmic space in $|f(w)|$, it might require \emph{polynomial}
+space in $|w|$. Nonetheless, there is a way to prove transitivity; it's just
+more complicated.
+
+\section{Hardness and completeness}
+
+\begin{definition}
+    A problem $K$ is $C$-hard under reducibility $\leq_r$ if for all
+    $L \in C$, $L \leq_r K$.
+\end{definition}
+
+\begin{definition}
+    A problem $K$ is $C$-complete under reducibility $\leq_r$ if
+    \begin{itemize}
+        \item
+            $K \in C$
+        \item
+            for all $L \in C$, $L \leq_r K$
+    \end{itemize}
+\end{definition}
+
+We can intuitively think of as the $C$-complete problem as the \emph{hardest}
+problems in $C$.
+
+The major theorem that spurred many developments in complexity theory is the
+Cook-Levin theorem.
+
+\begin{theorem}[Cook-Levin]
+    SAT is $NP$-complete.
+\end{theorem}
+
+\end{document}
