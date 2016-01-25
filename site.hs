@@ -31,6 +31,10 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "files/pdfs/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     create ["about.md", "projects.md"] $ do
         route   $ setExtension "html"
         compile $ pandocCompiler
