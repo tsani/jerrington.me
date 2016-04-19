@@ -47,7 +47,7 @@ fine to bake in a `-v` so we can see what file we moved.
 
 Let's examine the main part more closely.
 
-`ls -t "$DOWNLOAD\_DIR" | head -n 1` fetches the most recent file in the
+`ls -t "$DOWNLOAD_DIR" | head -n 1` fetches the most recent file in the
 downloads directory. Although `ls` displays entries in a paragraph-filling kind
 of way when used interactively, when its output is not a tty (i.e. not
 interactive), it displays one entry per line. `head -n 1` then takes just the
@@ -60,6 +60,7 @@ script process some switches, in this case `-n`, and forward the result to
 There's a _little_ problem with this script though. `ls` doesn't write out the
 full path to the files it lists! It writes out a path that's relative to the
 provided path. To fix this, we now have two options.
+
  1. We can prepend `$DOWNLOAD\_DIR` to each line produced by `ls`.
  2. We can use `find`.
 
