@@ -255,3 +255,6 @@ This was my first experience in adding a combinator to Servant, and I'm sure
 there are ways that the technique I used here can be improved. In a future post
 I'll extend the work here by using the context to pass in a database connection
 pool and use Esqueleto to look up the token in a database.
+
+Full source code is available
+[on Github](https://github.com/tsani/servant-otoke/tree/815c0aef69c3a0aac8b0f664a8122c8d2a490182).
