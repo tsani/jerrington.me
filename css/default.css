@@ -54,6 +54,12 @@ div#header {
     text-align: center;
 }
 
+div#header div.tagline {
+    font-size:0.8em;
+    color: #777;
+    font-style: italic;
+}
+
 div#title {
     font-size: 2em;
     text-transform: uppercase;
