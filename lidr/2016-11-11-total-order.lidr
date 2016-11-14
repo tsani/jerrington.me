@@ -9,8 +9,9 @@ we will show that minimality is a decidable property. Finally, we will
 generalize the notion of minimality, and implement a verified lexicographic
 total ordering for vectors.
 
-This post is a literate Idris file, so here is the module declaration and
-necessary imports.
+This post is
+[a literate Idris file](https://github.com/tsani/jerrington.me/blob/master/lidr/2016-11-11-total-order.lidr),
+so here is the module declaration and necessary imports.
 
 > module Data.Order.Total
 >
