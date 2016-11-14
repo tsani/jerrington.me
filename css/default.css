@@ -24,6 +24,7 @@ pre {
 pre code {
     width: 100%;
     display: block;
+    overflow-x: scroll;
 }
 
 p code {
