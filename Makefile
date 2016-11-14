@@ -1,11 +1,19 @@
-.PHONY: all
+.PHONY: build rebuild all_posts
+
+$(shell mkdir -p files/pdfs lidr)
 
 TEXS=$(shell find latex-src -name '*.tex')
 PDFS=$(patsubst latex-src/%.tex,files/pdfs/%.pdf,$(TEXS))
+LIDR=$(shell find lidr -name '*.lidr')
+LIDR_MD=$(patsubst lidr/%.lidr,posts/%.lidr.md,$(LIDR))
 
-all: $(PDFS) latex-clean
+site-%: all_posts
+	cabal run $(patsubst site-%,%,$@)
 
-$(shell mkdir -p files/pdfs)
+all_posts: $(PDFS) $(LIDR_MD) latex-clean
+
+posts/%.lidr.md: lidr/%.lidr
+	sed 's/^> /    /' < $< | sed 's/^>/    /' > $@
 
 files/pdfs/%.pdf: latex-src/%.tex
 	@pdflatex -output-directory files/pdfs $<
