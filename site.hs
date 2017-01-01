@@ -1,11 +1,10 @@
---------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid (mappend, (<>))
-import           Hakyll
-import           Text.Pandoc
 
+module Main where
 
---------------------------------------------------------------------------------
+import Data.Monoid ( (<>) )
+import Hakyll
+import Text.Pandoc
 
 blogName = "Jacob Errington"
 
@@ -71,7 +70,7 @@ main = hakyll $ do
             let mostRecent = head posts
 
             let indexCtx =
-                    listField "posts" postCtx (return posts) `mappend`
+                    listField "posts" postCtx (return posts) <>
                     myDefaultContext
 
 
@@ -82,11 +81,9 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
-
---------------------------------------------------------------------------------
 postCtx :: Context String
 postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
+    dateField "date" "%B %e, %Y" <>
     myDefaultContext
 
 pandocMathCompiler :: Compiler (Item String)
