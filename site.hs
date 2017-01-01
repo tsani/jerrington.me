@@ -41,10 +41,19 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
             >>= relativizeUrls
 
+    create ["atom.xml"] $ do
+      route idRoute
+      compile $ do
+        let feedCtx = postCtx <> bodyField "description"
+        posts <- fmap (take 10) . recentFirst
+          =<< loadAllSnapshots "posts/*" "content"
+        renderAtom feedConfig feedCtx posts
+
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ pandocMathCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
@@ -87,3 +96,12 @@ pandocMathCompiler
         writerOptions = defaultHakyllWriterOptions
             { writerHTMLMathMethod = MathJax ""
             }
+
+feedConfig :: FeedConfiguration
+feedConfig = FeedConfiguration
+  { feedTitle = "Jacob Thomas Errington's blog"
+  , feedDescription = "Just another functional programming blog."
+  , feedAuthorName = "Jacob Thomas Errington"
+  , feedAuthorEmail = "blog@mail.jerrington.me"
+  , feedRoot = "https://jerrington.me"
+  }
