@@ -3,6 +3,7 @@
 /_cache/
 /_site/
 /dist/
+/dist-newstyle/
 *.aux
 *.log
 *.pdf
