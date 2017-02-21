@@ -180,7 +180,7 @@ export PUSHBULLET_KEY="<API KEY>"
 ```
 
 Now basic functionality is available in tpb. List your Pushbullet-connected
-devices with `tpb --jsv list devices`. Take note of the ID of the device you
+devices with `tpb --jsv devices list`. Take note of the ID of the device you
 would like to use to send SMS. In same file as before, add:
 
 ```
