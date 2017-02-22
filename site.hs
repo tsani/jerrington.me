@@ -34,7 +34,7 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    create ["pages/about.md", "pages/projects.md"] $ do
+    create ["pages/about.md", "pages/projects.md", "pages/misc.md"] $ do
         route $
           setExtension "html" `composeRoutes` customRoute (drop 6 . toFilePath)
         compile $ pandocCompiler
