@@ -9,91 +9,90 @@ import Text.Pandoc
 blogName = "Jacob Errington"
 
 myDefaultContext
-    = constField "blogName" blogName
-    <> defaultContext
+  = constField "blogName" blogName
+  <> defaultContext
 
 main :: IO ()
 main = hakyll $ do
-    match "images/*" $ do
-        route   idRoute
-        compile copyFileCompiler
+  match "images/*" $ do
+    route   idRoute
+    compile copyFileCompiler
 
-    match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
+  match "css/*" $ do
+    route   idRoute
+    compile compressCssCompiler
 
-    match "font/*" $ do
-        route   idRoute
-        compile copyFileCompiler
+  match "font/*" $ do
+    route   idRoute
+    compile copyFileCompiler
 
-    match "files/*" $ do
-        route   idRoute
-        compile copyFileCompiler
+  match "files/*" $ do
+    route   idRoute
+    compile copyFileCompiler
 
-    match "files/pdfs/*" $ do
-        route   idRoute
-        compile copyFileCompiler
+  match "files/pdfs/*" $ do
+    route   idRoute
+    compile copyFileCompiler
 
-    create ["pages/about.md", "pages/projects.md", "pages/misc.md"] $ do
-        route $
-          setExtension "html" `composeRoutes` customRoute (drop 6 . toFilePath)
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
-            >>= relativizeUrls
+  create ["pages/about.md", "pages/projects.md", "pages/misc.md"] $ do
+    route $
+      setExtension "html" `composeRoutes` customRoute (drop 6 . toFilePath)
+    compile $ pandocCompiler
+      >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
+      >>= relativizeUrls
 
-    create ["atom.xml"] $ do
-      route idRoute
-      compile $ do
-        let feedCtx = postCtx <> bodyField "description"
-        posts <- fmap (take 10) . recentFirst
-          =<< loadAllSnapshots "posts/*" "content"
-        renderAtom feedConfig feedCtx posts
+  create ["atom.xml"] $ do
+    route idRoute
+    compile $ do
+      let feedCtx = postCtx <> bodyField "description"
+      posts <- fmap (take 10) . recentFirst
+        =<< loadAllSnapshots "posts/*" "content"
+      renderAtom feedConfig feedCtx posts
 
-    match "posts/*" $ do
-        route $ setExtension "html"
-        compile $ pandocMathCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
-            >>= relativizeUrls
+  match "posts/*" $ do
+    route $ setExtension "html"
+    compile $ pandocMathCompiler
+      >>= loadAndApplyTemplate "templates/post.html"  postCtx
+      >>= saveSnapshot "content"
+      >>= loadAndApplyTemplate "templates/default.html" postCtx
+      >>= relativizeUrls
 
-    match "notes/*" $ do
-        route $ setExtension "html"
-        compile $ pandocMathCompiler
-            >>= loadAndApplyTemplate "templates/post.html" postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
-            >>= relativizeUrls
+  match "notes/*" $ do
+    route $ setExtension "html"
+    compile $ pandocMathCompiler
+      >>= loadAndApplyTemplate "templates/post.html" postCtx
+      >>= loadAndApplyTemplate "templates/default.html" postCtx
+      >>= relativizeUrls
 
-    match "pages/index.html" $ do
-        route $ constRoute "index.html"
-        compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let mostRecent = head posts
+  match "pages/index.html" $ do
+    route $ constRoute "index.html"
+    compile $ do
+      posts <- recentFirst =<< loadAll "posts/*"
+      let mostRecent = head posts
 
-            let indexCtx =
-                    listField "posts" postCtx (return posts) <>
-                    myDefaultContext
+      let indexCtx =
+              listField "posts" postCtx (return posts) <>
+              myDefaultContext
 
+      getResourceBody
+          >>= applyAsTemplate indexCtx
+          >>= loadAndApplyTemplate "templates/default.html" indexCtx
+          >>= relativizeUrls
 
-            getResourceBody
-                >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
-                >>= relativizeUrls
-
-    match "templates/*" $ compile templateCompiler
+  match "templates/*" $ compile templateCompiler
 
 postCtx :: Context String
 postCtx =
-    dateField "date" "%B %e, %Y" <>
-    myDefaultContext
+  dateField "date" "%B %e, %Y" <>
+  myDefaultContext
 
 pandocMathCompiler :: Compiler (Item String)
 pandocMathCompiler
-    = pandocCompilerWith readerOptions writerOptions where
-        readerOptions = defaultHakyllReaderOptions
-        writerOptions = defaultHakyllWriterOptions
-            { writerHTMLMathMethod = MathJax ""
-            }
+  = pandocCompilerWith readerOptions writerOptions where
+    readerOptions = defaultHakyllReaderOptions
+    writerOptions = defaultHakyllWriterOptions
+      { writerHTMLMathMethod = MathJax ""
+      }
 
 feedConfig :: FeedConfiguration
 feedConfig = FeedConfiguration
