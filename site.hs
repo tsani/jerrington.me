@@ -34,8 +34,9 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    create ["about.md", "projects.md"] $ do
-        route   $ setExtension "html"
+    create ["pages/about.md", "pages/projects.md"] $ do
+        route $
+          setExtension "html" `composeRoutes` customRoute (drop 6 . toFilePath)
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
             >>= relativizeUrls
@@ -63,8 +64,8 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
-    match "index.html" $ do
-        route idRoute
+    match "pages/index.html" $ do
+        route $ constRoute "index.html"
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let mostRecent = head posts
