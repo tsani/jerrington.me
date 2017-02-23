@@ -18,3 +18,12 @@ $\omega$-regular languages:
 > If you find yourself in a finite maze and someone asks you to go for an
 > infinite walk, then you're bound to find yourself in the same room more than
 > once at some point.
+
+Before giving a somewhat technical proof that generalized Büchi automata are
+equivalent to ordinary Büchi automata:
+
+> True understanding comes from Greek letters!
+
+After noticing an error in the proof:
+
+> True understanding doesn't come from Greek letters after all!
