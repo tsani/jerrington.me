@@ -59,7 +59,7 @@ Random thoughts that pass through my head.
     invisible pink unicorn - then I should be allowed not to hire them for the
     position I'm trying to fill.
 
-# Professor quotes
+# Quotes
 
 ## Prakash Panangaden
 
@@ -84,3 +84,12 @@ equivalent to ordinary Büchi automata:
 After noticing an error in the proof:
 
 > True understanding doesn't come from Greek letters after all!
+
+## Clara Larocque
+
+Presenting a paper on formal verification of deep learning:
+
+> When a mathematician tells you something is obvious, it's probably just very
+> technical to prove and they want to gloss over the details.
+> When a computer scientist tells you something is obvious, it's probably
+> because they're bullshitting you.
