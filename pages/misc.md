@@ -2,6 +2,63 @@
 title: Misc
 ---
 
+# Remarks
+
+Random thoughts that pass through my head.
+
+  * Many activists in my experience believe something to the effect that
+    certain ideologies should not be allowed to have a platform.
+    In other words, it should be illegal to speak about certain things.
+    I disapprove of doing so, at least in such a broad manner, but I won't go
+    into the reasons why, at least not beyond the following remark.
+
+    What's interesting about this idea is this:
+    suppose that certain speech could simply be banned.
+    You say something wrong? We lock you up and throw away the key.
+    Now we need a body to oversee what speech is and is not allowed.
+    It surprises me that the very same activists who advocate for the
+    prohibition of certain speech generally seem to operate under the
+    assumption that *they* would form that body.
+    This assumption is dangerous and unfounded.
+    Who's to stop such a body from deciding that the advocacy for GLBT rights
+    is banned, and consequently locking up many of the same activists who
+    sought to install the body?
+
+    Hence, when someone says "we should be allowed to ban certain types of
+    speech", they don't really mean "we" in the general social sense of the
+    word whereby some government body is in charge of such an affair.
+    They mean "*I* should be allowed to ban certain types of speech."
+
+    To be honest, I would have no problem with activists saying precisely that.
+    What I do have a problem with is making it sound like there's some kind of
+    nice general way of deciding whether one type of speech or another is
+    problematic and should be banned.
+    There isn't, at least not of the form that would please the majority of
+    those activists, in my opinion.
+    There will be arbitrariness in the decision-making process.
+    It should be made clear by those same activists just how arbitrarily they
+    would decide these things.
+
+    I believe that discrimination is unjustifiable *provided that* it be on the
+    grounds of the uncontrollable circumstances of one's birth.
+    For some things this is clear, e.g. skin colour.
+    For other things, it has been up until somewhat recently less clear, e.g.
+    sexual orientation.
+    This decision should be grounded scientifically to the fullest extent
+    possible.
+
+    Strangely enough, the Criminal Code of Canada protects religion in this
+    regard - discrimation on the grounds of religion is illegal - yet religion
+    is fundamentally a choice.
+    You don't see isolated island populations suddenly developing Christianity.
+    (You probably will see them having homosexual relationships though!)
+    So although such populations might develop the notion of religion, the
+    particular flavour of it that they invent is up to their personal decisions
+    and culture.
+    And if I think that their beliefs are wrong - maybe they believe in an
+    invisible pink unicorn - then I should be allowed not to hire them for the
+    position I'm trying to fill.
+
 # Professor quotes
 
 ## Prakash Panangaden
