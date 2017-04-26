@@ -6,6 +6,13 @@ title: Misc
 
 Random thoughts that pass through my head.
 
+  * _The Paradox of the Real Line™_
+
+    Despite being a complete ordered field, satisfying a lot of algebraic and
+    relational properties and hence being very structured from a
+    model-theoretic point of view, the real line *feels* very unstructured and
+    ad hoc.
+
   * Many activists in my experience believe something to the effect that
     certain ideologies should not be allowed to have a platform.
     In other words, it should be illegal to speak about certain things.
