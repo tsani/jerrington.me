@@ -6,6 +6,11 @@ title: Misc
 
 Random thoughts that pass through my head.
 
+  * The words "triangle" and "quadrilateral" really bother me.
+    It's "pentagon", "hexagon", "heptagon" and so forth beyond 4 sides.
+    A quadrilateral ought to be called a tetragon, and a triangle ought to be
+    called a trigon.
+
   * _The Paradox of the Real Line™_
 
     Despite being a complete ordered field, satisfying a lot of algebraic and
