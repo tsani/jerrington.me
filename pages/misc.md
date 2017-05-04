@@ -64,7 +64,7 @@ Random thoughts that pass through my head.
 
     Strangely enough, the Criminal Code of Canada protects religion in this
     regard - discrimation on the grounds of religion is illegal - yet religion
-    is fundamentally a choice.
+    is fundamentally a *choice*.
     You don't see isolated island populations suddenly developing Christianity.
     (You probably will see them having homosexual relationships though!)
     So although such populations might develop the notion of religion, the
