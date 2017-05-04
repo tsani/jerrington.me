@@ -6,6 +6,9 @@ title: Misc
 
 Random thoughts that pass through my head.
 
+  * "The [Haskell] typechecker invites 'failure-driven development.'"
+    [source](http://bitemyapp.com/posts/2017-05-03-what-a-haskell-study-group-is-not.html)
+
   * The words "triangle" and "quadrilateral" really bother me.
     It's "pentagon", "hexagon", "heptagon" and so forth beyond 4 sides.
     A quadrilateral ought to be called a tetragon, and a triangle ought to be
