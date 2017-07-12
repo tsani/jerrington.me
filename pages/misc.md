@@ -121,3 +121,40 @@ Presenting a paper on formal verification of deep learning:
 > technical to prove and they want to gloss over the details.
 > When a computer scientist tells you something is obvious, it's probably
 > because they're bullshitting you.
+
+## Miscellaneous
+
+From a Vice article advocating ditching the smartphone in favour of a flip
+phone:
+
+> And that's how I learned the thin line between having good morals and having
+> bad credit.
+
+More generally, this reminds me of something that I like to believe.
+
+> Ten percent of people are fundamentally bad, and will always do evil.
+> Ten percent of people are fundamentally good, and will always do good.
+> For the remaining eighty percent, it depends.
+
+For those 80% without any particular strong convictions or moral compass, the
+path of least resistance is the way to go. The analysis weighs how easy it is
+to do something versus how great the desire is to do it. In other terms, it
+weighs the payoff against the odds of getting caught.
+
+My friend Kevin and I were discussing the other day our personal policies for
+leaving things unattended in trains. Overall, I'm more lenient with this sort
+of thing. I left my bag unattended on a train for maybe five entire hours. This
+bag contained my computer and my passport among other things. The key thing
+that made me comfortable with leaving it unattended is simply that the
+valuables *are in a bag*. Just that is enough to deter the 80%. Nobody knows a
+priori where exactly the passport is, or what exactly the contents of the
+bag is, for that matter. Even if I had left my passport out in the open
+entirely, I doubt it would be stolen. Most people are not identity thieves and
+wouldn't know how to liquidate a passport. On the other hand, had I left my
+*wallet* on my seat for five hours while I was reading in the cafe car, I'm
+almost certain it would be gone or missing a few items. That's simply because
+people know exactly what a wallet is for and how to use it: you pull out the
+money or cards and you spend.
+
+The conclusion I have is simple. People who _can_ do bad things with impunity
+_will_ do bad things.
