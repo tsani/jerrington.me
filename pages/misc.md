@@ -6,6 +6,19 @@ title: Misc
 
 Random thoughts that pass through my head.
 
+  * Individual subreddits appear to develop their own personalized linguistic
+    features. For example, `/r/raisedbynarcissists` refers to disliked family
+    members by prefixing their title with a capital N. People talk about
+    Nmothers and Nfathers and Nbrothers and Nsisters.
+    I wonder what *types* of subreddits develop special language.
+    Clearly, not all subreddits do. The very general ones like
+    `/r/showerthoughts` don't have any subreddit-specific language.
+    Subreddits like `/r/haskell` feature technical language, but this language
+    isn't *specific to that subreddit*. It's merely specific to the thing that
+    the subreddit is being discussed.
+    Of course, I might just be ignorant; perhaps the N prefixing done in
+    `/r/raisedbynarcissists` is actually common among people with bad parents.
+
   * "The [Haskell] typechecker invites 'failure-driven development.'"
     [source](http://bitemyapp.com/posts/2017-05-03-what-a-haskell-study-group-is-not.html)
 
