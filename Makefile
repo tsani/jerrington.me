@@ -9,11 +9,15 @@ LIDR_MD=$(patsubst lidr/%.lidr,posts/%.lidr.md,$(LIDR))
 
 DEPLOYDEST="/srv/http/blog"
 
-deploy: site-rebuild
+deploy: build site-rebuild
 	rsync -Pr _site/ /srv/http/blog
 
+build:
+	stack build
+	stack install
+
 site-%: all_posts
-	cabal run $(patsubst site-%,%,$@)
+	stack exec site $(patsubst site-%,%,$@)
 
 all_posts: $(PDFS) $(LIDR_MD) latex-clean
 

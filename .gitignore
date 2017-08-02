@@ -9,3 +9,4 @@
 *.pdf
 /posts/*.lidr.md
 *.ibc
+/.stack-work/
