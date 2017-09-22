@@ -10,7 +10,7 @@ LIDR_MD=$(patsubst lidr/%.lidr,posts/%.lidr.md,$(LIDR))
 DEPLOYDEST="/srv/http/blog"
 
 deploy: build site-rebuild
-	rsync -Pr _site/ /srv/http/blog
+	rsync -Pr _site/ $(DEPLOYDEST)
 
 build:
 	stack build
