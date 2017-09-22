@@ -26,13 +26,3 @@ I'm also interested in human languages. Although I only speak English and
 French fluently, I've taken at some time or another courses about Spanish or
 Greek. I'm also one of the very few speakers of Lojban, but I suppose that's to
 be expected of most constructed languages.
-
-If you'd like to contact me, feel free to send an email to `jake [this would be
-an amphora but I don't want spambots emailing me] mail [dot] jerrington [dot]
-me`.
-
-The blog posts on this site are under the Creative Commons Attribution 4.0
-International License.
-
-The code of the blog is available
-[on Github](http://github.com/djeik/jerrington.me).
