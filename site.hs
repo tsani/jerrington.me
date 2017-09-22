@@ -12,6 +12,9 @@ myDefaultContext
   = constField "blogName" blogName
   <> defaultContext
 
+staticPages
+  = ["pages/about.md", "pages/projects.md", "pages/misc.md", "pages/info.md"]
+
 main :: IO ()
 main = hakyll $ do
   match "images/*" $ do
@@ -34,7 +37,7 @@ main = hakyll $ do
     route   idRoute
     compile copyFileCompiler
 
-  create ["pages/about.md", "pages/projects.md", "pages/misc.md"] $ do
+  create staticPages $ do
     route $
       setExtension "html" `composeRoutes` customRoute (drop 6 . toFilePath)
     compile $ pandocCompiler
