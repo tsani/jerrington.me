@@ -156,5 +156,8 @@ almost certain it would be gone or missing a few items. That's simply because
 people know exactly what a wallet is for and how to use it: you pull out the
 money or cards and you spend.
 
-The conclusion I have is simple. People who _can_ do bad things with impunity
+The conclusion I have is simple: people who _can_ do bad things with impunity
 _will_ do bad things.
+So when trying to decide whether someone is good or bad, it's no use to simply
+check whether or not they did anything bad. We also have to look at whether it
+was *possible* for them to do something bad.
