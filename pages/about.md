@@ -17,12 +17,30 @@ programs can _do_, but rather by the abstract idea of being to model ideas
 correctly, precisely, and unambiguously. That probably explains why I like
 functional programming so much.
 
-That being said, I'm trying to orient my degree towards courses that discuss
-programming language theory and formal semantics of programs.
-These days I'm particularly fascinated by dependently typed programming
-languages.
+I grew up in Montreal and developed an interest in computers at a pretty
+young age. I remember being in the sixth grade when a friend of mine told me
+that he figured out how to make video games, and from that point onwards I was
+hooked.
+(It was only much later that I realized that game development is way too
+complicated for me, and requires a lot more than just programming!)
 
-I'm also interested in human languages. Although I only speak English and
-French fluently, I've taken at some time or another courses about Spanish or
-Greek. I'm also one of the very few speakers of Lojban, but I suppose that's to
-be expected of most constructed languages.
+I first taught myself some basic programming in C and in C++, and
+later in high school, I was given the opportunity to take part in the
+Be a Computer Scientist for a Week day camp offered at McGill.
+In CEGEP, I took a course on numerical methods for physical applications, which
+involved a programming project.
+Rather than do a physical simulation, my team created a viewer and builder
+for 3D cellular automata similar to
+[Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
+It was around this time that I began to use Haskell.
+I then got a Bachelors degree in Computer Science at McGill, with an emphasis
+on courses in programming language theory, compilers, and formal verification.
+
+I'm currently pursuing a Masters degree at McGill under the supervision of
+[Brigitte Pientka](http://www.cs.mcgill.ca/~bpientka/) in the computational
+logic lab.
+My masters project is to design and implement a proof search system.
+Thanks to the
+[Curry-Howard correspondence](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence),
+this engine will be capable of generating _programs_ of a given _type_.
+With a precise enough type, the generated program will be the right one!
