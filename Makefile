@@ -15,6 +15,7 @@ deploy: build site-rebuild
 build:
 	stack build
 	stack install
+	stack exec site rebuild
 
 site-%: all_posts
 	stack exec site $(patsubst site-%,%,$@)
