@@ -12,8 +12,13 @@ myDefaultContext
   = constField "blogName" blogName
   <> defaultContext
 
-staticPages
-  = ["pages/about.md", "pages/projects.md", "pages/misc.md", "pages/info.md"]
+staticPages =
+  [ "pages/about.md"
+  , "pages/projects.md"
+  , "pages/misc.md"
+  , "pages/info.md"
+  , "pages/phat.md"
+  ]
 
 main :: IO ()
 main = hakyll $ do
