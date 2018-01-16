@@ -12,16 +12,61 @@ myDefaultContext
   = constField "blogName" blogName
   <> defaultContext
 
-staticPages =
-  [ "pages/about.md"
-  , "pages/projects.md"
-  , "pages/misc.md"
-  , "pages/info.md"
-  , "pages/phat.md"
-  ]
-
 main :: IO ()
 main = hakyll $ do
+  -- PAGES --------------------------------------------------------------------
+
+  match "pages/index.html" $ do
+    route $ constRoute "index.html"
+    compile $ do
+      posts <- recentFirst =<< loadAll "posts/*"
+      let mostRecent = head posts
+
+      let indexCtx =
+              listField "posts" postCtx (return posts) <>
+              myDefaultContext
+
+      getResourceBody
+          >>= applyAsTemplate indexCtx
+          >>= loadAndApplyTemplate "templates/default.html" indexCtx
+          >>= relativizeUrls
+
+  match "pages/*" $ do
+    route $
+      setExtension "html" `composeRoutes` customRoute (drop 6 . toFilePath)
+    compile $ pandocCompiler
+      >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
+      >>= relativizeUrls
+
+  -- RSS FEED -----------------------------------------------------------------
+
+  create ["atom.xml"] $ do
+    route idRoute
+    compile $ do
+      let feedCtx = postCtx <> bodyField "description"
+      posts <- fmap (take 10) . recentFirst
+        =<< loadAllSnapshots "posts/*" "content"
+      renderAtom feedConfig feedCtx posts
+
+  -- POSTS --------------------------------------------------------------------
+
+  match "posts/*" $ do
+    route $ setExtension "html"
+    compile $ pandocMathCompiler
+      >>= loadAndApplyTemplate "templates/post.html"  postCtx
+      >>= saveSnapshot "content"
+      >>= loadAndApplyTemplate "templates/default.html" postCtx
+      >>= relativizeUrls
+
+  match "notes/*" $ do
+    route $ setExtension "html"
+    compile $ pandocMathCompiler
+      >>= loadAndApplyTemplate "templates/post.html" postCtx
+      >>= loadAndApplyTemplate "templates/default.html" postCtx
+      >>= relativizeUrls
+
+  -- STATIC RESOURCES ---------------------------------------------------------
+
   match "images/*" $ do
     route   idRoute
     compile copyFileCompiler
@@ -42,51 +87,7 @@ main = hakyll $ do
     route   idRoute
     compile copyFileCompiler
 
-  create staticPages $ do
-    route $
-      setExtension "html" `composeRoutes` customRoute (drop 6 . toFilePath)
-    compile $ pandocCompiler
-      >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
-      >>= relativizeUrls
-
-  create ["atom.xml"] $ do
-    route idRoute
-    compile $ do
-      let feedCtx = postCtx <> bodyField "description"
-      posts <- fmap (take 10) . recentFirst
-        =<< loadAllSnapshots "posts/*" "content"
-      renderAtom feedConfig feedCtx posts
-
-  match "posts/*" $ do
-    route $ setExtension "html"
-    compile $ pandocMathCompiler
-      >>= loadAndApplyTemplate "templates/post.html"  postCtx
-      >>= saveSnapshot "content"
-      >>= loadAndApplyTemplate "templates/default.html" postCtx
-      >>= relativizeUrls
-
-  match "notes/*" $ do
-    route $ setExtension "html"
-    compile $ pandocMathCompiler
-      >>= loadAndApplyTemplate "templates/post.html" postCtx
-      >>= loadAndApplyTemplate "templates/default.html" postCtx
-      >>= relativizeUrls
-
-  match "pages/index.html" $ do
-    route $ constRoute "index.html"
-    compile $ do
-      posts <- recentFirst =<< loadAll "posts/*"
-      let mostRecent = head posts
-
-      let indexCtx =
-              listField "posts" postCtx (return posts) <>
-              myDefaultContext
-
-      getResourceBody
-          >>= applyAsTemplate indexCtx
-          >>= loadAndApplyTemplate "templates/default.html" indexCtx
-          >>= relativizeUrls
-
+  -- TEMPLATES ----------------------------------------------------------------
   match "templates/*" $ compile templateCompiler
 
 postCtx :: Context String
