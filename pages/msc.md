@@ -72,3 +72,11 @@ key take-aways.
 * Meet with Aliya to learn about her findings w.r.t Beluga interactive mode.
 
   **Done: 11 January 2018.**
+
+# Work log
+
+* 17 January 2018: started reading _Focused Inductive Theorem Proving_.
+* 18 January 2018: continued reading.
+* 19 January 2018:
+  * continued reading,
+  * set up Beluga development environment.
