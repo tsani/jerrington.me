@@ -17,6 +17,8 @@ key take-aways.
 
   **Expected read by: 19 January 2018**
 
+  **Done on 22 January 2018.** [Notes](/notes/focused-inductive-atp.html)
+
 * _Programming with Binders and Indexed Data-Types_
   by A. Cave and B. Pientka.
 
