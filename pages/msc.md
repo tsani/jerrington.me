@@ -17,12 +17,12 @@ key take-aways.
 
   **Expected read by: 19 January 2018**
 
-  **Done on 22 January 2018.** [Notes](/notes/focused-inductive-atp.html)
+  **Done on 22 January 2018.** [Notes.](/notes/focused-inductive-atp.html)
 
 * _Programming with Binders and Indexed Data-Types_
   by A. Cave and B. Pientka.
 
-  **Expected read by: 19 January 2018**
+  **Expected read by: 23 January 2018**
 
 * _Focusing and Higher-Order Abstract Syntax_
   by N. Zeilberger.
@@ -32,12 +32,18 @@ key take-aways.
 * _Focusing on Pattern Matching_
   by N. Krishnaswami.
 
-  **Expected read by: 26 January 2018**
+  **Expected read by: 29 January 2018**
 
 * _Automated Theorem Proving in a Simple Meta Logic for LF_
   by C. Schurmann and F. Pfenning.
 
-  **Expected read by: 26 January 2018**
+  **Expected read by: 31 January 2018**
+
+## Implementation
+
+* Fix the interactive mode bugs Aliya and I discussed.
+
+  **Due: 25 January 2018**
 
 ## Code review
 
