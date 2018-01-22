@@ -5,6 +5,7 @@ module Main where
 import Data.Monoid ( (<>) )
 import Hakyll
 import Text.Pandoc
+import System.FilePath ( splitFileName, (</>), (<.>) )
 
 blogName = "Jacob Errington"
 
@@ -65,7 +66,18 @@ main = hakyll $ do
       >>= loadAndApplyTemplate "templates/default.html" postCtx
       >>= relativizeUrls
 
+  match "school/msc/doc/read/*/notes.*" $ do
+    route readingNotesRoute
+    compile $ pandocMathCompiler
+      >>= loadAndApplyTemplate "templates/notes.html" postCtx
+      >>= loadAndApplyTemplate "templates/default.html" postCtx
+      >>= relativizeUrls
+
   -- STATIC RESOURCES ---------------------------------------------------------
+
+  match "school/msc/doc/read/*/*.pdf" $ do
+    route schoolPdfRoute
+    compile copyFileCompiler
 
   match "images/*" $ do
     route   idRoute
@@ -111,3 +123,14 @@ feedConfig = FeedConfiguration
   , feedAuthorEmail = "blog@mail.jerrington.me"
   , feedRoot = "https://jerrington.me"
   }
+
+schoolPdfRoute :: Routes
+schoolPdfRoute = customRoute (g . splitFileName . toFilePath) where
+  g (_, f) = "pdf" </> f
+
+readingNotesRoute :: Routes
+readingNotesRoute = customRoute (g . toFilePath) where
+  g = notesDir . htmlExt . init . fst . splitFileName . drop (length pref)
+  htmlExt = (<.> "html")
+  notesDir = ("notes" </>)
+  pref = "school/msc/doc/read/" :: String
