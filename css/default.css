@@ -32,11 +32,6 @@ p code {
     border: 1px solid #fff0f0;
 }
 
-ul {
-    padding-left: 1em;
-    margin: 0;
-}
-
 a {
     color: #40A2F4;
     text-decoration: none;
@@ -65,6 +60,11 @@ div#title {
     font-size: 2em;
     text-transform: uppercase;
     font-weight: bold;
+}
+
+div#header ul#navigation {
+    margin: 0;
+    padding: 0;
 }
 
 div#header ul#navigation a {
