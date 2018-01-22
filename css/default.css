@@ -74,7 +74,9 @@ div#header ul#navigation a {
 
 div#header ul#navigation > li {
     padding: 0 0.5em;
+    margin: 0.5em;
     display: inline-block;
+    box-shadow: 0.1em 0.1em 1px black;
 }
 
 .page-center {
