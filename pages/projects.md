@@ -2,6 +2,20 @@
 title: Projects
 ---------------
 
+[Computing Workshop][]
+-----
+
+Computing Workshop is a 9-session mini-course on computing, taking a holistic
+approach that covers both hardware and software.
+
+Students will:
+
+* learn about the major hardware components of a computer and how they work;
+* build physical digital logic circuits using transistors;
+* practise elements of static web development using HTML and CSS;
+* use [Haskell][] to implement algorithms and build a static site generator
+  with [Hakyll][].
+
 [servant-pushbullet-client][]
 -----
 
@@ -64,3 +78,6 @@ This new evaluation method was used to produce some of the results in the paper
 [Simon Gravel]: http://simongravel.lab.mcgill.ca/Home.html
 [tracts]: http://github.com/sgravel/tracts
 [great migration]: http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006059
+[Computing Workshop]: https://computing-workshop.com/
+[Haskell]: https://haskell.org/
+[Hakyll]: https://jaspervdj.be/hakyll/
