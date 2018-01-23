@@ -27,6 +27,11 @@ such as pagniation of results.
 This library depends on [another one][pushbullet-types] I wrote which simply
 describes the types of objects returned by the Pushbullet API.
 
+Ultimately, the reason I wrote these libraries was to write [tpb][], an
+application to interact with the Pushbullet API on the command-line.
+On top of this application, I wrote a number of scripts for sending and
+receiving SMS on the command-line.
+
 [servant-github-webhook][]
 -----
 
@@ -78,6 +83,7 @@ This new evaluation method was used to produce some of the results in the paper
 [Simon Gravel]: http://simongravel.lab.mcgill.ca/Home.html
 [tracts]: http://github.com/sgravel/tracts
 [great migration]: http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006059
+[tpb]: https://github.com/tsani/tpb
 [Computing Workshop]: https://computing-workshop.com/
 [Haskell]: https://haskell.org/
 [Hakyll]: https://jaspervdj.be/hakyll/
