@@ -1,5 +1,5 @@
 ---
-title: "Jake M.Sc. work"
+title: "M.Sc. work"
 ---
 
 This is a living document. As due work items arise and as tasks are completed,
@@ -17,33 +17,38 @@ key take-aways.
 
   **Expected read by: 19 January 2018**
 
-  **Done on 22 January 2018.** [Notes.](/notes/focused-inductive-atp.html)
+  **Done on 22 January 2018.** [Notes.][fitp]
 
 * _Programming with Binders and Indexed Data-Types_
   by A. Cave and B. Pientka.
 
-  **Expected read by: 23 January 2018**
+  _In progress._ **Expected read by: 31 January 2018.**
+
+  [Notes.][pbidt]
 
 * _Focusing and Higher-Order Abstract Syntax_
   by N. Zeilberger.
 
-  **Expected read by: 26 January 2018**
+  **Expected read by: 2 February 2018.**
+
+* _Which types have a unique inhabitant?_
+  by G. Scherer.
+
+  Reading only sections 7.2, 7.3, and 10.1.
+
+  **Expected read by: 7 February 2018.**
 
 * _Focusing on Pattern Matching_
   by N. Krishnaswami.
 
-  **Expected read by: 29 January 2018**
-
 * _Automated Theorem Proving in a Simple Meta Logic for LF_
   by C. Schurmann and F. Pfenning.
-
-  **Expected read by: 31 January 2018**
 
 ## Implementation
 
 * Fix the interactive mode bugs Aliya and I discussed.
 
-  **Due: 25 January 2018**
+  **Due: 9 February 2018**
 
 ## Code review
 
@@ -56,7 +61,7 @@ key take-aways.
     * Beluga pretty-prints the result
     * Beluga reparses and reconstructs the result into an AST
 
-  **Expected due date: 31 January 2018.**
+  **Expected due date: 2 February 2018.**
 
 * Investigate existing higher-order logic programming engine implemented in
   Beluga but that isn't hooked up.
@@ -65,21 +70,26 @@ key take-aways.
 
 * Investigate Agda's interactive mode testing framework.
 
-  **Expected due date: 9 February 2018.**
+  **Expected due date: 1 February 2018.**
 
 ## Planning & Design
 
 * Design an interactive mode testing framework for Beluga.
+
   Expected output: document outlining the structure of the framework and how to
   use it.
 
-  **Expected due date: 15 February 2018.**
+  **Expected due date: 1 February 2018.**
 
 ## Meetings & knowledge sharing
 
 * Meet with Aliya to learn about her findings w.r.t Beluga interactive mode.
 
   **Done: 11 January 2018.**
+
+* Meet with Szilvia to share knowledge about Beluga interactive mode and
+  outline responsibilities in implementation / testing of future interactive
+  mode improvements.
 
 # Work log
 
@@ -88,3 +98,12 @@ key take-aways.
 * 19 January 2018:
   * continued reading,
   * set up Beluga development environment.
+* 22-26 January 2018:
+  * busy week due to other commitments.
+  * completed reading [_Focused Inductive Theorem Proving_][fitp].
+  * started reading [_Programming with Binders and Indexed Data-Types_][pbidt].
+* 29 January 2018:
+  * started familiarizing myself with Emacs
+
+[pbidt]: /notes/programming-binders-indexed-data-types.html
+[fitp]: /notes/focused-inductive-atp.html
