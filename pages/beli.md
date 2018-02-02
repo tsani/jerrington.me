@@ -1,6 +1,15 @@
 ### Bugs
 
+* Holes are not allowed on the LF level.
+
+  It should be possible to see a list of candidates and choose one, or use the
+  logic programming engine to fill it.
+  Lots of commands don't make sense on the LF level, like splitting.
+
 * Holes are not allowed in `let` declarations; only in `rec` declarations.
+
+  That's because the type annotation is not considered! Let has to be
+  *synthesizable*, not *checkable*.
 
 * Executing a split command with no file loaded results in an unhandled
   exception.
@@ -42,6 +51,10 @@
   offset. We can correct for this in the elisp code by adding the line number of
   the hole to its offset within the file, but the real solution is to fix the
   parser.
+
+  Update (2018-02-01): problem might be in `skip_newlines` in `lexer.ml`;
+  there's no `Loc.shift`. Discuss with Aliya regarding the right sequence of
+  commands.
 
 ### Interactive mode features we should have
 
