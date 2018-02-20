@@ -1,3 +1,7 @@
+---
+title: Beluga Interactive Mode
+---
+
 ### Bugs
 
 * Holes are not allowed on the LF level.
