@@ -57,8 +57,20 @@ title: Beluga Interactive Mode
   parser.
 
   Update (2018-02-01): problem might be in `skip_newlines` in `lexer.ml`;
-  there's no `Loc.shift`. Discuss with Aliya regarding the right sequence of
-  commands.
+  there's no `Loc.shift`.
+
+  Update: messing around with inserting `Loc.shift` seems to make things
+  worse. In particular, line numbers are incorrect.
+
+  Update (2018-02-20): further messing around with `Loc.shift` in the lexer
+  seems to make things better. I don't understand why it's behaving now. Now, no
+  matter where the hole is in the file, the reported location is only off by
+  two. There are situations where it can be off by more, and these arise due to
+  the numerous different places where newlines are handled inside the lexer. For
+  example, comments have their own newline handling, so inserting comments
+  affects the reported hole location.
+
+  Discuss with Aliya regarding the right sequence of commands.
 
 ### Interactive mode features we should have
 
