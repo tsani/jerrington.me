@@ -104,6 +104,15 @@ title: Beluga Interactive Mode
   *depended* on a particular evaluation order.
   *Sigh.*
 
+  Update (2018-02-22): I refactored a bunch of the newline handling sprinkled
+  throughout the lexer to use a common set of helper functions that correctly
+  shift the lexer location and line number. The comment handling is a bit of a
+  mess, but I'm slowly starting to understand how this lexer really works.
+  I have an idea for a test: using `lex_dump FILE | grep EOI | head -n 1`, we
+  can see where Beluga *thinks* the end of the file is, and compare this to
+  `wc -c FILE`. If these counts are the same, then (odds are that) the file was
+  correctly lexed.
+
 ### Interactive mode features we should have
 
 * Holes can be named, e.g. `?foo`
