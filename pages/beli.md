@@ -66,7 +66,7 @@ title: Beluga Interactive Mode
   the `offset` given by Beluga.
 
   This suggests to me that the bug lies within the Beluga parser itself.
-  
+
   Update (2018-02-01): After speaking with David and messing around some more,
   we discovered that the "more efficient" algorithm is off by the *number of
   lines*. It appears that line terminators are not counted when calculating the
@@ -157,7 +157,7 @@ title: Beluga Interactive Mode
 
   The user needs to manually run `:beli` to start the interactive mode.
   Instead, we can add a check to each command to start the interactive mode.
-  
+
   More generally, each interactive mode command should run all the commands it
   depends on, if any, such as saving the buffer to disk, loading it into Beli,
   running `beluga-highlight-holes`, etc.
