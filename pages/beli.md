@@ -15,6 +15,24 @@ title: Beluga Interactive Mode
   That's because the type annotation is not considered! Let has to be
   *synthesizable*, not *checkable*.
 
+  Update (2018-02-26): In other words, it would be possible to write something
+  like `let v = ?`, in which case the hole is _invalid_.
+  We should syntactically allow writing such holes, but fail at a later stage if
+  insufficient type information is available.
+  At a minimum, it should be possible to write `let v : Bool = ?`, since the
+  type of the hole is known.
+
+  To make this change, I would think to add a production to `cmp_exp_syn`:
+
+  ```
+  | "?" -> Comp.Hole _loc
+  ```
+
+  But this doesn't work, because Beluga has separate expression AST types for
+  expressions that have synthesizable types versus checkable types, so
+  `Comp.Hole` constructs a *checkable* AST node, whereas `cmp_exp_syn` needs to
+  produce a *synthesizable* AST node.
+
 * Executing a split command with no file loaded results in an unhandled
   exception.
 
@@ -146,6 +164,14 @@ title: Beluga Interactive Mode
 
 * Split command detects whether there is a hole at the point, and if any,
   avoids prompting for the hole to split on.
+
+  Update (2018-02-26): I was thinking about whether this is actually possible,
+  and it turns out that it is. We can model this functionality after the
+  `describe-function` Emacs builtin, which uses the word under the cursor as the
+  default value. This will tie in very nicely with the named holes feature,
+  since we can offer an interactive prompt that would look like
+  `Hole to split on (default foo):`
+  if the cursor is over a hole `?foo`.
 
 ### Confusion
 
