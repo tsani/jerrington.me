@@ -2,7 +2,25 @@
 title: Beluga Interactive Mode
 ---
 
+### Timeline
+
+* Week of 12 March 2018:
+  - named holes: submit pull request for OCaml side
+  - named holes: implement additions to `beluga-mode.el`.
+    (See "smart hole splitting" below.)
+* Week of 19 March 2018:
+  - interactive mode bug: splitting not allowed in functions with totality
+    annotations.
+
 ### Bugs
+
+* Splitting is not allowed in functions with totality annotations.
+
+* Certain files are incorrectly lexed.
+
+  Running `lex_check_all.sh` shows that certain example files are incorrectly
+  lexed. These files need to be examined more closely, using `lex_dump` to see
+  where the lexer gets mixed up.
 
 * Holes are not allowed on the LF level.
 
@@ -44,7 +62,7 @@ title: Beluga Interactive Mode
     - highlight the holes;
     - finally, call `%:split`.
 
-* Hole overlay is incorrectly positioned
+* **(RESOLVED)** Hole overlay is incorrectly positioned
 
   Upshot: the text under the _overlay_ is deleted and replaced when an
   interactive mode command is executed, e.g. `%: split 0 s` will remove the
@@ -133,7 +151,7 @@ title: Beluga Interactive Mode
 
 ### Interactive mode features we should have
 
-* Holes can be named, e.g. `?foo`
+* **(IN PROGRESS)** Holes can be named, e.g. `?foo`
 
   This way, we can use a command like `%: split foo s` to introduce a
   split on variable `s` at the hole named `foo`.
@@ -162,8 +180,9 @@ title: Beluga Interactive Mode
   depends on, if any, such as saving the buffer to disk, loading it into Beli,
   running `beluga-highlight-holes`, etc.
 
-* Split command detects whether there is a hole at the point, and if any,
-  avoids prompting for the hole to split on.
+* Smart hole splitting:
+  split command detects whether there is a hole at the point, and if any, avoids
+  prompting for the hole to split on.
 
   Update (2018-02-26): I was thinking about whether this is actually possible,
   and it turns out that it is. We can model this functionality after the
@@ -172,15 +191,8 @@ title: Beluga Interactive Mode
   since we can offer an interactive prompt that would look like
   `Hole to split on (default foo):`
   if the cursor is over a hole `?foo`.
-
-### Confusion
-
-* What's a "line directive" (Camlp4)? Comments in `beluga-mode.el` suggest that
-  the `bol` (beginning-of-line) and `offset` values returned by Beluga (and
-  ultimately coming from from Camlp4) might not be correct due to these
-  directives.
-  Would these directives be written into a Beluga source file? Why would
-  someone use them?
+  
+  This depends on the named holes feature, which is in progress.
 
 [1]: https://files.jerrington.me/arithmetic-bug-1.bel
 [ocaml-lies]: https://caml.inria.fr/pub/docs/oreilly-book/html/book-ora029.html
