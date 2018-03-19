@@ -4,11 +4,8 @@ title: Beluga Interactive Mode
 
 ### Timeline
 
-* Week of 12 March 2018:
-  - named holes: submit pull request for OCaml side
-  - named holes: implement additions to `beluga-mode.el`.
-    (See "smart hole splitting" below.)
 * Week of 19 March 2018:
+  - named holes: implement smart hole splitting
   - interactive mode bug: splitting not allowed in functions with totality
     annotations.
 
@@ -169,6 +166,25 @@ title: Beluga Interactive Mode
   `a1`, `a2`, etc. This way the user can see in the file what the hole number
   is.
 
+  Update (2018-03-19): this feature is implemented and awaiting another PR to be
+  merged before I can send a PR for this. The Emacs mode has also been updated
+  to allow using hole names instead of numbers. Beluga, when generating new
+  holes, does not currently generate names for them, but this is planned for
+  later.
+  We opted for disallowing hole names that are not valid Beluga identifiers, so
+  `?0` is illegal (a lexing error). In fact, we add a new lexical category HOLE,
+  which is a question mark followed by a valid identifier.
+  Named holes are still numbered, so if a file contains three holes, with the
+  second one being named, and the others being anonymous, the third hole is
+  still hole number three.
+
+* `beluga-load`, when used internally, affects the current buffer.
+
+  Currently when `beluga-load` is called internally, e.g. because of a split, it
+  spawns an interactive prompt for selecting the file to load. I think it's safe
+  to assume that when doing a split, we're already in the right buffer, so this
+  should be skipped.
+
 * Commands automatically start the interactive mode
 
   (This is low-hanging fruit.)
@@ -179,6 +195,12 @@ title: Beluga Interactive Mode
   More generally, each interactive mode command should run all the commands it
   depends on, if any, such as saving the buffer to disk, loading it into Beli,
   running `beluga-highlight-holes`, etc.
+
+  Update (2018-03-19): This is implemented for splitting. When invoking
+  `beluga-split-hole`, its prerequisite commands `beluga-load` and
+  `beluga-highlight-holes` will both be called.
+  However, we still don't actually *start* the interactive mode. We merely
+  invoke the prerequisite commands.
 
 * Smart hole splitting:
   split command detects whether there is a hole at the point, and if any, avoids
@@ -191,8 +213,12 @@ title: Beluga Interactive Mode
   since we can offer an interactive prompt that would look like
   `Hole to split on (default foo):`
   if the cursor is over a hole `?foo`.
-  
-  This depends on the named holes feature, which is in progress.
+
+  This depends on the named holes feature, which is now essentially complete.
+
+### Confusion
+
+None at the moment!
 
 [1]: https://files.jerrington.me/arithmetic-bug-1.bel
 [ocaml-lies]: https://caml.inria.fr/pub/docs/oreilly-book/html/book-ora029.html
