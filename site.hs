@@ -79,24 +79,8 @@ main = hakyll $ do
     route schoolPdfRoute
     compile copyFileCompiler
 
-  match "images/*" $ do
-    route   idRoute
-    compile copyFileCompiler
-
-  match "css/*" $ do
-    route   idRoute
-    compile compressCssCompiler
-
-  match "font/*" $ do
-    route   idRoute
-    compile copyFileCompiler
-
-  match "files/*" $ do
-    route   idRoute
-    compile copyFileCompiler
-
-  match "files/pdfs/*" $ do
-    route   idRoute
+  match "static/**" $ do
+    route (dropRoute 7)
     compile copyFileCompiler
 
   -- TEMPLATES ----------------------------------------------------------------
@@ -127,6 +111,11 @@ feedConfig = FeedConfiguration
 schoolPdfRoute :: Routes
 schoolPdfRoute = customRoute (g . splitFileName . toFilePath) where
   g (_, f) = "pdf" </> f
+
+-- | A route that drops a given number of characters from a path to
+-- produce a route.
+dropRoute :: Int -> Routes
+dropRoute n = customRoute (drop n . toFilePath)
 
 readingNotesRoute :: Routes
 readingNotesRoute = customRoute (g . toFilePath) where
