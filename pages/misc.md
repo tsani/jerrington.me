@@ -122,6 +122,20 @@ Presenting a paper on formal verification of deep learning:
 > When a computer scientist tells you something is obvious, it's probably
 > because they're bullshitting you.
 
+## Conor McBride
+
+In [this](https://www.youtube.com/watch?v=21bUrFEX4jI) talk, discussing how to
+deal with irrelevant data in dependently-typed programming languages. Conor
+advocates for a way to distinguish between data in "heaven" (static information)
+and data on "earth" (runtime information).
+
+> Idris isn't quite there yet, at least with explaining what's going on. There's
+> some kind of voodoo behind the scenes and some attempt to infer what's going
+> on, but nothing that surfaces nicely in some theory. And
+> that's... always... the way... with Edwin [the creator of Idris].
+> He, well -- it's an understanding that he and I have: he'll just - you know -
+> shop in my shop whenever the right product is ready.
+
 ## Miscellaneous
 
 From a Vice article advocating ditching the smartphone in favour of a flip
