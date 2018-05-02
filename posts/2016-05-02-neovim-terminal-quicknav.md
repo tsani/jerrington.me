@@ -60,8 +60,8 @@ window that's viewing a terminal buffer. We can use an autocommand for this.
 
 ```
 autocmd WinEnter *
- \ if &buftype ==# 'terminal'
- \  startinsert
+ \ if &buftype ==# 'terminal' |
+ \  startinsert |
  \ endif
 ```
 
