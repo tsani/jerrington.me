@@ -22,7 +22,7 @@ Students will:
 This library describes the Pushbullet API as a type and provides functions
 created with [Servant][servant-client] to call the API. It also provides some
 miscellaneous functions for dealing with particulars of the Pushbullet API,
-such as pagniation of results.
+such as pagination of results.
 
 This library depends on [another one][pushbullet-types] I wrote which simply
 describes the types of objects returned by the Pushbullet API.
