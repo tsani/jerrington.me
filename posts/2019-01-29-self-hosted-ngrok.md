@@ -8,7 +8,7 @@ Sadly, it costs money and it's proprietary.
 If you're a developer, odds are that you're already renting a server in the
 public cloud, so why not roll your own ngrok?
 
-It turns out that you can do it using free, out-of-the-box tools, with no
+It turns out that you can do it using free, off-the-shelf tools, with no
 sophisticated scripting required! In this article, I'll show you how.
 
 ## Step 1. Configuring Nginx
@@ -68,7 +68,7 @@ application running on your local machine on port `K`.
 
 To test this out, on your local machine, in one shell run
 `python -m http.server 8888` and in another shell run
-`ssh -R 3000:localhost:8888`. Visit `tunnel.yourdomain`. You should see a
+`ssh -R 3333:localhost:8888`. Visit `tunnel.yourdomain`. You should see a
 directory listing for whatever directory you were in when you ran the Python
 command!
 
@@ -85,8 +85,9 @@ There are already excellent tutorials available on setting up Letsencrypt, so I
 won't repeat that here. I recommend consulting the ArchWiki article
 [here](https://wiki.archlinux.org/index.php/Certbot).
 Letsencrypt is a self-hosters dream-come-true since it is truly a
-set-it-and-forget-it type of this. The certificate you get will renew itself
-when it its expiry is approaching.
+set-it-and-forget-it type of thing. With the appropriate setup, (namely a simple
+systemd timer,) the certificate you get will renew itself when it its expiry is
+approaching.
 
 Once you have a certificate, it suffices to adjust the Nginx server block above
 so it looks like this.
