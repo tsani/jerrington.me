@@ -68,7 +68,7 @@ application running on your local machine on port `K`.
 
 To test this out, on your local machine, in one shell run
 `python -m http.server 8888` and in another shell run
-`ssh -R 3333:localhost:8888`. Visit `tunnel.yourdomain`. You should see a
+`ssh -R 3333:localhost:8888 yourdomain`. Visit `tunnel.yourdomain`. You should see a
 directory listing for whatever directory you were in when you ran the Python
 command!
 
