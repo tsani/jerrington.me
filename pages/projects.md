@@ -5,16 +5,10 @@ title: Projects
 [Computing Workshop][]
 -----
 
-Computing Workshop is a 9-session mini-course on computing, taking a holistic
-approach that covers both hardware and software.
-
-Students will:
-
-* learn about the major hardware components of a computer and how they work;
-* build physical digital logic circuits using transistors;
-* practise elements of static web development using HTML and CSS;
-* use [Haskell][] to implement algorithms and build a static site generator
-  with [Hakyll][].
+Together with my partner [Eric Mayhew](https://emayhew.com/) I create and run a
+series of workshops on various topics in computer science. These range from
+fundamentals of circuits and programming, to an introduction to machine
+learning.
 
 [servant-pushbullet-client][]
 -----
