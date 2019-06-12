@@ -21,4 +21,4 @@ site-%: all_posts
 all_posts: $(LIDR_MD)
 
 posts/%.lidr.md: lidr/%.lidr
-	sed 's/^> /    /' < $< | sed 's/^>/    /' > $@
+	./convert-lidr.py $@ $<

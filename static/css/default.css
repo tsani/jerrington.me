@@ -10,7 +10,7 @@ body {
 }
 
 code, pre {
-    background-color: #ffd5d5;
+    background-color: #efefef;
 }
 
 pre {
@@ -90,7 +90,7 @@ div#content {
     border-bottom: 1px solid #555;
 }
 
-div#content p {
+div.content p {
     text-align: justify;
 }
 
@@ -164,4 +164,50 @@ img.figure {
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
+}
+
+div.deduction {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+div.deduction > p {
+    text-align: center;
+}
+
+div.deduction > *:not(:last-child)::after {
+    content: "";
+    width: 1em;
+}
+
+span.inference {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    margin: auto auto;
+}
+
+span.inference > span {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    /* padding: 0 0.5em; */
+}
+
+span.inference > span > * {
+    margin: 0 0.5em;
+}
+
+span.inference span.gap {
+    flex: 1 0 1em;
+}
+
+span.inference > .infer:last-child {
+    border-top: 1px solid black;
+}
+
+span.inference > .deduce:last-child {
 }

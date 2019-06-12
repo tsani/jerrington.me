@@ -20,7 +20,7 @@ so here is the module declaration and necessary imports.
 > %default total
 > %access public export
 
-## Decicidable equality
+## Decidable equality
 
 In Idris, *decision procedures* are really useful. A decision procedure lets
 you promote value-level information to the type-level, even at runtime. For
