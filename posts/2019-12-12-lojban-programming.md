@@ -82,7 +82,7 @@ The second case is the case for successor, since we defined it second.
 
 We have the following evaluation rules for `namcu rekso`:
 
-1. `lo namcu rekso be lo namsero bei X bei Y` evaluates to `Y`
+1. `lo namcu rekso be lo namsero bei X bei Y` evaluates to `X`
 2. `lo namcu rekso be lo namsaku be N be'o bei X bei Y` evaluates to
    `lo me'au Y be lo namcu rekso be N bei X bei Y`
   
