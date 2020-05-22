@@ -2,12 +2,13 @@
 title: Roll your own reminders with dunst
 ---
 
-Dunst is a very simple notification daemon. It displays notifications sent by
-whatever programs on Linux that use libnotify, which is most programs that
-have some form of notification. Libnotify also comes with a script `notify-send`
-that allows sending notifications from the command line.
+[Dunst](https://dunst-project.org/) is a very simple notification daemon. It
+displays notifications sent by whatever programs on Linux that use libnotify,
+which is most programs that have some form of notification. Libnotify also comes
+with a script `notify-send` that allows sending notifications from the command
+line.
 
-Using `notify-send`, `at`, and a bit of configuration for `dusnt`, we can make a
+Using `notify-send`, `at`, and a bit of configuration for `dunst`, we can make a
 very simple reminder script that displays a notification after a certain time
 has elapsed. We can make the reminder notification a bit more obtrusive than
 ordinary notifications, so there's no chance of missing it.
