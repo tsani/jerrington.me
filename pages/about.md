@@ -55,8 +55,8 @@ aspect of the login that made it slow was that a new process was spawned
 for each user session and this process needed to load a huge number of
 libraries. The idea to improve the speed was to spawn a partially initialized
 session process, with all the libraries loaded, and to fork it when a user
-needed to log in. Then the child process can complete user-specific
-initialization tasks that usually fast. The challenge was to get the
+needed to log in. Then the child process can complete the usually quick
+user-specific initialization tasks. The challenge was to get the
 [K](https://en.wikipedia.org/wiki/K_(programming_language))
 interpreter, which runs the user session process, to fork at all.
 The interpreter itself could not be directly extended as it is
@@ -65,7 +65,9 @@ to figure out how to get the interpreter to not crash after forking due to
 issues with inherited file descriptors.
 In late 2017, in my last term of undergrad, I did a research project with
 [Brigitte Pientka](http://www.cs.mcgill.ca/~bpientka/) that sought to understand
-how we could use copatterns in a language with an explicit model of time.
+how we could use [copatterns](https://dl.acm.org/doi/10.1145/2480359.2429075) in
+a language with an explicit model of time (see
+e.g. [here](https://dl.acm.org/doi/10.1145/2535838.2535881)).
 
 In 2018, I started my Master's degree in Computer Science at McGill.
 My advisor was Brigitte Pientka. At first I thought about extending the work I
