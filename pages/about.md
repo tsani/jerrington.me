@@ -33,14 +33,63 @@ Rather than do a physical simulation, my team created a viewer and builder
 for 3D cellular automata similar to
 [Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
 It was around this time that I began to use Haskell.
-I then got a Bachelors degree in Computer Science at McGill, with an emphasis
-on courses in programming language theory, compilers, and formal verification.
 
-I'm currently pursuing a Masters degree at McGill under the supervision of
-[Brigitte Pientka](http://www.cs.mcgill.ca/~bpientka/) in the computational
-logic lab.
-My masters project is to design and implement a proof search system.
-Thanks to the
-[Curry-Howard correspondence](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence),
-this engine will be capable of generating _programs_ of a given _type_.
-With a precise enough type, the generated program will be the right one!
+In 2014, I started a Bachelors degree in Computer Science at McGill.
+I worked as a research assistant for [Simon
+Gravel](http://simongravel.lab.mcgill.ca/) till 2015.
+While there, I developed visualizations for genetic data as well as an
+improvement for a tool called Tracts used to model ancestry information.
+In 2016, I started work at Oohlala Mobile (now [Ready Education](https://www.readyeducation.com/)).
+I did Python backend work for their mobile applications, which are whitelabel
+products sold to universities. I was in charge of developing integrations
+with university systems (SIS, LMS) to pull in information such as student
+calendars, event calendars, course lists, etc.
+For the compilers course I took in early 2016, my teammate Frédéric Lafrance and
+I wrote our compiler for a subset of Go in Haskell.
+We got top marks in the class and I was given an honorary A+ grade by the
+instructor Laurie Hendren. (McGill does not actually have an A+ grade.)
+In early 2017, I left Oohlala, and in the summer I interned for 10 weeks at
+[1010data](https://1010data.com/).
+My project's goal was to improve the speed of the core platform login. One
+aspect of the login that made it slow was that a new process was spawned
+for each user session and this process needed to load a huge number of
+libraries. The idea to improve the speed was to spawn a partially initialized
+session process, with all the libraries loaded, and to fork it when a user
+needed to log in. Then the child process can complete user-specific
+initialization tasks that usually fast. The challenge was to get the
+[K](https://en.wikipedia.org/wiki/K_(programming_language))
+interpreter, which runs the user session process, to fork at all.
+The interpreter itself could not be directly extended as it is
+closed-source. Instead, I leveraged K's ability to run extensions in C, and had
+to figure out how to get the interpreter to not crash after forking due to
+issues with inherited file descriptors.
+In late 2017, in my last term of undergrad, I did a research project with
+[Brigitte Pientka](http://www.cs.mcgill.ca/~bpientka/) that sought to understand
+how we could use copatterns in a language with an explicit model of time.
+
+In 2018, I started my Master's degree in Computer Science at McGill.
+My advisor was Brigitte Pientka. At first I thought about extending the work I
+had done in my undergraduate research project, but this eventually shifted to
+working on proof search techniques with the eventual hope to integrate some of
+these into [Beluga](http://complogic.cs.mcgill.ca/beluga/).
+We realized that to directly generate Beluga programs might be unnecessarily
+tricky, so we designed an intermediate language called the "proof script
+language". This is at once more high level and more verbose than the traditional
+Beluga functional programming language.
+The focus of the project shifted once more as I began development on Beluga's
+interactive mode.
+Ultimately, I developed with the help of Clare Jang and Marcel Goh a brand new
+interactive mode for Beluga called Harpoon.
+The interactions in this system are grounded in Contextual Modal Type Theory,
+and I gave an explicit elaboration from interactive actions into proof script
+fragments.
+Then I showed that the process of stitching these fragments together into a
+larger proof script preserves types.
+Finally, I developed a type-preserving translation from the proof script
+language into the traditional Beluga programming language.
+This demonstrates that interactive proofs are sound, and furthermore that any
+proof constructed interactively for a given theorem is indeed a real proof of
+that theorem.
+I finished the Master's program in summer 2020, and my thesis is titled
+"Mechanizing Metatheory Interactively". I presented our paper with the same
+title at LFMTP 2020.
