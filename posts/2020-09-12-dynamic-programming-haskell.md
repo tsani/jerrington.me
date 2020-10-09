@@ -214,13 +214,13 @@ stage0 :: Stage
 stage0 = [emptyBoard]
 
 emptyBoard :: Board
-emptyBoard = map (const Empty) [1..boardLength]
+emptyBoard = map (const Safe) [1..boardLength]
 ```
 
 Next, we need to think about how to get the next stage from the current
 stage: for each board `B` in the current stage, generate
-a new board `B'` for each empty position `P` in `B`, such that `B'[P] = Queen`
-and `B'[P'] = Danger` if position `P'` is in danger of position `P`.
+a new board `B'` for each safe position `P` in `B`, such that `B'[P] = Queen`
+and `B'[P'] = Danger` for all positions `P'` in danger of position `P`.
 
 This suggests a small piece of functionality that we need -- we need to be able
 to place a queen on a board, putting `Danger` on all the tiles that queen
@@ -254,7 +254,7 @@ inDangerOf :: (Int, Int) -> (Int, Int) -> Bool
 (x, y) `inDangerOf` (qx, qy) = x == qx || y == qy || (qx - x)^2 == (qy - y)^2
 ```
 
-Now we can loop back to the game plan: place a queen on every `Empty` tile in a
+Now we can loop back to the game plan: place a queen on every `Safe` tile in a
 board to generate new boards.
 
 ```
@@ -262,7 +262,7 @@ placeQueens :: Board -> [Board]
 placeQueens b = map (\pos -> placeQueen pos b) $ empties b
 
 empties :: Board -> [(Int, Int)]
-empties = map fst . filter (\(_, tile) -> tile == Empty) . imapBoard (,)
+empties = map fst . filter (\(_, tile) -> tile == Safe) . imapBoard (,)
 ```
 
 Now we apply `placeQueens` to every board in the stage, concatenating the
@@ -316,7 +316,7 @@ drawBoard = concatMap drawRow . groupBySize boardWidth where
     drawTile t = case t of
       Queen -> "Q "
       Danger -> "_ "
-      Empty -> "_ "
+      Safe -> "_ "
 
 groupBySize :: Int -> [a] -> [[a]]
 groupBySize _ [] = []
