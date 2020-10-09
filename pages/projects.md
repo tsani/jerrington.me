@@ -2,6 +2,17 @@
 title: Projects
 ---------------
 
+[Apollo][]
+-----
+
+Apollo is a web service for downloading music, and integrates with MPD.
+Using Apollo's HTTP API, you can send URLs from youtube, soundcloud, etc. to be
+downloaded. Apollo comes bundled with bash scripts for submitting URLs from the
+command-line.
+
+I have also developed a [Firefox extension][] for Apollo which makes it easy to
+submit links and monitor download progress directly in the browser.
+
 [Computing Workshop][]
 -----
 
@@ -81,3 +92,5 @@ This new evaluation method was used to produce some of the results in the paper
 [Computing Workshop]: https://computing-workshop.com/
 [Haskell]: https://haskell.org/
 [Hakyll]: https://jaspervdj.be/hakyll/
+[Firefox extension]: https://files.jerrington.me/apollo-1.0-an+fx.xpi
+[Apollo]: https://github.com/tsani/apollo
