@@ -2,7 +2,7 @@
 title: Dynamic Programming in Haskell
 ---
 
-Last week, [Eric](https://ejmayhew.com/) came to me with a fun programming
+Last week, [Eric](https://emayhew.com/) came to me with a fun programming
 challenge: the knight's tour around the keypad. This by now a well-known
 problem. I had actually been given it once upon a time in undergrad when
 interviewing for an internship. Alas back then, I couldn't solve it, and I
