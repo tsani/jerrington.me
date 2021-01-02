@@ -5,10 +5,8 @@ $(shell mkdir -p lidr)
 LIDR=$(shell find lidr -name '*.lidr')
 LIDR_MD=$(patsubst lidr/%.lidr,posts/%.lidr.md,$(LIDR))
 
-DEPLOYDEST=/srv/http/blog
-
 deploy: build site-rebuild
-	rsync -Pr _site/ blog:$(DEPLOYDEST)
+	./local-deploy.sh
 
 site-%: all_posts
 	stack run -- $(patsubst site-%,%,$@)
