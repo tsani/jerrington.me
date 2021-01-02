@@ -132,6 +132,7 @@ This is an application of one of the bigger principles of type-driven
 development: **make illegal states unrepresentable**.
 Going forward, I hope to find equally cheap ways to do just that.
 
-P.S. This article does simplify a few pointsIn case you're interested in the gory details,
+P.S. This article does simplify a few points. In case you're interested in the
+gory details, have a look at [the code](https://github.com/tsani/aoc/blob/master/2020/src/Day20.hs).
 
 [type-applications]: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#extension-TypeApplications
