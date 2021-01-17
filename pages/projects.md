@@ -92,5 +92,5 @@ This new evaluation method was used to produce some of the results in the paper
 [Computing Workshop]: https://computing-workshop.com/
 [Haskell]: https://haskell.org/
 [Hakyll]: https://jaspervdj.be/hakyll/
-[Firefox extension]: https://files.jerrington.me/apollo-1.0-an+fx.xpi
+[Firefox extension]: https://github.com/tsani/apollo-extension/releases
 [Apollo]: https://github.com/tsani/apollo
