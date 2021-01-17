@@ -51,7 +51,7 @@ main = hakyll $ do
 
   -- POSTS --------------------------------------------------------------------
 
-  match "posts/*" $ do
+  match (foldr (.||.) (complement mempty) ["posts/*", "drafts/*"]) $ do
     route $ setExtension "html"
     compile $ pandocMathCompiler
       >>= loadAndApplyTemplate "templates/post.html"  postCtx
