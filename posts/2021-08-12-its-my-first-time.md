@@ -60,7 +60,7 @@ first call is to `x`.
 
 Let's see one more example of this technique, this time to compute the maximum
 value of an array. The idea will be to construct a pair of functions, sharing in
-their closures a reference to the running maximum. The first function, `next`,
+their closures a reference to the running maximum. The first function, `input`,
 is invoked for each element of the array, and in doing so replaces the function
 `get` which retrieves the running maximum.
 
@@ -131,7 +131,7 @@ luck implementing `max` without a condition).
 
 Note that not everything is rainbows and unicorns in this approach: there is a
 penalty in using this technique, namely a double indirection.
-Notice that in both `thunk` and `makeMax` we define the each self-replacing
+Notice that in both `thunk` and `makeMax` we define each self-replacing
 function separately from a "trampoline function" that "bounces the call" to the
 self-replacing function. So we trade an if-statement that decides what state the
 algorithm is in with a function call that takes us to the handler for the
