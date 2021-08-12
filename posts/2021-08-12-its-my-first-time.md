@@ -110,9 +110,9 @@ The underlying phenomenon in each of the examples seen above is _state
 change_. Both algorithms begin in an initial empty state: before trying to
 read the thunk there is no value, so we must compute it; before seeing any data
 items, there is no maximum value. After the first interaction from outside --
-invoking the thunk or seeing the first data item -- a state change needs to
-occur: simply yield the computed value or compare the current input with the
-previous one to decide the new maximum.
+invoking the thunk or seeing the first data item -- the algorithm changes
+states, thus changing its behaviour: simply yield the computed value or compare
+the current input with the previous one to decide the new maximum.
 
 How does this state change become reflected in code? In the first implementation
 of `thunk` using a box, the state is explicitly represented as _data_. Therefore
