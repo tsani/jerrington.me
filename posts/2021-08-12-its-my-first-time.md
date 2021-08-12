@@ -98,9 +98,10 @@ All things considered, this is more complicated than just writing
 data.reduce<number | null>((max, x) => null === max || x > max ? x : max, null);
 ```
 but there are some subtle annoyances in this:
-- we must provide the type parameter `number | null` to `reduce` to avoid a type
-  mismatch
-- we must null-check the max on every iteration, even though after the first one
+
+- We must provide the type parameter `number | null` to `reduce` to avoid a type
+  mismatch.
+- We must null-check the max on every iteration, even though after the first one
   we know it will never become `null` again.
 
 ## The general principle
