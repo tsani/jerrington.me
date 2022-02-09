@@ -87,4 +87,28 @@ The change we made to `countdown` comes at a cost, however. What exactly are we
 supposed to put as a value for `recurse` when we call `countdown`??
 
 To address this, we will model each kind of recursive behaviour as a separate,
-higher-order function to which
+higher-order function to which we can pass `countdown`. The result of applying
+such a _recursion combinator_ to `countdown` should be a function that takes all
+the "real" parameters of `countdown`, i.e. `n`. Let's figure out how to
+implement a "standard" recursion first, then we'll move on to asynchronous
+recursion.
+
+```javascript
+const recursion = (f) => (...args) => f(f, ...args);
+```
+
+To see how this works, let's evaluate `recursion(countdown)`. Well, there's only
+one step to do: substitute `countdown` for `f` and we arrive at
+`(...args) => countdown(countdown, ...args)`. The result is that when we call
+_this_ function with a number such as `100`, we in fact end up calling
+_countdown_ passing `countdown` itself as the argument for the `recurse`
+parameter.
+
+Finally, to make this asynchronous, we'll need to construct a new `recurse`
+function that's more complicated than just `f`. But only a _bit_ more
+complicated. It will simply need to call `f` inside of a call to `setTimeout`.
+
+```javascript
+const delayedRecursison = (delay, f) =>
+    (...args) => f((...args) => setTimeout(() => f(...args), delay), ...args);
+```
