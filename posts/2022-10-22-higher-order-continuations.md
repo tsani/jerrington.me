@@ -41,7 +41,7 @@ subtree of a parent node, then what remains to be done with the result of this
 node is to add it with the parent node's left subtree sum (`a`) and integer
 value (`x`).
 
-This order of operations is captured concrete _call stack._
+This order of operations is captured concretely by the _call stack._
 
 Continuations enter the picture as a _representation of the call stack._
 
@@ -261,3 +261,4 @@ of a future post!
 [FV]: https://en.wikipedia.org/wiki/Free_variables_and_bound_variables
 [JKTKops]: https://github.com/jktkops
 [MK]: https://www.maxkopinsky.com/
+[DEFUN]: https://en.wikipedia.org/wiki/Defunctionalization
