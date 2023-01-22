@@ -2,6 +2,11 @@
 title: Refactoring Asynchronous Recursion with Continuation-Passing Style
 ---
 
+(This article was originally drafted in February 2022. The topic is very much
+related to the previous article's,
+[Implementing environment-based evaluation of recursive functions in OCaml][recursive-closures],
+but they can very much be read independently.)
+
 Whew, that's a title that takes some unpacking!
 Asynchronous recursion is a concept in JavaScript, and presumably in other
 languages with some form of async-await. Maybe another way to call it would
@@ -43,9 +48,9 @@ fs.unlink('/tmp/hello', (err) => {
 
 What's special about this is that the code to execute _after_ the delete has
 taken place is represented as a function passed as the second parameter of
-`unlink`. So the call to `unlink` returns immediately and other work can be
-done. When the deletion is done, the NodeJS runtime invokes the callback we
-passed, and we see either "yikes" or "deleted `/tmp/hello`".
+`unlink`. The call to `unlink` returns immediately so other work can be
+done concurrently. When the deletion finishes, the NodeJS runtime invokes the
+callback we passed, and we see either "yikes" or "deleted `/tmp/hello`".
 
 From the internal implementation of `unlink`'s point of view, it has been passed
 a function that it can consider a "return function". When `unlink`'s IO
@@ -111,9 +116,10 @@ complicated. It will simply need to call itself within a call to `setTimeout`.
 
 ```javascript
 const delayedRecursively = (f, delay) =>
-    (...args) => f((...args) =>
-        setTimeout(() =>
-            f(delayedRecursively(f, delay), ...args), delay
+    (...args) => f(
+        (...args) => setTimeout(
+            () => f(delayedRecursively(f, delay), ...args),
+            delay,
         ),
         ...args
     );
@@ -150,3 +156,70 @@ to return a value, that works whether the recursion is synchronous or
 asynchronous.
 
 ## Returning via yet another function
+
+The trick, as always, is to introduce yet another layer of indirection.
+
+As a motivating example, let's consider a recursive algorithm that sums the
+integer values contained in a binary tree.
+
+```javascript
+const sumTree = (t) => {
+    if (t === null) return 0;
+    else return sumTree(t.left) + t.value + sumTree(t.right);
+}
+```
+
+First and as before, we make the recursion indirect via a `recurse` function.
+
+```javascript
+const sumTree = (recurse, t) => {
+    if (t === null) return 0;
+    else return recurse(t.left) + t.value + recurse(t.right);
+}
+```
+
+Next, we observe that we have a problem if we use `delayedRecursively`: the
+return value of `recurse(t.left)`, for example, won't be the sum of the left
+subtree's elements! Let's introduce another function parameter called _resolve_
+this time. Rather than returning via the `return` statement, our function will
+instead return by calling `resolve`.
+
+```javascript
+const sumTree = (recurse, t, resolve) => {
+    if (t === null) resolve(0);
+    else
+        recurse(t.left, (n1) =>
+            recurse(t.right, (n2) =>
+                resolve(n1 + t.value + n2)));
+}
+```
+
+What's nice about this approach is that it works without us needing to modify
+any of our recursion combinators from the previous section. We can evaluate
+`delayedRecursively(sumTree, 100)(sampleTree, (n) => console.log(n))` and it
+(slowly) calculates the sum of the tree and prints out the sum.
+
+## Conclusion
+
+In this article, we saw how to separate two concerns that at first glance seem
+inextricably tried: the pattern of recursion was isolated from the recursive
+algorithm itself. We introduced some combinators, `recursively` and
+`delayedRecursively`, to each represent a different pattern of recursion.
+Then, we rewrote our recursive algorithm to _recurse via a function_ which we
+named `recurse`. That refactored version of the algorithm expresses the base and
+step cases of the recursive algorithm without explicitly performing the
+recursion, leaving it up to the recursion combinator to decide how exactly that
+will be done.
+Finally, to account for a desire to return values from our functions, we
+introduced one more layer of indirection by returning via a function which we
+named `resolve`. No changes to the recursion combinators were necessary to
+accommodate this.
+
+The choice of `resolve` for the name of this function is no accident. The code
+`recurse(t.left, (n1) => recurse(t.right, (n2) => resolve(n1 + t.value + n2)))`
+is honestly gross. It's callback hell. There is certainly a way of writing some
+slightly different recursion combinators that take advantage of JavaScript's
+promises and `async`/`await` syntax. I leave it to the interested reader to
+work this out.
+
+[recursive-closures]: /posts/2023-01-20-recursive-closures.html
