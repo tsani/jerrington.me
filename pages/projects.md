@@ -56,7 +56,7 @@ In the spring of 2015,
 Publications
 -----
 
-### Harpoon: Mechanizing Metatheory Interactively (System Description)
+### Harpoon: Mechanizing Metatheory Interactively
 
 [Beluga][beluga] is a proof checker that provides sophisticated infrastructure for
 implementing formal systems with the logical framework LF and proving
