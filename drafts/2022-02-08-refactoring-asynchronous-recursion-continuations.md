@@ -94,21 +94,59 @@ implement a "standard" recursion first, then we'll move on to asynchronous
 recursion.
 
 ```javascript
-const recursion = (f) => (...args) => f(f, ...args);
+const recursively = (f) => (...args) => f(recursively(f), ...args);
 ```
 
-To see how this works, let's evaluate `recursion(countdown)`. Well, there's only
+To see how this works, let's evaluate `recursively(countdown)`. There's only
 one step to do: substitute `countdown` for `f` and we arrive at
-`(...args) => countdown(countdown, ...args)`. The result is that when we call
-_this_ function with a number such as `100`, we in fact end up calling
-_countdown_ passing `countdown` itself as the argument for the `recurse`
-parameter.
+`(...args) => countdown(recursively(countdown), ...args)`.
+The result is that when we call _this_ function with a number such as `100`, we
+in fact end up calling _countdown_ passing `recursively(countdown)` itself as
+the argument for the `recurse` parameter. The process then continues
+recursively, we might say.
 
 Finally, to make this asynchronous, we'll need to construct a new `recurse`
 function that's more complicated than just `f`. But only a _bit_ more
-complicated. It will simply need to call `f` inside of a call to `setTimeout`.
+complicated. It will simply need to call itself within a call to `setTimeout`.
 
 ```javascript
-const delayedRecursison = (delay, f) =>
-    (...args) => f((...args) => setTimeout(() => f(...args), delay), ...args);
+const delayedRecursively = (f, delay) =>
+    (...args) => f((...args) =>
+        setTimeout(() =>
+            f(delayedRecursively(f, delay), ...args), delay
+        ),
+        ...args
+    );
 ```
+
+Let's convince ourselves that this works by evaluating `delayedRecursively(countdown, 100)`.
+Substituting, we get
+```javascript
+(...args) => countdown((...args) =>
+    setTimeout(() =>
+        countdown(delayedRecursively(countdown, 100), ...args), 100), ...args)
+```
+If we imagine for a moment that JavaScript allows partial application, then we
+can substitute further and get the following:
+```javascript
+(n) => {
+    /* ... the countdown implementation ... */
+    setTimeout(() => countdown(delayedRecursively(countdown, 100), n-1), 100)
+}
+```
+And if we ran this as `delayedRecursively(countdown, 500)(10)` we would see the
+messages printed out slowly.
+
+This approach works! We were able to get different recursive behaviours out of
+the same implementation of `countdown`, provided it recurse through an auxiliary
+function rather than directly.
+
+There is however a glaring issue with this approach: there is no way for the
+recursive call to meaningfully return a value to the caller! Sure, `recursively`
+simply returns whatever `f` returns, so one could simply write `const result =
+recurse(...);` but what about when we use `delayedRecursively`? We would then
+get whatever `setTimeout` returns! To address this, we will need a uniform way
+to return a value, that works whether the recursion is synchronous or
+asynchronous.
+
+## Returning via yet another function
