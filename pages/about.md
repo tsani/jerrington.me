@@ -2,7 +2,7 @@
 title: About
 ---
 
-My name is Jacob Errington. I've always been fascinated by magic.
+I've always been fascinated by magic.
 
 In the modern age, the closest thing we have to magic is programming.
 You have to learn the secret languages, passed down through generations, some
@@ -87,5 +87,20 @@ This demonstrates that interactive proofs are sound, and furthermore that any
 proof constructed interactively for a given theorem is indeed a real proof of
 that theorem.
 I finished the Master's program in summer 2020, and my thesis is titled
-"Mechanizing Metatheory Interactively". I presented our paper with the same
-title at LFMTP 2020.
+"Mechanizing Metatheory Interactively". I presented this work at at LFMTP 2020
+and later at CADE 2021. You can read the paper [here][harpoon-cade] and all the
+gory details in [my thesis][thesis].
+
+In summer 2020, I started working in a trading company called DRW. As this was
+at the height of the pandemic, I worked remotely. Ultimately, I decided that
+such a job in the industry didn't suit me. In summer 2021, I realized that my
+favourite part of my job was showing my coworkers new and different ways of
+doing things. So with significant help from my partner, I pivoted careers into
+teaching. In fall 2021, I interviewed to be a faculty lecturer at McGill
+University, and got the job.
+
+Since summer 2022, I have been a faculty lecturer at McGill, and so far I'm
+enjoying it much more than professional software engineering.
+
+[harpoon-cade]: /static/pdf/harpoon.pdf
+[thesis]: /static/pdf/thesis.pdf
