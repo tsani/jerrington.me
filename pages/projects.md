@@ -56,6 +56,28 @@ In the spring of 2015,
 Publications
 -----
 
+### Harpoon: Mechanizing Metatheory Interactively (System Description)
+
+[Beluga][beluga] is a proof checker that provides sophisticated infrastructure for
+implementing formal systems with the logical framework LF and proving
+metatheoretic properties as total, recursive functions transforming LF
+derivations. In this paper, we describe Harpoon, an interactive proof engine
+built on top of Beluga. It allows users to develop proofs interactively using a
+small, fixed set of high-level *actions* that safely transform a subgoal. A
+sequence of actions elaborates into a (partial) *proof script* that serves as an
+intermediate representation describing an assertion-level proof. Last, a proof
+script translates into a Beluga program which can be type-checked independently.
+
+Harpoon is available [on GitHub][harpoon-github] as part of Beluga.
+We have used Harpoon to replay a wide array of examples covering all features
+supported by Beluga. In particular, we have used it for normalization proofs,
+including the recently proposed [POPLMark reloaded challenge][poplmark-reloaded].
+
+This work was presented at CADE 2021. Click [here][harpoon-cade] for the full paper.
+
+The paper lacks many of the details of the full development, which you can read
+in my [thesis][].
+
 ### The Great Migration and African-American genomic diversity
 
 In 2014 as a research assistant in the lab of
@@ -94,3 +116,8 @@ This new evaluation method was used to produce some of the results in the paper
 [Hakyll]: https://jaspervdj.be/hakyll/
 [Firefox extension]: https://github.com/tsani/apollo-extension/releases
 [Apollo]: https://github.com/tsani/apollo
+[harpoon-cade]: /pdf/harpoon.pdf
+[harpoon-github]: https://github.com/Beluga-lang/Beluga
+[poplmark-reloaded]: https://poplmark-reloaded.github.io/
+[beluga]: https://www.cs.mcgill.ca/~complogic/beluga/
+[thesis]: /pdf/thesis.pdf
