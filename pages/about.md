@@ -102,5 +102,5 @@ University, and got the job.
 Since summer 2022, I have been a faculty lecturer at McGill, and so far I'm
 enjoying it much more than professional software engineering.
 
-[harpoon-cade]: /static/pdf/harpoon.pdf
-[thesis]: /static/pdf/thesis.pdf
+[harpoon-cade]: /pdf/harpoon.pdf
+[thesis]: /pdf/thesis.pdf
