@@ -2,6 +2,34 @@
 title: Projects
 ---------------
 
+[Eval][]
+-----
+
+Eval is an implementation of a strongly and statically typed functional
+programming language with type inference, polymorphism, algebraic datatypes, and
+pattern matching.
+
+The following program defines linked lists, an eliminator for them, a sample
+list, and a function to sum a list, and it calculates the sum of the sample
+list.
+
+```
+type List a =
+  | Nil
+  | Cons a (List a)
+
+def rec fold_list : (a -> b -> b) -> List a -> b -> b =
+  fun f l e -> match l with
+  | Nil -> e
+  | Cons x xs -> f x (fold_list f xs e)
+
+def list = Cons 5 (Cons 4 (Cons 3 (Cons 2 (Cons 1 (Cons 0 Nil)))))
+
+def sum = fun l -> fold_list (fun x y -> x + y) l 0
+
+def n = sum list
+```
+
 [Apollo][]
 -----
 
@@ -121,3 +149,4 @@ This new evaluation method was used to produce some of the results in the paper
 [poplmark-reloaded]: https://poplmark-reloaded.github.io/
 [beluga]: https://www.cs.mcgill.ca/~complogic/beluga/
 [thesis]: /pdf/thesis.pdf
+[Eval]: https://github.com/tsani/eval
