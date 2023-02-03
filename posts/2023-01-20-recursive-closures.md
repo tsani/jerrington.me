@@ -53,7 +53,7 @@ throwing away the fact that `y -> 4`, which is essential to evaluating that
 function! In other words, that function contains a _free variable_ `y`! What we
 need to do is to return not just `fun z -> y + z`, but also the current
 environment `y -> 4`. This way, if we later apply the resulting function, then
-we restore the environment `y -> 4`, augment it with `x -> v` for whatever `v`
+we restore the environment `y -> 4`, augment it with `z -> v` for whatever `v`
 we're applying to, and successfully evaluate `y + z` since the environment
 contains a mapping for both `y` and `z`.
 
