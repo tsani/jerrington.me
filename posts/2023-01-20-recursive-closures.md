@@ -224,9 +224,10 @@ There is a related approach called "untying the recursive knot", where we take a
 ordinary recursive function and apply a separation the concerns: we isolate the
 recursion itself from the operation done to the results of the recursive calls.
 For further reading, I recommend
-[this](http://typeocaml.com/2015/01/25/memoize-rec-untying-the-recursive-knot/)
+[this][1]
 article about exactly this refactoring.
 
+EDIT: I also published [an article][2] demonstrating this refactoring in JavaScript.
 
-
-
+[1]: http://typeocaml.com/2015/01/25/memoize-rec-untying-the-recursive-knot/
+[2]: /posts/2023-01-22-refactoring-asynchronous-recursion-continuations.html
