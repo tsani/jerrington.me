@@ -7,18 +7,29 @@ Originally developed as a technique for implementing compilers for
 transformation that eliminates higher-order functions.
 It is based on the following observation: although there might be infinitely
 many possible functions one might pass to a higher-order function, there are
-only finitely many functions that are actually used in any given program.
+only finitely many functions that are _actually_ passed in any given program.
 Therefore, we can define a (finite) data type to represent our choice of
 function and we can define an interpreter for this data type that recovers the
 behaviour of the original function.
 
-One situation we might want to employ d17n as programmers is in
-networked applications. In fact, you might have already done this without
-realizing it. Higher-order functions give us lots of expressive power, but we
-unfortunately can't send functions over the network! So instead, we send a
-_representation_ of a function, and the receiving end interprets this
-representation to call the right function on its side. For example, we might
-send a string that identifies the function to call on the remote side.
+One situation we might want to employ d17n as programmers is in networked
+applications --
+higher-order functions give us lots of expressive power, but we unfortunately
+can't send functions over the network!
+In fact, you might have already done this without
+realizing it. Rather than send a function, which as more or less impossible, we
+send some representation of a function that the remote side interprets to
+execute the function we wanted.
+The canonical example in web development is the use of a `return_to` URL parameter:
+when a user attemps to perform an action while not logged in, we redirect them
+to a login page with a `return_to` URL parameter. Once the user logs in, they
+are redirected to the URL stored in that parameter. That parameter is precisely
+a defunctionalized _continuation_.
+
+This article will demonstrate d17n first for the standard higher-order function
+`filter`, followed by a discussion of defunctionalized continuations.
+
+## Defunctionalizing `filter`
 
 Let's see d17n in action with an example. Suppose our program filters lists.
 
@@ -26,7 +37,7 @@ Let's see d17n in action with an example. Suppose our program filters lists.
 let rec filter p = function
   | [] -> []
   | x :: xs -> if p x then x :: filter p xs else filter p xs
-  
+
 let _ = filter (fun x -> x mod 2 = 0) [1;2;3;4;5;6;7;8;9]
 ```
 
@@ -42,8 +53,8 @@ let apply p_rep x = match p_rep with
   | IsEven -> x mod 2 = 0
 
 (* This is the defunctionalized filter.
-   Instead of receiving a function as input, it receives a `predicate`,
-   which is a _representation_ of a function. *)
+   Instead of receiving a function as input, it receives a
+   value of type `predicate`, which is a _representation_ of a function. *)
 let rec filter_df p_rep = function
   | [] -> []
   | x :: xs ->
@@ -64,13 +75,15 @@ First, what happens when the function we pass to `filter` is a _closure_, i.e.
 it contains variables that are not its parameters?
 
 ```ocaml
-let divisible_by k l = filter_df (fun x -> x mod k = 0) l
+let divisible_by k l = filter (fun x -> x mod k = 0) l
 ```
 
 Notice that the function `fun x -> x mod k = 0` refers to `k`, which is not a
 parameter of the function. To accommodate this, we will add a constructor to our
 type `predicate` called `IsDivisible`, and that new constructor will crucially
-have one field to store the value of this `k`.
+have one field to store the value of this `k`. Then, when our interpreter
+`apply` matches on the `predicate` it can recover the value of `k` and use it to
+recover the behaviour of the original function.
 
 ```ocaml
 type predicate = IsEven | IsDivisible of int
@@ -78,7 +91,7 @@ type predicate = IsEven | IsDivisible of int
 let apply p_rep x = match p_rep with
   | IsEven -> x mod 2 = 0
   | IsDivisible k -> x mod k = 0
-  
+
 (* The implementation of `filter` itself is unchanged. *)
 
 let divisible_by k l = filter_df (IsDivisible k) l
@@ -102,7 +115,7 @@ type predicate =
   | IsEven
   | IsDivisible of int
   | Both of predicate * predicate
-  
+
 (* And correspondingly, our implementation of `apply` will be recursive too. *)
 let rec apply p_rep x = match p_rep with
   | IsEven -> x mod 2 = 0
@@ -111,18 +124,24 @@ let rec apply p_rep x = match p_rep with
 ```
 
 Now the astute reader might have noticed that our type `predicate` is actually
-quite limiting: it only works for integers. A realistic program will be
-filtering many different kinds of lists; perhaps some of integers, some of
-strings, and perhaps others of functions! It is possible to further generalize
-`predicate` by using GADTs, lifting this apparent limitation of d17n. Alas, a
-discussion of GADTs will have to wait for a future article.
+quite limiting: it only works for one type and in this case that's `int`.
+The crux of the issue is that the predicate `IsDivisible` and `IsEven` only work
+for `int`, whereas the predicate `Both (p1, p2)` should work for any `x : 'a`
+provided that both `p1` and `p2` are predicates that work on `'a`.
+More to the point, what if we had a predicate `IsPalidrome` that worked on
+`string`?
+
+It is possible to further generalize the type `predicate` by making it into a
+_generalized algebraic datatype_ (GADT).
+But a demonstration of how this lifts the apparent limitation of d17n will have
+to wait until a future article.
 
 ## Defunctionalizing continuations
 
 One amazing use of higher-order functions is a technique called
-continuation-passing style (CPS). In this style of programming, rather than have
-functions that return their results normally, we instead write functions that
-"return" their results by calling another function.
+continuation-passing style (CPS). In this style of programming, rather than write
+a function that returns its result normally, we instead write a function that
+returns its result by calling another function with the result.
 
 A few months ago, I wrote [an article][sat-cps] explaining CPS in some detail
 and showing a mindblowing use of it to implement a backtracking search through a
@@ -137,7 +156,7 @@ type formula =
   | Disj of formula * formula
   | Neg of formula
   | Var of string
-  
+
 type env = (string * bool) list
 
 let rec eval (r : env) = function
@@ -147,12 +166,13 @@ let rec eval (r : env) = function
   | Disj (e1, e2) -> eval r e1 || eval r e2
 ```
 
-The challenge is this: devise a way to find a satisfying assignment to the
-variables in "one pass". Of course, it can't actually be in one pass because
-this is an NP-complete problem; that's why I put quotes around "one pass". What
-I mean by "one pass" is that we want to solve this formula without _separately_
-enumerating all the possible truth assignments of the variables and evaluating
-them.
+The challenge is this: devise a way to find for a given `phi : formula` a
+satisfying assignment to its variables, i.e. a value `r : env` such that `eval r
+phi = true`, _in "one pass"._
+Of course, it can't actually be in one pass because this is an NP-complete
+problem; that's why I put quotes around "one pass". What I mean by "one pass" is
+that we want to solve this formula without _separately_ enumerating all the
+possible truth assignments of the variables and evaluating them.
 
 Here's how to do it all at once, using CPS.
 
@@ -169,7 +189,7 @@ let rec solve (r : env) (fail : unit -> 'r) (phi : formula)
     end
   | Neg e ->
     solve r fail e @@ fun r b fail -> assign r (not b) fail
-  | Conj (e1, e2) -> 
+  | Conj (e1, e2) ->
     solve r fail e1 @@ fun r b1 fail ->
     if b1 then (* short-circuiting *)
       solve r fail e2 @@ fun r b2 fail -> assign r (b1 && b2) fail
@@ -190,13 +210,38 @@ which we don't have an assigned value in the environment `r : env`.
 So we call `assign` with an extended environment _and_ an augmented failure
 continuation. It is exactly here that we express the idea "try evaluating the
 rest of the tree with `x = true` _but if that fails_ then try evaluating the
-rest of the tree with `x = false`."
+rest of the tree with `x = false`." Another way to understand this part of the
+code is to observe that there are _two_ calls to the same `assign`: since
+invoking `assign` represents returning from the function, it's as if we had the
+ability to return multiple times from the same function.
 
 At first it seems terrifying to try to defunctionalize this, but fortunately,
-d17n is a very systematic process. There is exactly one place where we pass an
-anonymous function as an argument to `assign` and there are exactly five places
-where we pass an anonymous function as an argument to `solve`.
-For each of these functions, we need to identify the _free variables_ -- that's
-the fancy math-name for variables that aren't parameters.
+d17n is a completely systematic, mechanical process.
+
+1. Find every type of function that is passed, we define a new type.
+   We define one interpreter for each of these types, although at this point all
+   we can do is work out the signature of the interpreter.
+2. Find every position where we pass an anonymous function.
+   Each of those functions becomes a constructor of the datatype corresponding
+   to its type.
+3. For each anonymous function, we have to identify all the variables it
+   contains that aren't its parameters -- the fancy math-name for those is _free
+   variables_.
+4. Find every place where we _call_ a function received through a parameter;
+   these will become calls to the `apply` interpreter we will write.
+
+We'll follow these steps one by one.
+
+1. We define a type `failure` to represent the function `unit -> 'r` and a type
+   `assign` to represent the function `env -> bool -> (unit -> 'r) -> 'r`.
+   There is a small wrinkle
+   Our interpreters will be `apply_failure : unit`
+2.
+
+There is exactly one place
+where we pass an anonymous function as an argument to `assign` and there are
+exactly five places where we pass an anonymous function as an argument to
+`solve`. For each of these functions, we need to identify the _free variables_
+-- that's the fancy math-name for variables that aren't parameters.
 
 [sat-cps]: /posts/2022-10-22-higher-order-continuations.html
