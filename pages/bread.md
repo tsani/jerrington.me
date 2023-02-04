@@ -89,8 +89,8 @@ The crumb is awesome, the crust is awesome, and the flavour is awesome. Wow. I'm
 impressed with how it came out.
 
 <div class='2-col-photo'>
-    <img src=/img/bread/2023-02-03-loaf.jpg>
-    <img src=/img/bread/2023-02-03-crumb.jpg>
+<img src=/img/bread/2023-02-03-loaf.jpg>
+<img src=/img/bread/2023-02-03-crumb.jpg>
 </div>
 
 It is however juuuuust a _touch_ gummy in the center. On the other hand, the crust is quite dark,
