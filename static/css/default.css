@@ -138,6 +138,18 @@ ul.post span.date {
     font-size: small;
 }
 
+div.col-2-photo {
+    max-width: 120%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+div.col-2-photo > * {
+    max-width: 48%;
+}
+
 img.figure-natural {
 }
 

@@ -89,10 +89,7 @@ was a cute lighter-colored cross shape on the top of the loaf. I'll need to use 
 The crumb is awesome, the crust is awesome, and the flavour is awesome. Wow. I'm overall really
 impressed with how it came out.
 
-<div class='2-col-photo'>
-<img src=/img/bread/2023-02-03-loaf.jpg>
-<img src=/img/bread/2023-02-03-crumb.jpg>
-</div>
+<div class='col-2-photo'> <img src=/img/bread/2023-02-03-loaf.jpg> <img src=/img/bread/2023-02-03-crumb.jpg> </div>
 
 It is however juuuuust a _touch_ gummy in the center. On the other hand, the crust is quite dark,
 so I don't think I could have baked it for much longer really. I need a slower, gentler bake for
