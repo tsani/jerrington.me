@@ -15,13 +15,14 @@ perhaps a bit too much as it made the handling too difficult. Let's perform some
 binary search until I find a hydration level & ingredient combo that I like.
 
 Target hydration 80%
+
 - 450 g flour
 - required water weight `360 g` from:
-  - **2 whole eggs**:
-    - weighs `100 g`
-    - whole egg hydration is 75%
-    - contributes `75 g` of water weight.
-  - **285 g water**
+    * **2 whole eggs**:
+        - weighs `100 g`
+        - whole egg hydration is 75%
+        - contributes `75 g` of water weight.
+    * **285 g water**
 - pinch of salt
 - 1/4 tsp ADY
 
