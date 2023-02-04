@@ -8,13 +8,13 @@ I make bread.
 
 - 450 g flour
 - 68 % hydration -> 306 g water needed, split among:
-        - **100g water**
-        - 100g water from milk:
-                - milk hydration is 88%
-                - 0.88 * x = 100 => x = **170 g milk**
-        - 75g water from **2 whole eggs**:
-                - weighs 100 g
-                - egg hydration is 75%
+    * **100g water**
+    * 100g water from milk:
+        - milk hydration is 88%
+        - 0.88 * x = 100 => x = **115 g milk**
+    * 75g water from **2 whole eggs**:
+        - weighs 100 g
+        - egg hydration is 75%
 - pinch of salt
 - 1/4 tsp yeast
 
