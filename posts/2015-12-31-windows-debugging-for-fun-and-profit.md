@@ -62,7 +62,7 @@ Since we want to find the code that reads from this address, let's put a read
 watchpoint on the address, and then wait for the text to get displayed. Here's
 what that all looks like on screen after the watchpoint gets hit.
 
-<img class='figure figure-natural' alt="Yes, this is running in Windows XP." src="/images/cheat-engine-debugging.png"/>
+<img class='figure figure-natural' alt="Yes, this is running in Windows XP." src="/img/cheat-engine-debugging.png"/>
 
 Note that the string that we searched for is highlighted in the memory view
 window since we have watchpoints on those addresses.
@@ -157,11 +157,11 @@ complicated.
 
 And this is the result of this text-script in-game.
 
-<img class='figure figure-natural' alt="A single line of text with eyes closed." src='/images/text-script-result-1.png'/>
+<img class='figure figure-natural' alt="A single line of text with eyes closed." src='/img/text-script-result-1.png'/>
 
-<img class='figure figure-natural' alt="Two lines of text with eyes to the right." src='/images/text-script-result-2.png'/>
+<img class='figure figure-natural' alt="Two lines of text with eyes to the right." src='/img/text-script-result-2.png'/>
 
-<img class='figure figure-natural' alt="A single line of text with eyes to the left." src='/images/text-script-result-3.png'/>
+<img class='figure figure-natural' alt="A single line of text with eyes to the left." src='/img/text-script-result-3.png'/>
 
 Comparing the result with the script, it looks like `#XXXXF` identifies the
 speaker's face, the `02` marker acts as `end-of-panel`, `01` acts as a line

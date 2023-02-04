@@ -134,7 +134,7 @@ let rec eval env = function
 <img
   class="figure figure-natural"
   alt="Thanos meme: I used the stones to destroy the stones, but adapted for recursion."
-  src="/images/thanos-recursion.jpg">
+  src="/img/thanos-recursion.jpg">
   
 Perhaps that code hurts your head a little. That's fine. It hurts OCaml's head too!
 
