@@ -4,6 +4,8 @@ title: Bread
 
 I make bread.
 
+Dates for the bread are the day the preparation started, not the day of the bake.
+
 ## Next batch
 
 ### Plan
@@ -70,13 +72,30 @@ eggs and the milk. Given the ingredients, I'm moving along the bread - cake spec
 direction of a cake.
 
 About the bake, following my reading, I decided to bake at a lower temperature for longer. The
-presence of all those fats mean that the crust could possibly burn if I bake at 450 as usual.
+presence of all those fats mean that the crust could possibly burn if I bake at 450° as usual.
 
-**Bake:** 415F, 20 min lid on, 30 min lid off.
+**Bake:** 415°, 20 min lid on, 30 min lid off.
 
 In fact, I remember smelling something almost like a burn when I baked the previous loaf with
 2 whole eggs in it at 450. Fortunately there was no burn at all. The crust was a touch darker for
 sure, but nothing too crazy.
+
+### How it turned out
+
+The scoring was a complete failure. The loaf didn't open up at all from it. All we got from scoring
+was a cute lighter-colored cross shape on the top of the loaf. I'll need to use a better tool.
+
+The crumb is awesome, the crust is awesome, and the flavour is awesome. Wow. I'm overall really
+impressed with how it came out.
+
+<div class='2-col-photo'>
+    <img src=/img/bread/2023-02-03-loaf.jpg>
+    <img src=/img/bread/2023-02-03-crumb.jpg>
+</div>
+
+It is however juuuuust a _touch_ gummy in the center. On the other hand, the crust is quite dark,
+so I don't think I could have baked it for much longer really. I need a slower, gentler bake for
+this approach with so many added fats. Perhaps 375°F for 25 mins lid on, 40 mins lid off.
 
 ## 1 February 2023
 
