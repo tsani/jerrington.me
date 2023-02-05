@@ -8,7 +8,9 @@ Dates for the bread are the day the preparation started, not the day of the bake
 
 ## Next batch
 
-### Plan
+TBD
+
+## 4 February 2023
 
 I think 68% hydration was too low for good distribution and overnight rise. But clearly, 93% was
 perhaps a bit too much as it made the handling too difficult. Let's perform something like
@@ -18,17 +20,21 @@ Target hydration 80%
 
 - 450 g flour
 - required water weight `360 g` from:
-    * **2 whole eggs**:
-        - weighs `100 g`
+    * **3 whole eggs**:
+        - weighs `150 g`
         - whole egg hydration is 75%
-        - contributes `75 g` of water weight.
-    * **285 g water**
+        - contributes `113 g` of water weight.
+    * 100 g water from milk:
+        - milk hydration is 88%
+        - so need **115 g milk**
+    * **150 g water**
 - pinch of salt
 - 1/4 tsp ADY
 
 I expect this will come out really nice, since the first two loaves I made had 75% hydration.
 
-I'm not sure yet whether to use any milk. It'll depend on how the 3 February loaf comes out.
+The 3 February loaf came out _excellent_ so I'm deciding to use milk again and I'll use an extra
+egg.
 
 Something I'm questioning is my overnight bulk ferment. I've been doing it with a heated room,
 but doing it cold might be better. On the other hand, I've so far enjoyed the yeasty flavour.
@@ -39,6 +45,12 @@ because a cold ferment happens more slowly, so we need more yeast. In contrast, 
 using much less for a hot bulk ferment. I might consider bulk fermenting simply on the kitchen
 counter with something in the middle like 0.7% yeast.
 
+I'll go with the same fermentation properties finally.
+
+The dough absolutely blew up over night. Really big rise. And surprisingly easy to handle! I did
+use the bread scraper a bunch since it was sticking here and here, but never too much to my hands.
+I turned the bread _in_ the container before folding it out onto the counter. Then turned it again
+in the flour on the counter.
 
 ## 3 February 2023
 
