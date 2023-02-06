@@ -52,6 +52,18 @@ use the bread scraper a bunch since it was sticking here and here, but never too
 I turned the bread _in_ the container before folding it out onto the counter. Then turned it again
 in the flour on the counter.
 
+### How it turned out
+
+I'm blown away. It's the best loaf yet. Maybe I would lower the hydration by 2% or something, but
+otherwise this is it.
+
+<div class="col-2-photo"> <img src="/img/bread/2023-02-04-loaf.jpeg"> <img src="/img/bread/2023-02-04-crumb.jpeg"> </div>
+
+It gets _very_ crispy in the toaster, but given how dense it is (despite how airy the crumb is,
+there are _three eggs_), even somewhat thin slices remain deliciously chewy in the middle.
+
+I think I could have cooked it a little longer.
+
 ## 3 February 2023
 
 - 450 g flour
