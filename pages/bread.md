@@ -6,9 +6,57 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
-## Next batch
+## 7 February 2023
 
-TBD
+Used the same recipe as 5 February except I poured a bit too much out and getting it back into the
+bag is not really possible. I got 145 g milk, so I reduced the amount of water to 90 g. This leads
+to a **hydration of 73%**.
+
+The dough was sensibly the same to handle last night. The morning of 8 February I turned it.
+
+I don't have time to bake it this morning, so I'm leaving it to rise for closer to 24h. To make up
+for the longer bulk fermentation, I'm using the kitchen table at 18°C rather than the bathroom at a
+balmy 22°C if not higher -- I ought to measure some day.
+
+## 5 February 2023
+
+It expanded I would say too much last time. We could go for a touch less.
+
+Going to try to use more milk this time too.
+
+Target hydration: 77%
+
+- 450 g flour
+- required water weight `346.5 g` from:
+  * **3 whole eggs**:
+    - weights `150 g`
+    - whole egg hydration is 75%
+    - contributes `113 g` of water weight.
+  * `125 g` water from milk:
+    - milk hydration is 87%
+    - so we need **144 g of milk**
+  * `108.5 g` water
+- pinch of salt
+- 1/4 ADY
+
+Another small change I'm making to the preparation is that I'm turning the bread before bed in
+addition to when I get up.
+
+It rose a lot overnight.
+
+I'm going to try a slightly gentler bake: 370°F 25 mins lid on, 35 mins lid off.
+
+### How it turned out
+
+Came out much like yesterday's! Lovely blistered crust. Crumb appears to be more airy, which
+is a little surprising given that the dough is a touch less hydrated. It may have to do with
+slight inconsistency in the folding / kneading. I believe I kneaded the 4 February dough ever so
+slightly, whereas today's was only folded
+
+I think the gentler bake was a good idea as well.
+
+Scoring was a failure again. Eric tried to help too, but there is no apparent cut in the baked
+loaf, just some markings on the top of the loaf. I really need a sharp instrument.
 
 ## 4 February 2023
 
