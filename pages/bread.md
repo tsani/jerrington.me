@@ -58,6 +58,12 @@ I think the gentler bake was a good idea as well.
 Scoring was a failure again. Eric tried to help too, but there is no apparent cut in the baked
 loaf, just some markings on the top of the loaf. I really need a sharp instrument.
 
+Also, Eric bought a really nice bread knife and we tossed the old one. The old one's paint was
+literally chipping off into the bread leaving small blue flecks that doubtless contain forever
+chemicals poisoning us.
+
+<div class="col-2-photo"> <img src="/img/bread/knife.jpeg"> </div>
+
 ## 4 February 2023
 
 I think 68% hydration was too low for good distribution and overnight rise. But clearly, 93% was
