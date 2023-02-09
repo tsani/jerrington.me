@@ -18,6 +18,22 @@ I don't have time to bake it this morning, so I'm leaving it to rise for closer 
 for the longer bulk fermentation, I'm using the kitchen table at 18°C rather than the bathroom at a
 balmy 22°C if not higher -- I ought to measure some day.
 
+### At night the day after
+
+After about 24h bulk fermentation on the counter, I turned the bread, but I fucked up: I didn't
+shape it; I left it in the container. So I let it rest 20 minutes, then turned it again and shaped
+it. I was impatient because I wanted to go to sleep as it was late. I took a shower, waited a
+little longer for it to proof (maybe 15 min), then baked it.
+
+### How it turned out
+
+The loaf rose _much_ less; hardly any oven spring. Despite that, the crumb is very airy.
+I think ultimately it overproofed. The flavour is fine. A little yeasty.
+
+Overall, it's okay but not as wonderful as the previous two loaves.
+
+Conclusion: prefer a 12h bulk fermentation in a hot room and be patient.
+
 ## 5 February 2023
 
 It expanded I would say too much last time. We could go for a touch less.
