@@ -344,5 +344,83 @@ type failure_frame = assign * name * env
 type failure = failure_frame list
 ```
 
+Next, we apply the same reasoning to the functions passed as `assign`. We can immediately observe
+that a list structure will again arise as each function passed as `assign` refers to the outer
+`assign` as a free variable, except for the initial `assign` continuation which has no free
+variables. I will annotate each constructor field with the name of the free variable that gives
+rise to corresponds to that field.
+
+```ocaml
+type failure = failure_frame list
+and failure_frame = assign * name * env
+
+and assign = assign_frame list
+and assign_frame =
+  | Neg1
+  | Conj1 (* A-2 *) of formula (* e2 *)
+  | Conj2 (* A-3 *) of bool (* b1 *)
+  | Disj1 (* A-4 *) of formula (* e2 *)
+  | Disj2 (* A-5 *) of bool (* b1 *)
+```
+
+Due to the list structure, we should keep in mind that when our interpreter examines a `Disj1`, for
+example, there will be a sublist of `assign_frame`s as well. This sublist corresponds to the
+`assign` free variable present in the original function. Calling `assign` from within an augmented
+`assign` continuation in the original program will be translated into a call to `apply_assign` on
+the sublist of `assign_frame`s.
+
+### Step 3: Replace calls to unknown functions with calls to `apply`
+
+In this step, we begin to change the implementation of `solve` and `solve_enter`.
+
+```ocaml
+let rec solve (r : env) (fail : failure) (phi : formula) (assign : assign) : 'r =
+  match phi with
+  | Var x -> begin match List.assoc_opt x r with
+    | Some b ->
+      apply_assign assign r b fail
+    | None ->
+      apply_assign assign ((x, true) :: r) true @@ (assign, x, r) :: fail
+      (* previously: fun () -> assign ((x, false) :: r) false fail *)
+    end
+  | Neg e ->
+    solve r fail e (Neg1 :: assign)
+    (* previously: fun r b fail -> assign r (not b) fail *)
+  | Conj (e1, e2) ->
+    solve r fail e1 (Conj1 e2 :: assign)
+    (* previously: fun r b1 fail ->
+    if b1 then (* short-circuiting *)
+      solve r fail e2 @@ fun r b2 fail -> assign r (b1 && b2) fail
+    else
+      assign r false fail *)
+  | Disj (e1, e2) ->
+    solve r fail e1 (Disj1 e2 :: assign)
+    (* previously: fun r b1 fail ->
+    if b1 then
+      assign r true fail
+    else
+      solve r fail e2 @@ fun r b2 fail ->
+      assign r (b1 || b2) fail *)
+
+let solve_enter (phi : formula) : env option =
+  solve [] (* the initial environment *)
+    [] (* previously: fun () -> None *)
+    phi
+    [] (* previously: fun r res fail -> if res then Some r else fail () *)
+```
+
+### Step 4: Implement `apply`
+
+This step is straightforward. We write recursive functions `apply_failure` and `apply_assign` to
+process the lists `failure` and `assign`. Notice that in the 'previously' comments from the above
+code, some of the continuations we replaced with constructors will need to call `solve`. This means
+that `apply_failure`, `apply_assign` and `solve` will all need to be mutually recursive.
+
+```ocaml
+
+```
+
+
+
 [sat-cps]: /posts/2022-10-22-higher-order-continuations.html
 [TCO]: https://en.wikipedia.org/wiki/Tail_call
