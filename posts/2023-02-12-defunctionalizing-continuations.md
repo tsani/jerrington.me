@@ -347,16 +347,17 @@ type failure = failure_frame list
 Next, we apply the same reasoning to the functions passed as `assign`. We can immediately observe
 that a list structure will again arise as each function passed as `assign` refers to the outer
 `assign` as a free variable, except for the initial `assign` continuation which has no free
-variables. I will annotate each constructor field with the name of the free variable that gives
-rise to corresponds to that field.
+variables. I will annotate each constructor field with the name of the free variable that
+corresponds to that field.
 
 ```ocaml
 type failure = failure_frame list
 and failure_frame = assign * name * env
 
 and assign = assign_frame list
+  (* and the [] case of the list corresponds to A-6 *)
 and assign_frame =
-  | Neg1
+  | Neg1 (* A-1 *)
   | Conj1 (* A-2 *) of formula (* e2 *)
   | Conj2 (* A-3 *) of bool (* b1 *)
   | Disj1 (* A-4 *) of formula (* e2 *)
@@ -369,9 +370,10 @@ example, there will be a sublist of `assign_frame`s as well. This sublist corres
 `assign` continuation in the original program will be translated into a call to `apply_assign` on
 the sublist of `assign_frame`s.
 
-### Step 3: Replace calls to unknown functions with calls to `apply`
+### Step 3: Replace unknown functions with `apply` and anonymous functions with constructors
 
-In this step, we begin to change the implementation of `solve` and `solve_enter`.
+In this step, we change the implementation of `solve` and `solve_enter`.
+By "unknown function", I mean a function received through a parameter.
 
 ```ocaml
 let rec solve (r : env) (fail : failure) (phi : formula) (assign : assign) : 'r =
@@ -380,6 +382,7 @@ let rec solve (r : env) (fail : failure) (phi : formula) (assign : assign) : 'r 
     | Some b ->
       apply_assign assign r b fail
     | None ->
+      (* Here we used to both call assign and pass it an anonymous function. *)
       apply_assign assign ((x, true) :: r) true @@ (assign, x, r) :: fail
       (* previously: fun () -> assign ((x, false) :: r) false fail *)
     end
@@ -412,15 +415,87 @@ let solve_enter (phi : formula) : env option =
 ### Step 4: Implement `apply`
 
 This step is straightforward. We write recursive functions `apply_failure` and `apply_assign` to
-process the lists `failure` and `assign`. Notice that in the 'previously' comments from the above
-code, some of the continuations we replaced with constructors will need to call `solve`. This means
-that `apply_failure`, `apply_assign` and `solve` will all need to be mutually recursive.
+process the lists of type `failure` and `assign`. Notice that in the 'previously' comments from the
+above code, some of the continuations we replaced with constructors will need to call `solve`. This
+means that `apply_failure`, `apply_assign` and `solve` will all need to be mutually recursive.
+
+To implement each case of `apply`, we just have to take the code from those 'previously' comments:
+we continue translating each anonymous function into a constructor and each call to an unknown
+function into a call to the corresponding `apply`.
 
 ```ocaml
+let rec solve r fail phi assign = ... (* as above *)
 
+and apply_failure (sf : failure) : env option = match sf with
+  | [] -> None
+  | (sa, x, r) :: sf -> apply_assign sa ((x, false) :: r) false sf
+
+and apply_assign (assign : assign) (r : env) (b : bool) (fail : failure) : env option =
+  match assign with
+  | [] -> if b then Some r else apply_failure sf
+  | a :: assign -> match a with
+    | Neg -> apply_assign assign r (not b) fail
+    | Conj1 e2 ->
+      if b then solve r fail e2 (Conj2 b) else apply_assign assign r false fail
+    | Conj2 b1 ->
+      apply_assign assign r (b1 && b) fail
+    | Disj1 e2 ->
+      if b1 then apply_assign assign r true fail else solve r fail e2 (Disj2 b1)
+    | Disj2 b1 ->
+      apply_assign assign r (b1 && b) fail
 ```
 
+## Conclusion
 
+This is certainly a strange way of programming. Whereas in the original implementation with
+higher-order continuations all the code was in pretty much one tight function, now we have the code
+spread across three functions! Let's take a step back and think about what we've done.
+
+At first, our CPS program expressed the logic of what to do after the recursive call by placing
+that logic within a continuation.  Since each new continuation refers to the previous one, these
+form a linked list, although this structure is not immediately obvious. At positions where the
+solver wants to return a value, it instead invokes the continuation, e.g. `assign r (not b) fail`.
+The continuation `assign` contains all the pending operations to do 'on the way back' of the
+recursion.  In its defunctionalized form, the solver expresses the logic of what to do next by
+pushing onto a literal stack some kind of token e.g. `Conj1 e2`. When it wants to return, it
+invokes `apply_assign` passing it the stack of tokens representing the remaining work to do. Then,
+`apply_assign` dispatches on the stack to perform the logic that we used to express in the
+anonymous function.
+
+Ultimately, what we have done is rewrite the higher-order CPS code into a first-order _state
+machine_. Calls to functions such as `solve`, `apply_failure`, and `apply_success` represent a
+_state transition_ and the collection of arguments given to such functions _is the state_.
+These functions _examine_ the current state to figure out what to do: `apply_assign`, for instance,
+examines the call stack (represented as the type `assign`) to decide whether we finished evaluating
+the formula.
+
+Transforming our code in this way can serve as a guide for implementation in a lower-level
+language. We can fairly straightforwardly translate this code into C: since every call in the
+defunctionalized program is to a statically-known first-order function, we won't even need to use
+function pointers in implementing the C code. The resulting C program won't even need to be
+recursive: we can code it as one big while loop by effectively performing tail-call optimization
+ourselves. Seeing how to translate the final code we arrived at in this article might be the topic
+of a future post.
+
+Naturally, defunctionalization has an inverse called _refunctionalization_ (r17n). The idea
+of r17n really is the opposite: we identify each position where we branch on a first-order data
+structure and replace the data structure with a function that we instead call. Remarkably, this
+concept is actually [a well-known refactoring][oop-r17n] in the OOP world; we call it "replace
+conditional with polymorphism" in that context since (object) polymorphism is effectively how one
+gets higher-order functions in an OOP language. I have also written [an article][my-first-time]
+previously (_and unknowingly!_) about r17n in JavaScript. Specifically, the very first example
+discussed in that article shows how to replace a first-order implementation of a 'thunk' with a
+higher-order implementation that has some garbage-collection related benefits.
+
+Finally, the takeaway is that d17n and r17n are fascinating refactorings that apply across a wide
+range of programming languages. Using d17n, we can prototype something in a higher-order way and
+systematically lower it to a first-order implementation. The benefits are multiple: we can
+reimplement in a lower-level language for performance, or we can transfer defunctionalized
+continuations across nodes in a networked application. Using r17n we can convert natural
+first-order code into higher-order code. The benefits in that case are less obvious, but I have yet
+to see so far a refunctionalized program shorter than its corresponding first-order implementation.
 
 [sat-cps]: /posts/2022-10-22-higher-order-continuations.html
 [TCO]: https://en.wikipedia.org/wiki/Tail_call
+[oop-r17n]: https://refactoring.guru/replace-conditional-with-polymorphism
+[my-first-time]: /posts/2021-08-12-its-my-first-time.html
