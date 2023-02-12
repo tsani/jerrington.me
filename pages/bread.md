@@ -6,6 +6,36 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 9 February 2023
+
+I followed sensibly the same recipe as usual now. I bold the major differences.
+
+- 450 g flour
+- 350 g -- 78% hydration -- water from:
+  * 3 whole eggs:
+    - weights `150 g`
+    - contributes `113 g` of water weight.
+  * `126 g` water from milk:
+    - milk hydration is 87%
+    - so we need 144 g of milk
+  * `108.5 g` water
+- **two pinches** of salt
+- 1/4 ADY
+
+So really the only difference is that I put some more salt this time.
+
+I left it to rise overnight in the bathroom with the heat on and I baked it in the morning.
+I was patient this time around for the second rise. After shaping the boule I let it rest for 1.5h
+before baking it. I baked it at 375°F for 20 minutes lid on, 30 minutes lid off. I didn't score it.
+
+### How it turned out
+
+It was excellent. Airy crumb. A bit uneven in its airiness though; some quite large bubbles made it
+through. I did somewhat knead the dough, but I might want to be a bit rougher with it next time.
+
+The flavour is good. I might even want to try for more salt next time. I might actually want to
+start measuring the salt content and tracking it in my baker's formula.
+
 ## 7 February 2023
 
 Used the same recipe as 5 February except I poured a bit too much out and getting it back into the
