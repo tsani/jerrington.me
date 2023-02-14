@@ -6,6 +6,22 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 13 February 2023
+
+Same recipe. I noticed it rose a bit less overnight than previously and that the dough was a bit
+sturdier. I wonder if my impatience in mixing in the scalded milk + water caused any of the yeast
+to die. That might explain why the bread rose less. On the other hand, I pour that mixture into
+(cold) beaten eggs while mixing, so it must cool down very fast. Yeast dies around 150°F, and I
+think it's unlikely that the mix is that hot. Anyway we'll see how it turns out when it bakes.
+
+## 12 February 2023
+
+Same recipe and again didn't manage to score it. The bread has been pretty consistent
+
+## 11 February 2023
+
+Followed sensibly the same recipe as before. Tried scoring it again to no avail.
+
 ## 9 February 2023
 
 I followed sensibly the same recipe as usual now. I bold the major differences.
