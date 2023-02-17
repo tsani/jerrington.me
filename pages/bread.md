@@ -6,6 +6,59 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 15 February 2023
+
+Been continuing with the same recipe so far. I'm excited to experiment some more, but simply don't
+have the time.
+
+Today, I'm going to calculate the nutrition facts for my bread recipe.
+
+- 125 g all-purpose flour:
+  - 455 kcal
+  - 95.4 g carbs
+  - 12.9 g protein
+  - 1.2 g fat
+- so in 450 g flour:
+  - 1638 kcal
+  - 343.5 g carbs
+  - 46.5 g protein
+  - 4.5 g fat
+
+- 1 large egg:
+  - 72 kcal
+  - 0.4 g carbs
+  - 6.3 g protein
+  - 5 g fat
+- so in 3 large eggs (150 g):
+  - 216 kcal
+  - 1.2 g carbs
+  - 18.9 g protein
+  - 15 g fat
+
+- 145 g milk:
+  - 97 kcal
+  - 8 g carbs
+  - 5 g protein
+  - 5 g fat
+
+- in total:
+  - 1638 + 216 + 97 = 1951 kcal
+  - 343.5 + 1.2 + 8 = 353 g carbs
+  - 46.5 + 18.9 + 5 = 70.5 g protein
+  - 4.5 + 15 + 5 = 24.5 g fat
+
+- total ingredient weight: 450 + 150 + 145 = 745 g
+
+Now there's one catch. I want to calculate the nutrition for one slice. But it's not enough to just
+weigh the slice and prorate the facts based on the total ingredient weight. Why? Because of the
+water! There's water content in the eggs, the milk, and in the literal water that's added to the
+recipe. During baking, this water is (partially) going to evaporate. It'll furthermore evaporate as
+the bread cools. To actually calculate the total facts per 100 g in the final loaf, I'll need to
+weight the loaf after it cools, and see how this compares to the total ingredient weight. I expect
+it to be a bit heavier, again due to the added ~100 g of water, but it shouldn't be heavier by a
+full 100 g because of evaporation.
+
+
 ## 13 February 2023
 
 Same recipe. I noticed it rose a bit less overnight than previously and that the dough was a bit
