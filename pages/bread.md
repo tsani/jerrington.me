@@ -6,6 +6,26 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 19 February 2023
+
+This time I'm going to try a preferment.
+
+Preferment:
+- 110 g water
+- 90 g flour
+- 0.7 g ADY
+
+Using the immersion circulator to keep the temperature at a perfect 85°F.
+Started at 12:30 PM and aiming to assemble the full dough at 8:30 PM.
+I'll proceed with a bulk ferment overnight.
+
+This means that the main dough will need:
+- 360 g flour (450 g - 90 g)
+- NO actual water (it all went in the preferment)
+- 145 g milk as before
+- 3 whole eggs
+- NO extra ADY (?)
+
 ## 15 February 2023
 
 Been continuing with the same recipe so far. I'm excited to experiment some more, but simply don't
