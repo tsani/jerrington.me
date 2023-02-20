@@ -24,7 +24,65 @@ This means that the main dough will need:
 - NO actual water (it all went in the preferment)
 - 145 g milk as before
 - 3 whole eggs
-- NO extra ADY (?)
+- NO extra ADY
+
+After letting it rise overnight, it appears to be MUCH more bubbly than without a preferment.
+Also the _smell!_ It smell much more sour, almost vinegary. I'm concerned that it's overripe and
+that it won't turn out well in the oven.
+
+### How it turned out
+
+I think it did overproof. The crumb is a little too chewy for my taste. The flavour is okay but not
+as good as the previous loaves. Also the crumb came out extremely airy. It could have used for more
+kneading. It's also not clear that on the second rise it actually doubled in size. Maybe it was
+more like 1.5x.
+
+The scoring worked out a lot better. There's actually a small ear on the bread!
+I need to cut much closer to horizontal next time, and I should probably score it _before_
+transferring it into the dutch oven, since it's challenging to get the right angle with the dutch
+oven being so hot and in the way.
+
+<div class="col-2-photo"> <img src="/img/bread/2023-02-19-loaf.jpeg"> <img src="/img/bread/2023-02-19-crumb.jpeg"> </div>
+
+#### Nutrition facts
+
+The total weight of the bread after baking is 700 g, so using the values from last time (since all
+the ingredients are the same) I can calculate the nutrition facts. According to the calculations,
+45 g of water evaporated during baking.
+
+For a 700 g loaf:
+
+- 1951 kcal
+- 353 g carbs
+- 70.5 g protein
+- 24.5 g fat
+
+For a 30 g slice:
+
+- 83 kcal
+- 15 g carbs
+- 3 g protein
+- 1 g fat
+
+For a 50 g slice:
+
+- 140 kcal
+- 25 g carbs
+- 5 g protein
+- 1.75 g fat
+
+#### Cost
+
+While we're doing some math here, it might be nice to calculate how much one of these loaves costs
+compared.
+
+- 450 g of flour costs 0.68 $
+- 145 g of 3.5% milk costs 0.30 $
+- 3 whole eggs cost 0.85 $
+- water is free :)
+- total: 1.85 $
+
+Much cheaper than the 4.99 $ you normally pay for an "artisan country loaf" isn't it!
 
 ## 15 February 2023
 
