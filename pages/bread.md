@@ -11,6 +11,7 @@ Dates for the bread are the day the preparation started, not the day of the bake
 This time I'm going to try a preferment.
 
 Preferment:
+
 - 110 g water
 - 90 g flour
 - 0.7 g ADY
@@ -20,6 +21,7 @@ Started at 12:30 PM and aiming to assemble the full dough at 8:30 PM.
 I'll proceed with a bulk ferment overnight.
 
 This means that the main dough will need:
+
 - 360 g flour (450 g - 90 g)
 - NO actual water (it all went in the preferment)
 - 145 g milk as before
@@ -70,6 +72,13 @@ For a 50 g slice:
 - 25 g carbs
 - 5 g protein
 - 1.75 g fat
+
+For a 70 g slice (middle of the loaf):
+
+- 196 kcal
+- 35 g carbs
+- 7 g protein
+- 2.45 g fat
 
 #### Cost
 
