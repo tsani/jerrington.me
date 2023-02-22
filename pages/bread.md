@@ -6,6 +6,23 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 21 February 2023
+
+We ran out of milk, so I substituted the milk for flour at the appropriate ratio in the usual
+recipe.
+
+This morning I noticed that the dough rose _substantially_ less! I'm not exactly sure why, but I
+have a few ideas:
+
+- colder dough: the milk is scalded, and then combined with the water (cold) making a ~120°F liquid
+  that gets combined with the dough. Since the dough is warmer, the yeast acts faster and produces
+  more rise.
+- sugar: milk contains sugars, so the yeast eats these up and produces more rise.
+
+It's actually probably a combination of these two. It would probably be fine to go with a colder
+dough that has less sugar _if I bulk ferment the dough longer._ I did a ~14 hour bulk ferment as
+usual, but it ought to be maybe 24 hours instead.
+
 ## 19 February 2023
 
 This time I'm going to try a preferment.
