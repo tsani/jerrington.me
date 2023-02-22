@@ -119,7 +119,12 @@ ancestry proportions.
 
 This new evaluation method was used to produce some of the results in the paper
 [_The Great Migration and African-American genomic diversity_][great migration],
- of which I am a coauthor.
+of which I am a coauthor.
+
+## Personal projects
+
+* I bake bread and journal my experience [here][/pages/bread.html]
+* I enjoy bodybuilding and track my workouts on Hevy. Follow me `@latsani`.
 
 [servant-server]: https://hackage.haskell.org/package/servant-server
 [servant-client]: https://hackage.haskell.org/package/servant-client
