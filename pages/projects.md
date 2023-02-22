@@ -2,8 +2,7 @@
 title: Projects
 ---------------
 
-[Eval][]
------
+## [Eval][]
 
 Eval is an implementation of a strongly and statically typed functional
 programming language with type inference, polymorphism, algebraic datatypes, and
@@ -30,8 +29,8 @@ def sum = fun l -> fold_list (fun x y -> x + y) l 0
 def n = sum list
 ```
 
-[Apollo][]
------
+## [Apollo][]
+
 
 Apollo is a web service for downloading music, and integrates with MPD.
 Using Apollo's HTTP API, you can send URLs from youtube, soundcloud, etc. to be
@@ -41,16 +40,15 @@ command-line.
 I have also developed a [Firefox extension][] for Apollo which makes it easy to
 submit links and monitor download progress directly in the browser.
 
-[Computing Workshop][]
------
+## [Computing Workshop][]
+
 
 Together with my partner [Eric Mayhew](https://emayhew.com/) I create and run a
 series of workshops on various topics in computer science. These range from
 fundamentals of circuits and programming, to an introduction to machine
 learning.
 
-[servant-pushbullet-client][]
------
+## [servant-pushbullet-client][]
 
 This library describes the Pushbullet API as a type and provides functions
 created with [Servant][servant-client] to call the API. It also provides some
@@ -65,8 +63,7 @@ application to interact with the Pushbullet API on the command-line.
 On top of this application, I wrote a number of scripts for sending and
 receiving SMS on the command-line.
 
-[servant-github-webhook][]
------
+## [servant-github-webhook][]
 
 This is my first published Haskell library. It implements
 [Servant][servant-server] combinators to
@@ -74,15 +71,13 @@ represent routes that are meant to service GitHub webhooks. These combinators
 provide routing based on webhook type and automatic verification of GitHub
 digital signatures.
 
-Vent over Tea
------
+## Vent over Tea
 
 In the spring of 2015,
 [Dan Crisan][] and I built the first iteration of the
 [Vent over Tea][] web site together.
 
-Publications
------
+## Publications
 
 ### Harpoon: Mechanizing Metatheory Interactively
 
@@ -108,9 +103,7 @@ in my [thesis][].
 
 ### The Great Migration and African-American genomic diversity
 
-In 2014 as a research assistant in the lab of
-[Simon Gravel][],
-I contributed to [tracts][],
+In 2014 as a research assistant in the lab of [Simon Gravel][], I contributed to [tracts][],
 which is a tool for modelling local ancestry patterns along the genome.
 Simply put, given a model of migration and the ancestry proportions of
 individuals in a present population, tracts evaluates the likelihood of the
