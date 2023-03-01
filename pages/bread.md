@@ -6,6 +6,103 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 1 March 2023
+
+Let's go totally classic recipe here: just flour, water, salt, and yeast.
+
+Let's go with 78% hydration.
+
+- 500 g flour
+- 390 g water
+- two pinches salt
+- 1 tsp ADY
+
+I'm going with a whole tsp ADY since I'm just going to let the bread rise for three hours instead
+of my usual overnight schenanigans.
+
+Speaking of overnight, in future overnight bulk ferments, I'm not going to use the bathroom
+anymore. I think another reason why the gluten formation is insufficient to hold the bread together
+(besides possibly the inclusion of eggs) is that it's fermenting _too much._ Heat plays a big role
+in that. Instead I'll let it gently rise overnight on the counter.
+
+## 28 February 2023
+
+Usual recipe.
+
+I paid more attention to the dough as I was shaping it up after the bulk ferment and noticed it was
+tearing! Could this be the fault of the eggs? I want to try a loaf without eggs to see.
+
+## 26 February 2023
+
+I prepared two batches of the usual recipe, but this time I have bread flour.
+
+- 1/4 tsp ADY
+- 450 g **bread flour**
+- 108 g water
+- 145 g scalded milk
+- 3 whole eggs
+- 2 pinches salt
+
+I put both doughs into the bathroom with the heat on around 10 pm and took them out at 8:30 am.
+Since it's cold out, I decided that rather than leave the doughs on the vanity as usual that I
+would put them _on the floor near the heater,_ one of them more or less directly under it -- dough
+A -- and the other a little off to the side -- dough B.
+
+When I took out the doughs, I noticed that dough A had risen less than B. Dough B looked as my
+doughs usually do after bulk fermentation. Moreover, the edges of dough A were kind of dry!
+
+So here's what I think happened: dough A was too hot, the fermentation went too fast, and the
+gluten _broke down_. In other words, it rose quickly and then deflated as the gluten fell apart and
+couldn't support the weight of the dough anymore.
+
+That hypothesis is further corroborated by this: as I began to work the dough this morning, and I
+used the scraper to tidy it up, I noticed that rather than stretch on the surface and tighten up,
+the dough was _tearing!_ Perhaps this batch is fucked...
+
+## 25 February 2023
+
+Using a preferment:
+
+- 1/4 tsp ADY
+- 250 g flour
+- 100 g water
+- 145 g milk
+
+So almost _all_ of the water content is already in the preferment. What will remain to be added
+after is:
+
+- 200 g flour
+- 3 whole eggs
+- 2 pinches salt
+
+I started the preferment at 13:00. At 16:00 I'll combine with the remaining ingredients and let it
+rest 30 minutes. Then I'll shape it and let it rest 1.5h. Then I'll bake it.
+
+Essentially the only things added at the end were the eggs and some flour.  Doing this is more
+delicate than I at first thought. I beat the eggs in a separate container and just dumped them on
+the preferment, then dumped in the flour and mixed the whole thing. Mixing it properly in a state
+like that is VERY challenging, and I just didn't mix it enough.
+
+### How it turned out
+
+I didn't take any pictures, but looking at the crumb, one can see some yellow spots. I think this
+is a consequence of the insufficient mixing. The dough texture wasn't uniform, with some spots
+having more egg than others, to the point that this is reflected in the appearance of the dough.
+The crumb was also substantially denser.
+
+### Ideas for next time
+
+When working with a preferment and wanting to add eggs, I could consider:
+
+1. Putting the eggs directly into the preferment. This avoids entirely the problem of combining the
+   eggs later with the preferment.
+   I'm already letting my eggs participate in the bulk fermentation when that's how I prepare my
+   dough, so what's the problem with having them in the preferment?
+2. Fully combining the eggs with the remaining flour before combining with the preferment.
+   Consider this: three whole eggs contribute 113 g of water. Therefore with 200 g flour, this
+   dough would be quite dry at 56.5% hydration. It's hard to estimate how easy the two doughs will
+   be to combine, but it could be worth a try.
+
 ## 21 February 2023
 
 We ran out of milk, so I substituted the milk for flour at the appropriate ratio in the usual
