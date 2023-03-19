@@ -6,6 +6,61 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 11 March 2023
+
+Over the past week I've made a couple of loaves following the usually 'cake bread' recipe involving
+eggs and milk. One had decent oven spring, another didn't. I've tried the overnight rise in the
+oven with the light on, on the counter, etc. to varying results. I think it's a question of how
+much mixing I'm doing and what temperature I let the bread rise at overnight. The kitchen's
+temperature varies!
+
+Today I'm going to try to make a simple loaf over the next four ~ five hours and pay extra
+attention to kneading technique.
+
+* 500 g flour
+* 350 g water (70% hydration)
+* 10 g yeast
+* two pinches salt
+
+## 3 March 2023
+
+So yesterday I prepared a classic loaf again and let it rise overnight on the counter. It about
+doubled in size. I don't know what on earth I was thinking at that point, because then I decided to
+use the sous vide to heat it up some more to make it rise more. I did that, but then when I was
+shaping the dough it simply wouldn't hold together. It would tear open in the middle and
+essentially cave in.
+
+In hindsight, I don't think that had much to do with letting rise too much, but actually more to do
+with my shaping technique.
+I was really disappointed with the dough since it wasn't holding up and just tossed it ;(
+
+In the evening, I prepared another another dough and let it rise overnight on the counter.
+I kneaded it this morning following the Bertinet method and then shaped it. This time I used a
+slightly different shaping technique.
+
+It's kind of hard to describe shaping technique in words, but I think I understand why my old
+technique was causing the dough to collapse in the middle. I was basically being 'too square'. I
+would push the dough from the bottom with the scraper, then the right, then the top, etc.
+Ultimately I think this creates little 'rolls' inside the dough but deprives the center of the
+dough of any substance.
+
+For the new technique I made a few changes:
+
+* I only _slightly_ move the scraper between pushes, rather than a full 90°.
+* I don't remove the scraper entirely from the dough between pushes.
+* I always shape in the same direction.
+
+This second point was something of a discovery for me. I was really frustrated by the dough
+sticking to my scraper as I pulled it out of the dough, so I thought, "what if I don't pull the
+scraper all the way out?" Essentially, the 'stuck' dough gets pushed _back_ into the dough and
+eventually becomes tight enough to not stick.
+
+The third point really just means I follow Bertinet's advice: he says to always rotate the dough in
+the same way (clockwise if you're right-handed).
+
+Picking up the dough and putting into the container to let it rise again before baking was a bit of
+a challenge since it was quite sticky, so it kind of flopped out sideways.
+
 ## 1 March 2023
 
 Let's go totally classic recipe here: just flour, water, salt, and yeast.
@@ -24,6 +79,7 @@ Speaking of overnight, in future overnight bulk ferments, I'm not going to use t
 anymore. I think another reason why the gluten formation is insufficient to hold the bread together
 (besides possibly the inclusion of eggs) is that it's fermenting _too much._ Heat plays a big role
 in that. Instead I'll let it gently rise overnight on the counter.
+
 
 ## 28 February 2023
 
