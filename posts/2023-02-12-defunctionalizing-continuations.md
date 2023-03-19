@@ -432,7 +432,7 @@ and apply_failure (sf : failure) : env option = match sf with
 
 and apply_assign (assign : assign) (r : env) (b : bool) (fail : failure) : env option =
   match assign with
-  | [] -> if b then Some r else apply_failure sf
+  | [] -> if b then Some r else apply_failure fail
   | a :: assign -> match a with
     | Neg -> apply_assign assign r (not b) fail
     | Conj1 e2 ->
