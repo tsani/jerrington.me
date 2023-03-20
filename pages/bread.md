@@ -6,6 +6,37 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 19 March 2023
+
+* 500 g flour
+* 360 g water
+* 9 g yeast
+* two pinches salt
+
+I did a little 'yeast activation' with sugar for 10 minutes in all 360 g of the water. I combined
+with the flour and salt and I kneaded it _a lot._ It rose very fast, maybe due to too much yeast or
+the effect of the pre-activation. It practically doubled in size in an hour, so I did just a little
+bit of shaping and let it rise a little more before going to a second kneading. The second kneading
+was very gentle. I punched the bread down very gently, folded it, and turned it. I shaped it and
+let it proof for about an hour again by the time it had doubled in size. I scored it. I baked it at
+450° F for 20 minutes lid on, 20 minutes lid off.
+
+### How it turned out
+
+<div class="col-2-photo"> <img src="/img/bread/2023-03-19-loaf.jpeg"> </div>
+
+It came out super fluffy and delicious. One of the best yet, rivaled only by a loaf I made a while
+back following roughly the same approach. My kneading technique is a lot better now. I understand
+that while kneading I should avoid as best I can that the bread tears.
+
+The mistake I made in my previous kneading technique was that I would stretch the bread way too
+much before folding it.  That causes a lot of tearing. I rememeber once doing a bunch of kneading
+following this stretching technique and getting demoralized as the dough was completely losing its
+consistency, turning back into a goopy blob.
+
+Anyway, I folded the bread very gently when kneading, so it really held up its shape very well and
+came out excellent.
+
 ## 11 March 2023
 
 Over the past week I've made a couple of loaves following the usually 'cake bread' recipe involving
