@@ -1,6 +1,33 @@
 ---
-title: SIGCSE 2023 schedule
+title: SIGCSE 2023
 ---
+
+## Notes
+
+* Evaluating Group Work in (too) Large CS Classes with (too) Few Resources:
+    - students work in pairs on three projects
+    - assessed based on code, functional tests, but also teamwork:
+        - self and peer eval of soft skills via likert scale
+        - individual 10 min oral exam once at the end of term conducted by TAs:
+              - ask about 2 of the three projects: one the students pick, one the TA picks.
+              - ask the same three general questions for each, plus follow up questions
+* [Visualized scope tracing](https://blue.butler.edu/~agupta/VST/) (Ankur Gupta)
+    - want to share the technique especially with Faten, Giulia who teach intro courses
+* Slip day tokens (part of 'it seemed like a good idea at the time')
+    - towards a general policy for late-days?
+* Executable exams
+    - Delivering _exams_ via LearnOCaml?
+    - Delivering fully async exams:
+        - Academic integrity best practices
+* [Programming exercise markup language](https://cssplice.github.io/peml/)
+    - towards a common format for describing exercises; applications for LearnOCaml?
+* [Spiffy PI questions](https://peerinstruction4cs.com/)
+    - have an IDK answer: better to know they're lost than to not know whether they're just
+      guessing
+    - two-phase PI vs single-vote think-pair-share format
+    - colored index-cards with a white back: non-technological and mitigates embarrassment
+    - techno approach does mean we can collect data on answers
+    - participation points based on answering PI questions
 
 ## Wednesday 15 March 2023
 

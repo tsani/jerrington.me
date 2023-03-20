@@ -1,5 +1,5 @@
 ---
-title: Python pro-tip #1
+title: Python pro-tip number 1
 ---
 
 Suppose you want to access the first element of a sequence but only if the
