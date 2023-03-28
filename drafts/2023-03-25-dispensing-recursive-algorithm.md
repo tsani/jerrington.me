@@ -47,10 +47,10 @@ recursive call is made.
 
 Therefore, calling this function does not generate the whole sequence at once. In fact, nothing
 happens just yet if we call `enumerate_assignments(5)` except to 'prime' the generator to run. The
-call returns an _iterator,_ which stores the state of the execution.  Then, calling the function
-`next()` on the iterator will resume execution of the function up to the next `yield`.  Also,
-`next()` returns to us the yielded value.  Repeatedly calling `next()` until the generator exits is
-is exactly what a Python `for`-loop does, so we can print all the truth assignments on five
+call returns a so-called _iterator,_ which stores the state of the execution.  Then, calling the
+function `next()` on the iterator will resume execution of the function up to the next `yield`.
+Also, `next()` returns to us the yielded value.  Repeatedly calling `next()` until the generator
+exits is exactly what a Python `for`-loop does, so we can print all the truth assignments on five
 variables like this:
 
 ```python
@@ -59,14 +59,16 @@ for a in enumerate_assignments(5):
 ```
 
 What if the language we're working in doesn't have `yield` though? How can we implement something
-like this in, say, OCaml?
+like this in, say, OCaml? In doing so, we will explore what happens under the hood of generators.
 
 ## Implementing generators using state and CPS
 
-Our goal will be to implement a function `enumerate_assignments : int -> unit -> bool list option`
+First, let's mimic Python's approach: generators in Python are stateful objects, so our
+implementation in this section will use a reference to store the execution state.
+Our goal is to implement a function `enumerate_assignments : int -> unit -> bool list option`
 such that `enumerate_assignments n` returns a function `next` such that `next ()` returns the next
-truth assignment in the sequence wrapped in `Some`. If the sequence is finished, then it will
-return `None`.
+truth assignment wrapped in `Some` if the sequence continues. If the sequence ends, then `next ()`
+returns `None`.
 
 Clearly, the function `next` computed by `enumerate_assignments n` is impure as it returns
 different outputs for the same input. The impurity comes from the fact that we use a mutable
@@ -149,10 +151,109 @@ implementation.
 let enumerate_assignments n =
   let rec go n a next =
     if n = 0 then
-      Some (a, next)
+      Some (a, next) (* return the value _and_ the continuation *)
     else
       go (n-1) (true :: a) (fun () -> go (n-1) (false :: a) next)
   in
   go n [] (fun () -> None)
+```
+
+Slight problem with this implementation: it doesn't typecheck! And the error is not a simple
+"expect this type, got this other type," but rather
+
+```
+Error: The expression `go (n-1) (false :: a) next`
+       has type (bool list * (unit -> 'a)) option
+       but an expression was expected of type 'a
+       The type variable 'a occurs inside (bool list * (unit -> 'a)) option
+```
+
+According to this error, the return type of `go`, which is so far inferred as
+`(bool list * (unit -> 'a)) option` (due to the expression `Some (a, next)`) has to equal the
+return type of `next` which is so far inferred as `'a`. This circularity is forbidden, so OCaml
+rejects the program.
+
+We can resolve this by introducing a recursive type, let's say `L`,
+such that `L = (bool list * (unit -> L)) option`. The base case of this recursive type arises from
+the `None` constructor of the `option` type. Now we can fix the circular variable type variable
+`'a` to be `L` and eliminate the forbidden circular instantiation.
+
+```ocaml
+type l = Next of (bool list * (unit -> l)) option
+```
+
+(Notice that the constructor `Next` witnesses the recursive equality
+`L = (bool list * (unit -> L)) option`. We see `Next : (bool list * (unit -> l)) option -> l`
+witnessing one direction of the equality, and since `l` has only one constructor, pattern matching
+on a value of type `l` witnesses the other direction.)
+
+We can slightly refactor this type by introducing a second constructor and eliminating the
+`option`.
+
+```ocaml
+type l =
+  | Done
+  | More of bool list * (unit -> l)
+```
+
+And we can generalize the type by replacing `bool list` with a type variable.
+
+```ocaml
+type 'a l =
+  | Done
+  | More of 'a * (unit -> 'a l)
+```
+
+And would you look at that! This is simply a list, but whose tail is computed by a function `unit
+-> 'a l` rather than being already materialized.
+
+Now we're equipped to rewrite `enumerate_assignments` but having the type
+`int -> unit -> bool list l`.
+
+```ocaml
+let enumerate_assignments n =
+  let rec go n a next =
+    if n = 0 then
+      More (a, next) (* return the value _and_ the continuation *)
+    else
+      go (n-1) (true :: a) (fun () -> go (n-1) (false :: a) next)
+  in
+  fun () -> go n [] (fun () -> Done)
+```
+
+Have we achieved our goal of making `enumerate_assignments` stateless? Yes and no.
+
+Indeed we have eliminated the mutable variable, so on the one hand we can say "mission
+accomplished." But on the other hand, the state of the walk through the space of truth assignments
+is still very much present in our program. That state is captured in the continuation, which is
+returned explicitly via the `More` constructor of our _lazy list_ type `l`. The state of our
+generator implementation is no longer mutable and hidden, but rather immutable and explicitly
+passed around. We can therefore view lazy lists as _purely functional generators._
+
+Another consideration is that in order to make this approach work in a strongly and statically
+typed setting as in OCaml, we did need to introduce the recursive type `l`. In the setting of a
+different type system, this might not be necessary. For instance, in a dynamically-typed setting,
+e.g. in Python, it is unnecessary to introduce an extra type: we can simply return `None` when the
+sequence ends and `(a, next)` when the sequence continues.
+
+In the next section, we revisit our implementation using hidden, mutable state, and eliminate from
+it the higher-order functions. This will give rise to a first-order implementation suitable for
+translation into a language such as C, which is moreover well-equipped to handle mutable state.
+
+## Defunctionalizing the continuation of a generator
+
+Recall from the first section the `enumerate_assignments` implementation using mutable state.
+
+```ocaml
+let enumerate_assignments n =
+  let rec go n a next =
+    if n = 0 then
+      (state := next; Some a)
+    else
+      go (n-1) (true :: a) (fun () -> go (n-1) (false :: a) next)
+
+  and state = ref (fun () -> go n [] (fun () -> None))
+  in
+  fun () -> !state ()
 ```
 
