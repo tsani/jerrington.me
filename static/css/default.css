@@ -25,6 +25,7 @@ pre code {
     width: 100%;
     display: block;
     overflow-x: auto;
+    color: black;
 }
 
 p code {
@@ -222,4 +223,19 @@ span.inference > .infer:last-child {
 }
 
 span.inference > .deduce:last-child {
+}
+
+aside {
+    color: #777;
+    font-size: 0.9em;
+}
+
+aside.aside-hidden > :first-child {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+aside.aside-hidden > :not(:first-child) {
+    display: none;
 }
