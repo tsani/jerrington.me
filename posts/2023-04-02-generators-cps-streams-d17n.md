@@ -1,5 +1,5 @@
 ---
-title: Implementing generators with continuation-passing style
+title: Implementing generators with continuation-passing style, streams, and defunctionalization
 ---
 
 Some languages define a variant of `return` called `yield`. When a function returns normally, it's
