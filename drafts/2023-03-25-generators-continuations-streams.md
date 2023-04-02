@@ -111,7 +111,7 @@ This functional representation of an evaluation context is called a _continuatio
 
 Now that we have a way of representing evaluation contexts as continuations, we can write OCaml
 programs that manipulate continuations. Since continuations are functions, we cannot inspect them:
-the only thing we can do with them is call them. Calling a continuation `k` with an argument `a`
+we can only construct them and call them. Calling a continuation `k` with an argument `a`
 represents filling the hole in the evaluation context represented by `k` with the value `a` and
 proceeding to evaluate the resulting expression.
 
@@ -121,7 +121,7 @@ required in the represented evaluation context, namely in computing `_ > 5`. The
 is needed in the context `if _ then E1 else E2`, and the value of that if-then-else expression is
 needed in the context `let x = _ in E3`. From this apparent nestedness of evaluation contexts, we
 can observe that the contexts form a _stack._ This observation will be expanded on considerably in
-the last section of this article.
+the last section of this article when we translate these ideas into C.
 
 ```
     (fun r -> let x = if r > 5 then E1 else E2 in E3) 3
@@ -138,15 +138,16 @@ the represented evaluation context and continuing the evaluation from there.
 The big idea of _continuation-passing style_ (CPS) is to equip the functions we write with an
 extra parameter. You guessed it, that extra parameter is the continuation of the function.  So
 instead of having a function `f : A -> int` that we use like `f a + 5`, we instead write `f a (fun
-r -> r + 5)`. When we implement `f`, we will have access to (a representation of) the evaluation
-context in which the call to `f` takes place!
+r -> r + 5)`. The upshot is that in the implementation of `f`, we will have access to (a
+representation of) the evaluation context in which the call to `f` takes place!
 
-In traditional CPS, functions no longer 'return normally'. Instead, they always return by calling
-the continuation. In our current setting of implementing generators, this isn't quite what we want.
-We would like our functions to return normally -- this is how the generator will emit a value --
-but we nonetheless want access to the evaluation context so that we can store it in a reference
-just before returning. In the next section, we'll see how we can transform the Python code above
-into OCaml using this form of CPS.
+In traditional CPS, functions no longer 'return normally'. Instead, they return by calling the
+continuation with the value they want to return. In our current setting of implementing generators,
+this isn't quite what we want.  We would like our functions to return normally -- this is how the
+generator will emit a value -- but we nonetheless want access to the evaluation context so that we
+can store it in a reference just before returning. This will enable us to resume the function from
+the point where it emitted a value. In the next section, we'll see how we can transform the Python
+code from the beginning of the article into OCaml using this form of CPS.
 
 ## Implementing generators using state and CPS
 
@@ -156,6 +157,14 @@ objects, so our implementation in this section will use a reference to store an 
 To come up with our OCaml implementation, let's first translate the Python program from the first
 section into pseudo-OCaml with `yield` & `yield from`. Rather than use a mutable array to construct
 the truth assignment, we'll build it up one value at a time in a parameter.
+
+<aside>
+
+Since the function we will eventually write is tail-recursive, the list pointer in this parameter
+will actually be mutated. Although this isn't the same as using a genuinely mutable array, there
+will be some mutation in the resulting program.
+
+</aside>
 
 ```ocaml
 let enumerate_assignments n =
@@ -194,12 +203,14 @@ Next, let's address `yield from`. This keyword causes the current generator to i
 'sub-generator' and to yield all of its values.
 
 <aside>
+
 In Python, we have the following interpretation of `yield from E`:
 
 ```Python
 for x in E:
     yield x
 ```
+
 </aside>
 
 Since we choose to represent yielding a value as simply returning it, we implement `yield from go
@@ -213,10 +224,11 @@ _; yield from go (n-1) (false :: a)
 ```
 
 We represent this evaluation context as a function: `fun x -> x; yield from go (n-1) (false :: a)`.
-Notice that `x : unit`. A value of type `unit` does not convey any information, so can simplify to
-`fun () -> yield from go (n-1) (false :: a)`.
+Since `yield from` does not compute anything -- it performs an _effect_ -- we observe that
+`x : unit`. A value of type `unit` does not convey any information, so can simplify to `fun () ->
+yield from go (n-1) (false :: a)`.
 
-Next we must translate the `yield from go ...` that appears inside the continuation. Again,
+Next we must translate the inner `yield from go ...` which appears inside the continuation. Again,
 we translate this simply to a call to `go`, but in doing so we must decide what continuation to
 pass in this call. We ask ourselves what evaluation context this call takes place in: what
 happens next, after `yield from go (n-1) (false :: a)` finishes generating its sequence of values?
@@ -252,7 +264,7 @@ let enumerate_assignments n =
     go n [] (* ? *)
 ```
 
-But calling `go` right away at the end of `enumerate_assignments` can't be correct anymore. This
+Calling `go` right away at the end of `enumerate_assignments` can't be correct anymore. This
 will return the first item of the sequence, and then we'll have no way to call the stored
 continuation to get the next one!
 
@@ -286,8 +298,8 @@ signal this.
 Now we need to turn the fantasy of the type `'a gen` and its associated function
 `next : 'a gen -> 'a option`
 into reality. Here there are several approaches available to us, but one particularly clean one
-using higher-order functions is to represent `'a gen` as `unit -> 'a option`. Then, `next` becomes
-trivial to implement.
+using higher-order functions is to represent `'a gen` as a function `unit -> 'a option`. Then,
+`next` becomes trivial to implement.
 
 ```ocaml
 let next f = f ()
@@ -323,28 +335,31 @@ driver function is called, it will emit the next item in the sequence!
 But there's a small wrinkle in `fun () -> go n []`: there's an argument missing! What continuation
 do we pass in this initial call to go?
 
-This continuation will end up saved by `go` in `state` after the whole sequence of truth
+The continuation passed here ends up saved by `go` in `state` after the whole sequence of truth
 assignments is generated. Therefore, we need to arrange that when this continuation ends up stored,
-the driver function returns `None`. The driver function we want has the form `fun () -> !state ()`,
-so this initial continuation passed to `go` ought to be `fun () -> None`.
+the driver function returns `None`. The driver function has the form `fun () -> !state ()`, so this
+initial continuation passed to `go` ought to be `fun () -> None`.
 
-But previously, our continuation had the type `unit -> 'a`, so we need to adjust `go` slightly to
-accommodate this change. This leads to our finalized generator using CPS and state.
+But previously, the continuation had the type `unit -> 'a`, so we need to adjust `go` slightly to
+accommodate this change. This leads to the finalized generator using CPS and state.
 
 ```ocaml
 let enumerate_assignments n =
     let rec go n a next =
         if n = 0 then
-            (state := next; a)
+            (* we wrap the next item in Some *)
+            (state := next; Some a)
         else
             go (n-1) (true :: a) (fun () -> go (n-1) (false :: a) next)
     and state = ref (fun () -> go n [] (fun () -> None))
+    (* and arrange that the last continuation to be stored in
+       `state` just returns `None`. *)
     in
     fun () -> !state ()
 ```
 
-Now the state variable, which initially contains a call to `go`, must be mutually recursive with
-`go`, which refers back to the state variable.
+Now the state reference, which initially contains a call to `go`, must be mutually recursive with
+`go`, which refers back to the state reference.
 
 Let's witness the fruits of our handiwork. Here's an OCaml REPL demonstrating the generator.
 
@@ -366,7 +381,7 @@ val next : unit -> bool list option = <fun>
 ```
 
 In the next section, we explore how to eliminate the mutable variable from this implementation.
-This will give rise to an implementation suitable in purely functional languages, which lack
+This will give rise to an implementation suitable to purely functional languages, which lack
 (genuine) mutable variables.
 
 ## Eliminating state
@@ -376,9 +391,9 @@ the driver function `fun () -> !state ()` can return: it can return `Some a` aft
 continuation, or it can return `None` which happens when the sequence ends and the initial
 continuation `fun () -> None` has been stored in the variable `state`.
 
-Rather than store the continuation in some hidden stateful variable, we can simply return both the
-assignment _and_ the continuation in the `Some` case. That gives rise to the following intuitive
-implementation.
+Rather than store the continuation in some hidden stateful variable, we can simply return _both_
+the assignment _and_ the continuation in the `Some` case. That gives rise to the following
+intuitive implementation.
 
 ```ocaml
 let enumerate_assignments n =
@@ -415,10 +430,14 @@ the `None` constructor of the `option` type. Now we can fix the circular variabl
 type l = Next of (bool list * (unit -> l)) option
 ```
 
-(Notice that the constructor `Next` witnesses the recursive equality
+<aside>
+
+Notice that the constructor `Next` witnesses the recursive equality
 `L = (bool list * (unit -> L)) option`. We see `Next : (bool list * (unit -> l)) option -> l`
 witnessing one direction of the equality, and since `l` has only one constructor, pattern matching
-on a value of type `l` witnesses the other direction.)
+on a value of type `l` witnesses the other direction.
+
+</aside>
 
 We can slightly refactor this type by introducing a second constructor and eliminating the
 `option`.
@@ -576,11 +595,341 @@ choose more efficient representations for these types too.
 ### Translating to C
 
 The resulting C program is around 100 lines of code whereas the defunctionalized OCaml program
-is around 20 lines of code. (Both counts ignore blank lines and comments.)
+is around 20 lines of code. (Both counts ignore blank lines and comments.) We need the following
+includes in this development.
+
+```c
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+```
 
 Our first choice for efficient data representation will be to represent `bool list` as simply
 `uint64_t`. This limits the number of variables to 64, but it also has the nice property that on a
-64-bit machine such as most, a truth assignment will fit into a register.
+64-bit machine such as most, a truth assignment fits into a register.
+We will need to define some operations for setting and clearing specific bits.
+
+```c
+typedef uint64_t truth_assignment;
+typedef uint8_t var_index;
+
+truth_assignment set_true(truth_assignment a, var_index i) {
+    return a | (1UL << i);
+}
+
+truth_assignment set_false(truth_assignment a, var_index i) {
+    return a & ~(1UL << i);
+}
+
+truth_assignment const EMPTY_TRUTH_ASSIGNMENT = 0;
+```
+
+Next, we will translate the type `frame` from the OCaml implementation into a simple C struct.
+
+```c
+struct frame {
+    var_index i;
+    truth_assignment a;
+};
+
+struct frame make_frame(var_index i, truth_assignment a) {
+    return (struct frame) {
+        .i = i,
+        .a = a,
+    };
+}
+```
+
+Next, recall the `stack` type from the OCaml implementation.
+
+```ocaml
+type stack =
+    | Start of int
+    | Continue of frame * stack
+    | Finished
+```
+
+We will represent the linked list structure as a simple array of `struct frame`s. Notice that the
+depth of recursion is bounded by the parameter `n` given to `enumerate_assignments`. The maximum
+recursion depth informs the stack size to allocate. To manage this array of frames, we will need to
+track a _frame pointer:_ this is the index of the next unused frame in the stack. Seen differently,
+the frame pointer is the count of frames currently in the stack.
+
+```c
+var_index const MAX_VARS = 64;
+var_index const STACK_LIMIT = MAX_VARS;
+```
+
+The frame pointer, being at least 8 bits wide, can accommodate values greater than the count of
+frames we will ever store.
+This means we can use the upper bits of the frame pointer to help identify what state the generator
+is in.
+When the generator is in the start state, the stack is empty, so we can use the value
+`1 << (WIDTH-1)` for the frame pointer to signify that the generator is in the start state.
+
+In the `Start` state, we need to know the count `n` of variables we're enumerating truth
+assignments for, but afterwards we can forget this `n` and just keep the array of frames.
+This suggests using a `union` to reuse space here.
+
+```c
+struct generator {
+    uint8_t frame_pointer;
+    union {
+        var_index num_variables;
+        struct frame stack[STACK_LIMIT];
+    } data;
+};
+
+enum state {
+    START = 1,
+    CONTINUE = 0,
+};
+
+enum state generator_state(struct generator *gen) {
+    // extract the uppermost bit of the frame pointer
+    return gen->frame_pointer >> 7;
+}
+
+// constructs a generator's initial state
+struct generator enumerate_assignments(var_index num_variables) {
+    return (struct generator) {
+        .data.num_variables = num_variables,
+        .frame_pointer = 1 << 7,
+    };
+}
+```
+
+Next, we need operations to push and pop from the stack held in a `generator`.
+
+```c
+/**
+ * Returns -1 if pushing fails: wrong generator state or stack is full.
+ * Otherwise copies the given frame into the top of the stack, increments the frame pointer,
+ * and returns 1. */
+int gen_stack_push(struct generator * gen, struct frame const * frame) {
+    if (gen->frame_pointer >= STACK_LIMIT) {
+        return -1;
+    }
+    gen->data.stack[gen->frame_pointer++] = *frame;
+    return 1;
+}
+
+/**
+ * Returns -1 if popping is forbidden: wrong generator state or empty stack.
+ * Otherwise decrements the frame pointer, and copies the top frame into `out`,
+ * and returns 1 */
+int gen_stack_pop(struct generator * gen, struct frame * out) {
+    if (0 == gen->frame_pointer || START == generator_state(gen)) {
+        return -1;
+    }
+    *out = gen->data.stack[-- gen->frame_pointer];
+    return 1;
+}
+```
+
+Now that we've translated all the type definitions, we can translate the programs `go` and `apply`
+from OCaml into C. Recall the OCaml implementation:
+
+```ocaml
+let enumerate_assignments n =
+    let state = ref (Start n) in
+    let rec go n a s =
+        if n = 0 then
+            (state := s; Some a)
+        else
+            go (n-1) (true :: a) (Continue ({n; a}, s))
+    and apply s = match s with
+        | Start -> go n [] Finished (* Finished comes from fun () -> None *)
+        | Continue ({n; a}, s) -> go (n-1) (false :: a) s
+        | Finished -> None
+    in
+    fun () -> apply !state
+```
+
+Notice that `go` refers to the variable `state` that is not a parameter of `go`. In other words,
+the definition of `go` constructs a _closure._ Sadly, C does not have closures, so we will
+implement this by passing our translation of `go` a pointer to the `generator`. This way when `go`
+makes a recursive call, it can simply use `gen_stack_push`. In other words, rather than building up
+the stack in a parameter to save it just before returning, our translation of `go` will
+be mutating the stack along the way.
+
+Observe also that `go` is _tail-recursive:_ the recursive call is the last thing the function does.
+The OCaml compiler transforms this into a while-loop during compilation. We will do this
+tail-call optimization manually in our translation, to avoid using the C call stack.
+
+```c
+int go(struct generator * gen, var_index i, truth_assignment * ta) {
+    // due to the --> 'operator', `i` will have its value decremented by one inside the loop
+    while (i --> 0) {
+        *ta = set_true(*ta, n);
+        // in the OCaml program, the frame that gets pushed by the recursive call
+        // `go (n-1) (true :: a) (Continue ({n; a}, stk))`
+        // stores the value `n`, but here we are storing n-1 as a consequence
+        // of the decrement that happens in the while loop condition.
+        struct frame frame = make_frame(n, *ta);
+        if(-1 == gen_stack_push(gen, &frame)) return -1;
+    }
+    return 1;
+}
+```
+
+Notice that `go` returns a status code here, whereas the original OCaml program returned the truth
+assignment. The C program returns the truth assignment via the pointer parameter `ta`.
+
+Finally, we can translate `apply`. We will call it `next` in the C program, since it will dispatch
+on the current generator state to compute the next item in the sequence, updating the generator
+state.
+
+```
+int next(struct generator * gen, truth_assignment * ta) {
+    int status;
+    struct frame frame;
+
+    switch (generator_state(gen)) {
+    case CONTINUE:
+        status = gen_stack_pop(gen, &frame);
+
+        if (0 == status) return 0;
+        if (-1 == status) return -1;
+
+        *ta = set_false(frame.a, frame.i);
+        if (-1 == go(gen, frame.i, ta)) return -1;
+        return 1;
+
+    case START:
+        *ta = EMPTY_TRUTH_ASSIGNMENT;
+        gen->frame_pointer = 0;
+        if(-1 == go(gen, gen->data.num_variables, ta)) return -1;
+        return 1;
+    }
+}
+```
+
+And what good is all this code if we don't try it out. Here's a `main` function to run the
+generator until it exits, printing out the truth assignments along the way.
+
+```c
+int main() {
+    struct generator gen = enumerate_assignments(5);
+    int status = 0;
+    truth_assignment a;
+
+    for (; status = next(&gen, &a), 1 != status;) {
+        printf("truth assignment: %d\n", a);
+    }
+
+    if (-1 == status) {
+        printf("Generator encountered an error, sorry.\n");
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+```
+
+Collecting all this C code into a file `enumerate.c`, we can witness the fruits of our labour:
+
+```bash
+$ gcc enumerate.c && ./a.out
+truth assignment: 31
+truth assignment: 30
+truth assignment: 29
+truth assignment: 28
+truth assignment: 27
+truth assignment: 26
+truth assignment: 25
+truth assignment: 24
+truth assignment: 23
+truth assignment: 22
+truth assignment: 21
+truth assignment: 20
+truth assignment: 19
+truth assignment: 18
+truth assignment: 17
+truth assignment: 16
+truth assignment: 15
+truth assignment: 14
+truth assignment: 13
+truth assignment: 12
+truth assignment: 11
+truth assignment: 10
+truth assignment: 9
+truth assignment: 8
+truth assignment: 7
+truth assignment: 6
+truth assignment: 5
+truth assignment: 4
+truth assignment: 3
+truth assignment: 2
+truth assignment: 1
+truth assignment: 0
+```
+
+And there you have it: the most complicated program you've ever seen to count down from `2^n -1`.
+
+## Conclusion
+
+This article covered a lot of ground.
+
+At first, we were motivated by Python's elegant generator syntax and curious about how these ideas
+are implemented. We implemented the idea of stateful generators using continuation-passing style to
+give us access to a representation of the evaluation context, so we could store that context in a
+mutable variable. That gave us the following implementation.
+
+```ocaml
+let enumerate_assignments n =
+    let rec go n a next =
+        if n = 0 then
+            (* we wrap the next item in Some *)
+            (state := next; Some a)
+        else
+            go (n-1) (true :: a) (fun () -> go (n-1) (false :: a) next)
+    and state = ref (fun () -> go n [] (fun () -> None))
+    (* and arrange that the last continuation to be stored in
+       `state` just returns `None`. *)
+    in
+    fun () -> !state ()
+```
+
+In the following section, we explored a purely functional take on this idea, motivated by the
+simple idea of returning the continuation together with the generated value. To make this
+typecheck, we needed to introduce the following recursive type.
+
+```ocaml
+type 'a l =
+  | Done
+  | More of 'a * (unit -> 'a l)
+```
+
+This recursive type (or some variant thereof) is often presented in programming languages courses
+simply as "a lazy list". The development in this article, on the other hand, _derived_ this
+representation by eliminating the mutable variable from the program in the previous section.
+This demonstrates that lazy lists are purely functional generators, where the state of the
+generator is captured in the continuation of type `unit -> 'a l` that is explicitly returned.
+
+In the following section, we applied defunctionalization to the stateful CPS generator to convert
+it into a state machine using an explicit stack.
+
+```ocaml
+let enumerate_assignments n =
+  let state = ref (Start n) in
+  let rec go n a s =
+    if n = 0 then
+      (state := s; Some a)
+    else
+     go (n-1) (true :: a) (Continue ({n; a}, stk))
+  and apply s = match s with
+    | Start n -> go n [] Finished
+    | Continue ({n; a}, s) -> go (n-1) (false :: a) s
+    | Finished -> None
+  in
+  fun () -> apply !state
+```
+
+In the final section, we translated the defunctionalized program into C, using efficient data
+representations along the way where possible.
+
+I hope that this sheds some light on the connection between CPS, generators, and state machines.
 
 [d17n]: /posts/2023-02-12-defunctionalizing-continuations.html
 [higher-order-continuations]: /posts/2022-10-22-higher-order-continuations
