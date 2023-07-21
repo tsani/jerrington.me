@@ -71,7 +71,7 @@ To motivate the discussion of continuations in this section, let's look ahead at
 to accomplish in the _next_ section: we will implement a generator as a stateful function `next`.
 Each time we call this function -- `next ()` -- it returns the next item in the sequence.
 The key idea in implementing this function is that just before returning an item in the sequence,
-we store the current _evaluation context_ in the reference. Then, when the user of our generator
+we store the current _evaluation context_ in a reference. Then, when the user of our generator
 calls `next ()` again, we restore the saved evaluation context. Evaluation then proceeds from that
 saved point up to the next item in the sequence.
 
@@ -225,7 +225,7 @@ _; yield from go (n-1) (false :: a)
 
 We represent this evaluation context as a function: `fun x -> x; yield from go (n-1) (false :: a)`.
 Since `yield from` does not compute anything -- it performs an _effect_ -- we observe that
-`x : unit`. A value of type `unit` does not convey any information, so can simplify to `fun () ->
+`x : unit`. A value of type `unit` does not convey any information, so we simplify to `fun () ->
 yield from go (n-1) (false :: a)`.
 
 Next we must translate the inner `yield from go ...` which appears inside the continuation. Again,
@@ -308,6 +308,13 @@ let next f = f ()
 Hence, we implement `enumerate_assignments` to return a function `unit -> bool list option`, such
 that each time this function is called, it emits the next item in the sequence.
 
+<aside>
+
+This analysis _identifies_ the generator with its `next` function. Since the thing we care to do
+to a generator is to call `next` on it, we can represent the generator itself with such a function.
+
+</aside>
+
 ```ocaml
 let enumerate_assignments n =
     let state = ref (* ? *) in
@@ -330,7 +337,7 @@ the initial call `go n []`. This makes it so that the 'driver function' returned
 function that generates the next item in the sequence, so initially we store the function that
 generates the first item of the sequence `fun () -> go n []`. Moreover, we implemented `go` to save
 the current continuation back into the `state` just before it returns. Therefore, the next time the
-driver function is called, it will emit the next item in the sequence!
+driver function is called, it emits the next item in the sequence!
 
 But there's a small wrinkle in `fun () -> go n []`: there's an argument missing! What continuation
 do we pass in this initial call to go?
@@ -510,8 +517,8 @@ let enumerate_assignments n =
 ```
 
 We can apply _defunctionalization_ to eliminate the higher-order functions present in this program
-(see [here][d17n]). In short, we replace each function type $T$ that occurs in the program with a
-new datatype $D(T)$. Then, for each function
+(see [here][d17n]). In short, we replace each function type $T = T_1 \to T_2$ that occurs in the
+program with a new datatype $D(T)$. Then, for each function
 $\Gamma \vdash \text{fun}\, x \to e_i : T_1 \to T_2$, define a
 constructor $C_i : P(\Gamma) \to D(T)$ where $P(x_1 : S_1, \ldots, x_n : S_n) = (S_1, \ldots,
 S_n)$. Next, define the function $\text{apply}\, : D(T) \to T1 \to T2$ as follows (in pseudo-OCaml)
@@ -525,7 +532,7 @@ In other words, the function `apply` takes the _representation_ $f : D(T)$ of th
 function and recovers the original function: notice that $\text{apply}\, f : T_1 \to T_2$ has the
 original function's type!
 
-For `enumerate_assignments`, we introduce a type `stack` to represent the function type
+Concretely for `enumerate_assignments`, we introduce a type `stack` to represent the function type
 `unit -> bool list option`.
 There are three functions of this type passed as arguments to other functions.
 
@@ -540,7 +547,7 @@ There are three functions of this type passed as arguments to other functions.
   defunctionalizing. This will make our type `stack` into a recursive type. Moreover, since the new
   continuation defined by this anonymous function refers to exactly one other continuation, we are
   finally justified in calling our type "stack": these continuations were implicitly forming a
-  linked list that we now explicitly represent.
+  linked list that now is explicitly represented.
   From this analysis we generate the constructor `Continue : int * bool list * stack -> stack`.
 
 We will make a small refactoring: we will separate the "stack frames" from the stack by introducing
@@ -569,7 +576,7 @@ let enumerate_assignments n =
     if n = 0 then
       (state := s; Some a)
     else
-     go (n-1) (true :: a) (Continue ({n; a}, stk))
+     go (n-1) (true :: a) (Continue ({n; a}, s))
      (* ^ previously: fun () -> go (n-1) (false :: a) next *)
   (* Apply pops a frame from the stack and runs until the next item is produced, if any.
      When `go` runs, it will manipulate the stack, saving it into `state` in particular right
@@ -651,14 +658,17 @@ type stack =
 
 We will represent the linked list structure as a simple array of `struct frame`s. Notice that the
 depth of recursion is bounded by the parameter `n` given to `enumerate_assignments`. The maximum
-recursion depth informs the stack size to allocate. To manage this array of frames, we will need to
-track a _frame pointer:_ this is the index of the next unused frame in the stack. Seen differently,
-the frame pointer is the count of frames currently in the stack.
+value of the parameter `n` in the development here is `64`. The maximum recursion depth informs the
+maximum stack size.
 
 ```c
 var_index const MAX_VARS = 64;
 var_index const STACK_LIMIT = MAX_VARS;
 ```
+
+To manage this array of frames, we will need to track a _frame pointer:_ this is the index of the
+next unused frame in the stack. Seen differently, the frame pointer is the count of frames
+currently in the stack.
 
 The frame pointer, being at least 8 bits wide, can accommodate values greater than the count of
 frames we will ever store.
@@ -699,7 +709,7 @@ struct generator enumerate_assignments(var_index num_variables) {
 }
 ```
 
-Next, we need operations to push and pop from the stack held in a `generator`.
+Next, we need operations to push to and pop from the stack held in a `generator`.
 
 ```c
 /**
@@ -715,13 +725,14 @@ int gen_stack_push(struct generator * gen, struct frame const * frame) {
 }
 
 /**
- * Returns -1 if popping is forbidden: wrong generator state or empty stack.
+ * Returns -1 if popping is forbidden: wrong generator state.
+ * Returns 0 if the stack is empty.
  * Otherwise decrements the frame pointer, and copies the top frame into `out`,
  * and returns 1 */
 int gen_stack_pop(struct generator * gen, struct frame * out) {
-    if (0 == gen->frame_pointer || START == generator_state(gen)) {
-        return -1;
-    }
+    if (START == generator_state(gen)) return -1;
+    if (0 == gen->frame_pointer) return 0;
+
     *out = gen->data.stack[-- gen->frame_pointer];
     return 1;
 }
@@ -749,24 +760,30 @@ let enumerate_assignments n =
 Notice that `go` refers to the variable `state` that is not a parameter of `go`. In other words,
 the definition of `go` constructs a _closure._ Sadly, C does not have closures, so we will
 implement this by passing our translation of `go` a pointer to the `generator`. This way when `go`
-makes a recursive call, it can simply use `gen_stack_push`. In other words, rather than building up
-the stack in a parameter to save it just before returning, our translation of `go` will
-be mutating the stack along the way.
+makes a recursive call, it can simply use `gen_stack_push` to implement the expression `Continue
+({n; a}, s)` at the same time as `state := s`. In other words, rather than building up the stack in
+a parameter to save it just before returning, our translation of `go` will be mutating the stack
+along the way.
 
 Observe also that `go` is _tail-recursive:_ the recursive call is the last thing the function does.
-The OCaml compiler transforms this into a while-loop during compilation. We will do this
-tail-call optimization manually in our translation, to avoid using the C call stack.
+The OCaml compiler transforms this into a while-loop during compilation. This transformation is
+called _tail-call optimization._ We will also perform this transformation in our translation, to
+avoid using the C call stack.
 
 ```c
 int go(struct generator * gen, var_index i, truth_assignment * ta) {
-    // due to the --> 'operator', `i` will have its value decremented by one inside the loop
+    struct frame frame;
+
+    // due to the --> 'operator',
+    // `i` will have its value decremented by one inside the loop
     while (i --> 0) {
         *ta = set_true(*ta, n);
+
         // in the OCaml program, the frame that gets pushed by the recursive call
-        // `go (n-1) (true :: a) (Continue ({n; a}, stk))`
+        // `go (n-1) (true :: a) (Continue ({n; a}, s))`
         // stores the value `n`, but here we are storing n-1 as a consequence
         // of the decrement that happens in the while loop condition.
-        struct frame frame = make_frame(n, *ta);
+        frame = = make_frame(n, *ta);
         if(-1 == gen_stack_push(gen, &frame)) return -1;
     }
     return 1;
@@ -774,13 +791,14 @@ int go(struct generator * gen, var_index i, truth_assignment * ta) {
 ```
 
 Notice that `go` returns a status code here, whereas the original OCaml program returned the truth
-assignment. The C program returns the truth assignment via the pointer parameter `ta`.
+assignment. The C program 'returns' the truth assignment via the pointer parameter `ta`, and rather
+than construct a new truth assignment, it simply modifies the given one.
 
 Finally, we can translate `apply`. We will call it `next` in the C program, since it will dispatch
 on the current generator state to compute the next item in the sequence, updating the generator
 state.
 
-```
+```c
 int next(struct generator * gen, truth_assignment * ta) {
     int status;
     struct frame frame;
@@ -789,8 +807,8 @@ int next(struct generator * gen, truth_assignment * ta) {
     case CONTINUE:
         status = gen_stack_pop(gen, &frame);
 
-        if (0 == status) return 0;
-        if (-1 == status) return -1;
+        // handle generator exit
+        if (0 == status || -1 == status) return status;
 
         *ta = set_false(frame.a, frame.i);
         if (-1 == go(gen, frame.i, ta)) return -1;
@@ -917,7 +935,7 @@ let enumerate_assignments n =
     if n = 0 then
       (state := s; Some a)
     else
-     go (n-1) (true :: a) (Continue ({n; a}, stk))
+     go (n-1) (true :: a) (Continue ({n; a}, s))
   and apply s = match s with
     | Start n -> go n [] Finished
     | Continue ({n; a}, s) -> go (n-1) (false :: a) s
