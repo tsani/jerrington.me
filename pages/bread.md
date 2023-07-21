@@ -6,6 +6,62 @@ I make bread.
 
 Dates for the bread are the day the preparation started, not the day of the bake.
 
+## 20 July 2023
+
+I've been continuing to make bread using pretty much the recipe from 19 March, except that I've
+reduced the amount of yeast down to 4g.
+Anyway that's not what I wanted to write about.
+
+On Thursday, 20 July I made _pitas!_
+
+* 1000g white flour
+* 600g water
+* 7g yeast
+* 4 tbsp olive oil
+* 4 pinches salt
+* 1 tbsp sweet stuff (I used honey; the recipe calls for brown sugar)
+
+The recipe was a little weird in its instructions. (Got it from a YouTube video.)
+
+1. Dissolve yeast and sweetener in 300g water.
+2. Dissolve salt in 300g water.
+3. Combine yeast mixture with 600g flour and the olive oil.
+   No need to fully combine!
+4. Add saltwater mix to the flour mix.
+5. Add (up to) remaining 400g of flour while mixing.
+6. Mix/knead until surface is smooth -- 5 minutes.
+7. Rest 40 minutes in a greased bowl, until doubled.
+8. Turn out the dough onto a floured surface and gently deflate.
+9. Divide into a dozen.
+    - The video divided into 8, but hers were _really_ thick.
+    - I divided into 10, and due to the 'oven spring' they were still quite thick
+    - I think dividing into a dozen would work, but really anything between 9 and 12 seems
+      reasonable.
+10. Shape into balls _and cover_
+    - I didn't cover the balls, so their surfaces of the ones waiting dried out a little bit while
+      I was cooking the others.
+11. Flatten balls with a rolling pin.
+12. Cook in a preheated cast-iron skillet on medium (just under 5) with just the tiniest slick of
+    oil.
+    - The first one came out tasting like fried dough and was a bit greasy: there was too much oil
+      and the pan wasn't hot enough.
+    - 3 drops of oil is enough.
+13. Flip after about 90s ~ 2min, when bubbly and a bit crisp.
+    - When lifting with a spatula, the pita should be stiff
+14. Cook on the other side for another 90s ~ 2min.
+15. Cover finished pitas with a clean dishtowel.
+    - They come out of the skillet stiff, so the steam trapped by the towel loosens them up.
+    - our white kitchen towels are perfect
+
+They were fluffy and awesome. Made for awesome souvlaki wraps.
+
+I screwed up the dough slightly by forgetting to include the olive oil while the mixture was still
+liquidy. What I did was make a little well in the dough, put in 1 tbsp of oil, incorporated it by
+kneading, and then repeated three more times to get all the oil in. This worked well! Good trick to
+know. It does make the kneading process longer though.
+
+Next time, I'll include the oil when the dough is still in a liquid form!
+
 ## 19 March 2023
 
 * 500 g flour
