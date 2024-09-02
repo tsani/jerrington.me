@@ -2,12 +2,8 @@
 title: "Info & Contact"
 ---
 
-To contact me for academic or other school related inquiries, please send an
-email `jacob.errington [this would be an amphora] mail [dot] mcgill [dot] ca`.
-
-To contact me for anything related to my projects or with miscellaneous
-inquiries, please send an email to
-`jake [this would be an amphora] mail [dot] jerrington [dot] me`.
+* **For consulting inquiries:** `jake [this would be an amphora] mail [dot] jerrington [dot] me`
+* **For academic inquiries:** `jacob.errington [this would be an amphora] mcgill [dot] ca`.
 
 ### This blog
 

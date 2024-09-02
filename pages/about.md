@@ -2,7 +2,9 @@
 title: Who am I?
 ---
 
-I am a well-rounded software developer based on Montreal with both a broad skillset and deep
+<img style="float: right; max-width: 33%; margin: 0 0.5em;" src="/img/jake-profile.jpg">
+
+I am a well-rounded software developer based in Montreal with both a broad skillset and deep
 technical expertise. I hold a master's degree in computer science from McGill University.
 
 My technical professional experience spans nearly a decade. It includes (full-stack) web
@@ -16,4 +18,4 @@ thousands of undergraduate students over three years. Recurring highlights from 
 of my teaching are the clarity of my communication, and my exceptional organizational ability.
 
 I'm eager to bring these skills to the table in addressing your business's technology needs.
-[Contact me now](/contact.html) to book a call.
+[Contact me now](/info.html) to book a call.

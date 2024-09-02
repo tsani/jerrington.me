@@ -17,24 +17,26 @@ main :: IO ()
 main = hakyll $ do
   -- PAGES --------------------------------------------------------------------
 
-  match "pages/index.html" $ do
+  match "pages/index.md" $ do
     route $ constRoute "index.html"
     compile $ do
-      posts <- recentFirst =<< loadAll "posts/*"
-      let mostRecent = head posts
+      pandocCompiler
+        >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
+        >>= relativizeUrls
 
-      let indexCtx =
-              listField "posts" postCtx (return posts) <>
-              myDefaultContext
+  match "pages/blog.md" $ do
+    route $ constRoute "blog.html"
+    compile $ do
+      posts <- recentFirst =<< loadAll "posts/*"
+      let ctx = listField "posts" postCtx (return posts) <> myDefaultContext
 
       getResourceBody
-          >>= applyAsTemplate indexCtx
-          >>= loadAndApplyTemplate "templates/default.html" indexCtx
-          >>= relativizeUrls
+        >>= applyAsTemplate ctx
+        >>= loadAndApplyTemplate "templates/default.html" ctx
+        >>= relativizeUrls
 
   match "pages/*" $ do
-    route $
-      setExtension "html" `composeRoutes` customRoute (drop 6 . toFilePath)
+    route $ setExtension "html" `composeRoutes` dropRoute 6
     compile $ pandocCompiler
       >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
       >>= relativizeUrls
@@ -59,25 +61,7 @@ main = hakyll $ do
       >>= loadAndApplyTemplate "templates/default.html" postCtx
       >>= relativizeUrls
 
-  match "notes/*" $ do
-    route $ setExtension "html"
-    compile $ pandocMathCompiler
-      >>= loadAndApplyTemplate "templates/post.html" postCtx
-      >>= loadAndApplyTemplate "templates/default.html" postCtx
-      >>= relativizeUrls
-
-  match "school/msc/doc/read/*/notes.*" $ do
-    route readingNotesRoute
-    compile $ pandocMathCompiler
-      >>= loadAndApplyTemplate "templates/notes.html" postCtx
-      >>= loadAndApplyTemplate "templates/default.html" postCtx
-      >>= relativizeUrls
-
   -- STATIC RESOURCES ---------------------------------------------------------
-
-  match "school/msc/doc/read/*/*.pdf" $ do
-    route schoolPdfRoute
-    compile copyFileCompiler
 
   match "static/**" $ do
     route (dropRoute 7)
@@ -108,18 +92,7 @@ feedConfig = FeedConfiguration
   , feedRoot = "https://jerrington.me"
   }
 
-schoolPdfRoute :: Routes
-schoolPdfRoute = customRoute (g . splitFileName . toFilePath) where
-  g (_, f) = "pdf" </> f
-
 -- | A route that drops a given number of characters from a path to
 -- produce a route.
 dropRoute :: Int -> Routes
 dropRoute n = customRoute (drop n . toFilePath)
-
-readingNotesRoute :: Routes
-readingNotesRoute = customRoute (g . toFilePath) where
-  g = notesDir . htmlExt . init . fst . splitFileName . drop (length pref)
-  htmlExt = (<.> "html")
-  notesDir = ("notes" </>)
-  pref = "school/msc/doc/read/" :: String
