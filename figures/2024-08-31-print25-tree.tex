@@ -1,0 +1,22 @@
+\documentclass[12pt,tikz]{standalone}
+
+\usepackage{graphicx}
+\usetikzlibrary{positioning}
+\begin{document}
+
+\begin{tikzpicture}[draw, black, shorten >=3pt, shorten <=3pt, node distance = 2.5cm]
+  \node at (10, 0) (dummy) {};
+
+  \node (root) at (5, 0) {call};
+  \node[below left = of root] (call left) {\ttfamily print};
+  \node[below right = of root] (call right) {\ttfamily +};
+  \node[below left = of call right] (plus left) {\ttfamily 2};
+  \node[below right = of call right] (plus right) {\ttfamily 5};
+
+  \draw (root) -- node[sloped, yshift=6pt] {\footnotesize function} (call left);
+  \draw (root) -- node[sloped, yshift=6pt] {\footnotesize argument} (call right);
+  \draw (call right) -- (plus left);
+  \draw (call right) -- (plus right);
+\end{tikzpicture}
+
+\end{document}

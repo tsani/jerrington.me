@@ -1,0 +1,62 @@
+\documentclass[12pt,tikz]{standalone}
+
+\usepackage{graphicx}
+\usetikzlibrary{positioning}
+\begin{document}
+
+\begin{tikzpicture}[draw, black, shorten >=3pt, shorten <=3pt, node distance = 1cm]
+  \node at (10, 0) (dummy) {};
+
+  \node at (0, 0) (root) {\ttfamily +};
+  \node[below left = of root] (A) {\ttfamily 1};
+  \node[below right = of root] (B) {\ttfamily +};
+  \node[below left = of B] (C) {\ttfamily 2};
+  \node[below right = of B] (D) {\ttfamily +};
+  \node[below left = of D] (E) {\ttfamily 3};
+  \node[below right = of D] (F) {\ttfamily 4};
+
+  \draw (root) -- (A);
+  \draw (root) -- (B);
+  \draw (B) -- (C);
+  \draw (B) -- (D);
+  \draw (D) -- (E);
+  \draw (D) -- (F);
+  %
+  %
+  %
+  \node at (10, 0) (dummy) {};
+
+  \node at (8, 0) (root 2) {\ttfamily +};
+
+  \node[below left = of root 2, xshift=-1cm] (2A) {\ttfamily +};
+  \node[below left = of 2A] (2A1) {\ttfamily 1};
+  \node[below right = of 2A] (2A2) {\ttfamily 2};
+
+  \node[below right = of root 2, xshift=1cm] (2B) {\ttfamily +};
+  \node[below left = of 2B] (2B1) {\ttfamily 3};
+  \node[below right = of 2B] (2B2) {\ttfamily 4};
+
+  \draw (root 2) -- (2A);
+  \draw (root 2) -- (2B);
+  \draw (2A) -- (2A1);
+  \draw (2A) -- (2A2);
+  \draw (2B) -- (2B1);
+  \draw (2B) -- (2B2);
+
+  \node at (16, 0) (root 3) {\ttfamily +};
+  \node[below left = of root 3] (L) {\ttfamily +};
+  \node[below right = of root 3] (X) {\ttfamily 4};
+  \node[below left = of L] (L2) {\ttfamily +};
+  \node[below right = of L] (X2) {\ttfamily 3};
+  \node[below left = of L2] (X3) {\ttfamily 1};
+  \node[below right = of L2] (X4) {\ttfamily 2};
+
+  \draw (root 3) -- (L);
+  \draw (root 3) -- (X);
+  \draw (L) -- (L2);
+  \draw (L) -- (X2);
+  \draw (L2) -- (X3);
+  \draw (L2) -- (X4);
+\end{tikzpicture}
+
+\end{document}
