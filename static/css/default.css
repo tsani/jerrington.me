@@ -21,14 +21,15 @@ pre {
     border: 1px solid #fff0f0;
 }
 
-pre code {
+pre > code {
     width: 100%;
     display: block;
     overflow-x: auto;
     color: black;
+    padding: 0;
 }
 
-p code {
+code {
     padding: 0 0.25em;
     border: 1px solid #fff0f0;
 }
