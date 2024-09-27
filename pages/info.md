@@ -2,8 +2,10 @@
 title: "Info & Contact"
 ---
 
-* **For consulting inquiries:** `jake [this would be an amphora] mail [dot] jerrington [dot] me`
-* **For academic inquiries:** `jacob.errington [this would be an amphora] mcgill [dot] ca`.
+* **Professional inquiries:** `jake [this would be an amphora] mail [dot] jerrington [dot] me`
+* **Academic inquiries:** `jacob.errington [this would be an amphora] mcgill [dot] ca`.
+* [LinkedIn Profile](https://www.linkedin.com/in/jacob-errington-9822a7b0/)
+* [GitHub Profile](https://github.com/tsani)
 
 ### This blog
 
