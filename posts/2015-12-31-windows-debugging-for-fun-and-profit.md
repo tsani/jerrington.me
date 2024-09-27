@@ -29,7 +29,7 @@ text is encoded not in ASCII, nor in Unicode, but in Shift-JIS (SJIS). Some
 SJIS characters are coded on one byte, and some are coded on two bytes, with
 the distinguishing characteristic between the two being the value of the first
 byte: if the first byte is less that `0x80`, then the character is coded on one
-byte; else, the character is coded on two bytes. 
+byte; else, the character is coded on two bytes.
 
 Accordingly, H-codes are somewhat more complicated, as the breakpoint given in
 an H-code might only have one half of a character.
@@ -57,7 +57,7 @@ go on from my friend is the first string that a character says in game.
 
 Let's search for the string shortly before it gets displayed. The rationale for
 doing this is that we'll find an address pointing to some kind of text or event
-script database rather than some kind of transient memory. 
+script database rather than some kind of transient memory.
 Since we want to find the code that reads from this address, let's put a read
 watchpoint on the address, and then wait for the text to get displayed. Here's
 what that all looks like on screen after the watchpoint gets hit.
@@ -78,7 +78,7 @@ to put our hook, but frankly, I'm not convinced yet.
 
 To start with a clean slate, let's restart the game. Then let's put a
 breakpoint on the instruction to see what triggers it and to inspect the
-processor state when the instruction executes. 
+processor state when the instruction executes.
 
 Each time the instruction executes, the value of `eax` seems to be increasing.
 To me, this suggests that it's reading the text character by character. That
@@ -124,31 +124,31 @@ complicated.
 23 36 50 23 30 32 30 36 46
 #  6  P  #  0  2  0  6  F
 
-81 63 81 63 88 AB 82 A2 97 5C 8A B4 82 AA 93 49 92 86 82 C5 82 B7 81 42 
+81 63 81 63 88 AB 82 A2 97 5C 8A B4 82 AA 93 49 92 86 82 C5 82 B7 81 42
 …     …     悪    い    予    感    が    的    中    で    す    。
 
-02 03 
+02 03
 ?? ??
 
-23 30 32 30 38 46 
+23 30 32 30 38 46
 #  0  2  0  8  F
 
-8E 9E 81 45 8B F3 81 45 8C B6 81 63 81 63 
+8E 9E 81 45 8B F3 81 45 8C B6 81 63 81 63
 時    ・    空    ・    幻    …     …
 
-01 
+01
 ??
 
-8F E3 88 CA 8E 4F 91 AE 90 AB 82 AA 93 AD 82 A2 82 C4 82 A2 82 DC 82 B7 81 42 
+8F E3 88 CA 8E 4F 91 AE 90 AB 82 AA 93 AD 82 A2 82 C4 82 A2 82 DC 82 B7 81 42
 上    位    三    属    性    が    働    い    て    い    ま    す    。
 
-02 03 
+02 03
 ?? ??
 
-23 30 32 30 31 46 
+23 30 32 30 31 46
 #  0  2  0  1  F
 
-81 73 93 83 81 74 82 E2 81 73 91 6D 89 40 81 74 82 C6 93 AF 82 B6 82 C5 82 B7 82 CB 81 42 
+81 73 93 83 81 74 82 E2 81 73 91 6D 89 40 81 74 82 C6 93 AF 82 B6 82 C5 82 B7 82 CB 81 42
 《    塔    》    や    《    僧    院    》    と    同    じ    で    す    ね    。
 
 02 00
@@ -272,10 +272,10 @@ All that being said, here's the code for setting the breakpoint.
 First, we have to escalate the privileges of our process so that it can call
 `OpenProcess`.
 
-```
-HANDLE token; 
+```c++
+HANDLE token;
 // ^ our process's access token
-LUID debug_luid; 
+LUID debug_luid;
 // ^ the locally-unique identifier for the SeDebugPrivilege privilege
 
 // Look up the SeDebugPrivilege privilege's LUID.
@@ -296,7 +296,7 @@ if(!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
 // so-called 'struct hack' to have dynamic size, so we have to allocate enough
 // memory for the structure itself plus one item for the contents of the
 // dynamic array at the end.
-PTOKEN_PRIVILEGES tp 
+PTOKEN_PRIVILEGES tp
     = (PTOKEN_PRIVILEGES)malloc(sizeof(*tp) + sizeof(LUID_AND_ATTRIBUTES));
 
 tp->PrivilegeCount = 1;
@@ -318,7 +318,7 @@ free(tp);
 Next, we have to enumerate the running processes to find the process ID of the
 game.
 
-```
+```c++
 HANDLE process_snapshot;
 // ^ A handle to the snapshot of the currently running processes
 PROCESSENTRY32 pe;
@@ -327,7 +327,7 @@ char found;
 // ^ A boolean for whether we found the game or not.
 
 // Create the snapshot of the currently running processes.
-if(INVALID_HANDLE_VALUE == 
+if(INVALID_HANDLE_VALUE ==
     (process_snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)))
 {
     printf("Failed to get process list. (Error %d.)\n", GetLastError());
@@ -368,7 +368,7 @@ if(!found)
 // Get the handle on the game's process with all privileges.
 // This includes the necessary PROCESS_VM_WRITE and PROCESS_VM_OPERATION
 // privileges.
-if(NULL == 
+if(NULL ==
     (game_process = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID)))
 {
     printf("Failed to open ED_ZERO.exe process. (Error %d.)\n", GetLastError());
@@ -384,7 +384,7 @@ if(!DebugActiveProcess(pe.th32ProcessID))
 
 Finally, we can set the breakpoint in the process memory.
 
-```
+```c++
 SIZE_T b;
 // ^ Used as an out parameter for the number of bytes written to the process
 // memory.
@@ -440,28 +440,30 @@ When we're done processing the event, we call `ContinueDebugEvent`. Until we
 call `ContinueDebugEvent`, the thread that triggered the event will be
 suspended.
 
-    void debug_loop()
+```c++
+void debug_loop()
+{
+    DEBUG_EVENT event;
+    ZeroMemory(&event, sizeof(event));
+
+    for(;;)
     {
-        DEBUG_EVENT event;
-        ZeroMemory(&event, sizeof(event));
-
-        for(;;)
+        // Block until we receive a debug event.
+        if(!WaitForDebugEvent(&event, INFINITE))
         {
-            // Block until we receive a debug event.
-            if(!WaitForDebugEvent(&event, INFINITE))
-            {
-                printf("Failed to get next debug event. (Error %d.)", GetLastError());
-                exit(1);
-            }
-
-            // This function will analyze the event type and call an appropriate
-            // handler.
-            dispatch_event_handler(&event);
-
-            // Return control to the game.
-            ContinueDebugEvent(event.dwProcessId, event.dwThreadId, DBG_CONTINUE);
+            printf("Failed to get next debug event. (Error %d.)", GetLastError());
+            exit(1);
         }
+
+        // This function will analyze the event type and call an appropriate
+        // handler.
+        dispatch_event_handler(&event);
+
+        // Return control to the game.
+        ContinueDebugEvent(event.dwProcessId, event.dwThreadId, DBG_CONTINUE);
     }
+}
+```
 
 Now to write the `dispatch_event_handler` function that's invoked by the above
 code. There are some nasty details involved here. It turns out that the first
@@ -480,52 +482,54 @@ contraints the thread ID, so this is easy. However, rather than call
 the first time for efficiency, and store the thread handle in a global
 variable.
 
-    void dispatch_event_handler(LPDEBUG_EVENT event)
+```c++
+void dispatch_event_handler(LPDEBUG_EVENT event)
+{
+    // We need to skip the first breakpoint event, since it's artificially
+    // generated.
+    static char first_try = 1;
+
+    switch(event->dwDebugEventCode)
     {
-        // We need to skip the first breakpoint event, since it's artificially
-        // generated.
-        static char first_try = 1;
-
-        switch(event->dwDebugEventCode)
+    case EXCEPTION_DEBUG_EVENT:
+        // We only bother with the exception events
+        switch(event->u.Exception.ExceptionRecord.ExceptionCode)
         {
-        case EXCEPTION_DEBUG_EVENT:
-            // We only bother with the exception events
-            switch(event->u.Exception.ExceptionRecord.ExceptionCode)
+        case EXCEPTION_BREAKPOINT:
+            if(first_try)
             {
-            case EXCEPTION_BREAKPOINT:
-                if(first_try)
-                {
-                    first_try = 0;
-                    break;
-                }
-
-                // Open the game thread the second time a breakpoint gets hit.
-                if(game_thread == NULL)
-                {
-                    if(NULL == 
-                        (game_thread = 
-                        OpenThread(THREAD_ALL_ACCESS, FALSE, event->dwThreadId)))
-                    {
-                        printf("Failed to open game thread.\n");
-                        exit(1);
-                    }
-                }
-
-                // invoke the breakpoint handling routine.
-                on_breakpoint(game_process, game_thread);
+                first_try = 0;
                 break;
-
-                default:
-                    printf("Unhandled exception occurred.\n");
-                    break;
             }
+
+            // Open the game thread the second time a breakpoint gets hit.
+            if(game_thread == NULL)
+            {
+                if(NULL ==
+                    (game_thread =
+                    OpenThread(THREAD_ALL_ACCESS, FALSE, event->dwThreadId)))
+                {
+                    printf("Failed to open game thread.\n");
+                    exit(1);
+                }
+            }
+
+            // invoke the breakpoint handling routine.
+            on_breakpoint(game_process, game_thread);
             break;
 
-        default:
-            //printf("Unhandled debug event occurred.\n");
-            break;
+            default:
+                printf("Unhandled exception occurred.\n");
+                break;
         }
+        break;
+
+    default:
+        //printf("Unhandled debug event occurred.\n");
+        break;
     }
+}
+```
 
 Finally, we can write the `on_breakpoint` function that will inspect the
 processor state in the game thread to read the value in `eax`, and read the
@@ -545,7 +549,7 @@ something useful! There are at least two options available to us.
 
 I feel like real debuggers use a different strategy than either one of these,
 but I found it pretty hard to do research on this short of reading the source
-code of existing debuggers, which I wasn't prepared to do for what's supposed 
+code of existing debuggers, which I wasn't prepared to do for what's supposed
 to be just a quick hack.
 
 The former option seems like it introduces race conditions; we might miss a
@@ -583,89 +587,91 @@ to `eip`, which is in the control register group, we'll have to use the
 Talk is cheap. Let's see the code.
 
 
-    void on_breakpoint(HANDLE game_process, HANDLE game_thread)
+```c++
+void on_breakpoint(HANDLE game_process, HANDLE game_thread)
+{
+    char sjis[RPM_BUF_SIZE];
+    // ^ a buffer to hold the memory that we read from the game memory at
+    // the address given in eax.
+
+    SIZE_T b;
+    // ^ to be used as an out parameter for reading and writing memory.
+
+    CONTEXT context;
+    // ^ the structure holding the processor state.
+
+    LPVOID sjis_addr;
+    // ^ we'll store the contents of eax in here
+
+    LPVOID bp_addr;
+    // ^ we'll hold the current value of eip in here
+
+    // First, we read the processor state in the game thread.
+
+    // We want to read the integer registers (esp. EAX) and the control
+    // registers (esp. EIP)
+    context.ContextFlags = CONTEXT_INTEGER | CONTEXT_CONTROL;
+
+    if(!GetThreadContext(game_thread, &context))
     {
-        char sjis[RPM_BUF_SIZE];
-        // ^ a buffer to hold the memory that we read from the game memory at
-        // the address given in eax.
-
-        SIZE_T b;
-        // ^ to be used as an out parameter for reading and writing memory.
-
-        CONTEXT context;
-        // ^ the structure holding the processor state.
-
-        LPVOID sjis_addr;
-        // ^ we'll store the contents of eax in here
-
-        LPVOID bp_addr;
-        // ^ we'll hold the current value of eip in here
-
-        // First, we read the processor state in the game thread.
-
-        // We want to read the integer registers (esp. EAX) and the control
-        // registers (esp. EIP)
-        context.ContextFlags = CONTEXT_INTEGER | CONTEXT_CONTROL;
-
-        if(!GetThreadContext(game_thread, &context))
-        {
-            printf("Failed to get thread context.\n");
-            return;
-        }
-
-        // Pull out the breakpoint address from eip and the value of eax, which
-        // is a pointer of the next chunk of data to be parsed.
-        bp_addr = (LPVOID)context.Eip;
-        sjis_addr = (LPVOID)context.Eax;
-
-        // As a sanity check, we'll verify that eip is right after our
-        // breakpoint. If it's not, then we'll bail out because it means that
-        // some other breakpoint that we didn't put there was hit.
-        // Please forgive the nasty casts.
-        if(bp_addr != (LPVOID)((DWORD)instruction_address + 1))
-        {
-            printf("Breakpoint hit at another address, namely 0x%08x.\n", bp_addr);
-            return;
-        }
-
-        // Now we read the memory of the game at the address that we found in
-        // eax in order to get the next character to be read.
-        if(!ReadProcessMemory(game_process, sjis_addr, sjis, RPM_BUF_SIZE, &b))
-        {
-            printf("Failed to read SJIS character from game memory @ 0x%08x. "
-                    "Read %d bytes. (Error %d.)\n", 
-                    sjis_addr, 
-                    b, 
-                    GetLastError());
-        }
-
-        // The instruction that we overwrote was `movzx ecx, byte ptr [eax]`,
-        // which is coded on 3 bytes, so we need to jump over the next two
-        // bytes which are garbage.
-        context.Eip += 2;
-
-        // Reset the context flags to write out in case the call to
-        // GetThreadContext changed the flags on us for some reason.
-        context.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;
-
-        // Simulate the overwritten instruction by moving the lowest read byte
-        // into ECX. We have to take care to cast it to an unsigned char to
-        // ensure that the value is positive, so that when the unsigned char
-        // gets implicitly widened to a DWORD (the type of the Ecx field), we
-        // actually get zeroes in the high bits instead of ones. (Tracking down
-        // that bug was in fact a nightmare.)
-        context.Ecx = (unsigned char)sjis[0];
-
-        // Flush the context out to the processor registers.
-        if(!SetThreadContext(game_thread, &context))
-        {
-            printf("Failed to write processor state.");
-            return;
-        }
-
-        // parse the buffer of data that we read.
-        parse_buf(sjis);
+        printf("Failed to get thread context.\n");
+        return;
     }
+
+    // Pull out the breakpoint address from eip and the value of eax, which
+    // is a pointer of the next chunk of data to be parsed.
+    bp_addr = (LPVOID)context.Eip;
+    sjis_addr = (LPVOID)context.Eax;
+
+    // As a sanity check, we'll verify that eip is right after our
+    // breakpoint. If it's not, then we'll bail out because it means that
+    // some other breakpoint that we didn't put there was hit.
+    // Please forgive the nasty casts.
+    if(bp_addr != (LPVOID)((DWORD)instruction_address + 1))
+    {
+        printf("Breakpoint hit at another address, namely 0x%08x.\n", bp_addr);
+        return;
+    }
+
+    // Now we read the memory of the game at the address that we found in
+    // eax in order to get the next character to be read.
+    if(!ReadProcessMemory(game_process, sjis_addr, sjis, RPM_BUF_SIZE, &b))
+    {
+        printf("Failed to read SJIS character from game memory @ 0x%08x. "
+                "Read %d bytes. (Error %d.)\n",
+                sjis_addr,
+                b,
+                GetLastError());
+    }
+
+    // The instruction that we overwrote was `movzx ecx, byte ptr [eax]`,
+    // which is coded on 3 bytes, so we need to jump over the next two
+    // bytes which are garbage.
+    context.Eip += 2;
+
+    // Reset the context flags to write out in case the call to
+    // GetThreadContext changed the flags on us for some reason.
+    context.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;
+
+    // Simulate the overwritten instruction by moving the lowest read byte
+    // into ECX. We have to take care to cast it to an unsigned char to
+    // ensure that the value is positive, so that when the unsigned char
+    // gets implicitly widened to a DWORD (the type of the Ecx field), we
+    // actually get zeroes in the high bits instead of ones. (Tracking down
+    // that bug was in fact a nightmare.)
+    context.Ecx = (unsigned char)sjis[0];
+
+    // Flush the context out to the processor registers.
+    if(!SetThreadContext(game_thread, &context))
+    {
+        printf("Failed to write processor state.");
+        return;
+    }
+
+    // parse the buffer of data that we read.
+    parse_buf(sjis);
+}
+```
 
 The `parse_buf` function is pretty uninteresting, so I won't include it here.
 In a nutshell, it appends text data to a large internal buffer and skips over
@@ -729,68 +735,69 @@ Finally we're done with the clipboard and we can close it with
 
 Here's the code.
 
-    void flush_message_buffer()
+```c++
+void flush_message_buffer()
+{
+    // msg_offset specifies how much of the internal buffer we've written
+    // to so far.
+    if(msg_offset == 0)
+        return; // nothing to do !
+
+    // null-terminate the buffer
+    msg_buf[msg_offset] = '\0';
+
+    // allocate a global buffer to give to the system with the clipboard
+    // data.
+    HGLOBAL clip_buf = GlobalAlloc(GMEM_MOVEABLE, msg_offset + 1);
+
+    // copy the message buffer into the global buffer
+    memcpy(GlobalLock(clip_buf), msg_buf, msg_offset + 1);
+    GlobalUnlock(clip_buf);
+
+    // allocate global memory to hold the locale identifier.
+    HGLOBAL locale_ptr = GlobalAlloc(GMEM_MOVEABLE, sizeof(DWORD));
+    DWORD japanese = 1041;
+    memcpy(GlobalLock(locale_ptr), &japanese, sizeof(japanese));
+    GlobalUnlock(locale_ptr);
+
+    // Open the clipboard so we can write to it.
+    if(!OpenClipboard(NULL))
     {
-        // msg_offset specifies how much of the internal buffer we've written
-        // to so far.
-        if(msg_offset == 0)
-            return; // nothing to do !
-        
-        // null-terminate the buffer
-        msg_buf[msg_offset] = '\0';
-
-        // allocate a global buffer to give to the system with the clipboard
-        // data.
-        HGLOBAL clip_buf = GlobalAlloc(GMEM_MOVEABLE, msg_offset + 1);
-
-        // copy the message buffer into the global buffer
-        memcpy(GlobalLock(clip_buf), msg_buf, msg_offset + 1);
-        GlobalUnlock(clip_buf);
-
-        // allocate global memory to hold the locale identifier.
-        HGLOBAL locale_ptr = GlobalAlloc(GMEM_MOVEABLE, sizeof(DWORD));
-        DWORD japanese = 1041;
-        memcpy(GlobalLock(locale_ptr), &japanese, sizeof(japanese));
-        GlobalUnlock(locale_ptr);
-        
-        // Open the clipboard so we can write to it.
-        if(!OpenClipboard(NULL))
-        {
-            printf("Failed to open clipboard. (Error %d.)\n", GetLastError());
-            goto cleanup;
-        }
-
-        // Remove any data that might already be in the clipboard.
-        if(!EmptyClipboard())
-        {
-            printf("Failed to empty clipboard. (Error %d.)\n", GetLastError());
-            goto cleanup;
-        }
-
-        // Write the text data to the clipboard.
-        if(!SetClipboardData(CF_TEXT, clip_buf))
-        {
-            printf("Failed to set clipboard data. (Error %d.)\n", GetLastError());
-            goto cleanup;
-        }
-
-        // Write the locale information to the clipboard.
-        if(!SetClipboardData(CF_LOCALE, locale_ptr))
-        {
-            printf("Failed to set clipboard locale. (Error %d.)\n", GetLastError());
-            goto cleanup;
-        }
-
-        
-    cleanup:
-
-        // Clear the message buffer
-        ZeroMemory(msg_buf, msg_offset);
-        // Close the clipboard
-        CloseClipboard();
-        // Reset the offset within the internal buffer to the beginning.
-        msg_offset = 0;
+        printf("Failed to open clipboard. (Error %d.)\n", GetLastError());
+        goto cleanup;
     }
+
+    // Remove any data that might already be in the clipboard.
+    if(!EmptyClipboard())
+    {
+        printf("Failed to empty clipboard. (Error %d.)\n", GetLastError());
+        goto cleanup;
+    }
+
+    // Write the text data to the clipboard.
+    if(!SetClipboardData(CF_TEXT, clip_buf))
+    {
+        printf("Failed to set clipboard data. (Error %d.)\n", GetLastError());
+        goto cleanup;
+    }
+
+    // Write the locale information to the clipboard.
+    if(!SetClipboardData(CF_LOCALE, locale_ptr))
+    {
+        printf("Failed to set clipboard locale. (Error %d.)\n", GetLastError());
+        goto cleanup;
+    }
+
+cleanup:
+
+    // Clear the message buffer
+    ZeroMemory(msg_buf, msg_offset);
+    // Close the clipboard
+    CloseClipboard();
+    // Reset the offset within the internal buffer to the beginning.
+    msg_offset = 0;
+}
+```
 
 Conclusion
 ----------
