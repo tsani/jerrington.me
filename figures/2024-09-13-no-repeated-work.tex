@@ -3,19 +3,20 @@
 \usepackage{graphicx}
 \usetikzlibrary{positioning}
 \begin{document}
+\fontsize{16}{20}\selectfont
 
 \newcommand{\state}[2]{%
   $s = $ \texttt{#1}\\
   $p = $ \texttt{#2}
 }
 
-\begin{tikzpicture}[align=center, draw, black, shorten >=3pt, shorten <=3pt, node distance = 1.5cm]
+\begin{tikzpicture}[align=center, draw, black, shorten >=3pt, shorten <=3pt, node distance = 2.5cm]
   \node at (5, 0) (root) {\state{"aaab"}{"a*a*a*c"}};
-  \node at (2.5, -1.5) (L) {\state{"aab"}{"a*a*a*c"}};
-  \node at (7.5, -1.5) (R) {\state{"aaab"}{"a*a*c"}};
-  \node at (0, -3) (LL) {\state{"ab"}{"a*a*a*c"}};
-  \node at (10, -3) (RR) {\state{"aaab"}{"a*c"}};
-  \node at (5, -3) (mid) {\state{"aab"}{"a*a*c"}};
+  \node at (2, -2) (L) {\state{"aab"}{"a*a*a*c"}};
+  \node at (8, -2) (R) {\state{"aaab"}{"a*a*c"}};
+  \node at (-1, -4) (LL) {\state{"ab"}{"a*a*a*c"}};
+  \node at (11, -4) (RR) {\state{"aaab"}{"a*c"}};
+  \node at (5, -4) (mid) {\state{"aab"}{"a*a*c"}};
 
   \draw (root) -- (L);
   \draw (root) -- (R);
