@@ -252,3 +252,19 @@ aside.aside-hidden > :first-child {
 aside.aside-hidden > :not(:first-child) {
     display: none;
 }
+
+.flex {
+    display: flex;
+}
+
+.row {
+    flex-flow: row nowrap;
+}
+
+.space-between {
+    justify-content: space-around;
+}
+
+.align-start {
+    align-items: start;
+}
