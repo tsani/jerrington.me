@@ -82,33 +82,10 @@ contexts as a compromise to enable writing a pretty-printer that shows names.
 
 Our goal is to implement a typechecker for this syntax: a procedure on pairs of terms together with
 a context to decide the typing relation. That relation is defined inductively by a natural
-deduction-style set of inference rules. Crucially, since this calculus is dependently-typed,
-substitutions -- `[t/x]A` denotes the capture-avoiding substitution of all free occurrences of `x`
-in `A` with `t` -- will appear in these typing rules.
-
-I'll give only rules that differ from the those of the simply-typed lambda calculus.
-
-```
-    G, x:A |- t : B              G(x) = A
----------------------------    ------------
-  G |- λx.t : (x:A) -> B        G |- x : A
-
-
-  G |- t : (x:A) -> B    G |- t' : A
---------------------------------------
-         G |- t t' : [t'/x]B
-
-
-  G |- A : ★    G, x:A |- B : ★
----------------------------------
-       G |- (x:A) -> B : ★
-
---------------      --------------
-  G |- ★ : ★          G |- ⊤ : ★
-```
-
-Yes, that's the type-in-type rule, meaning that the resulting system is unsound. I'll explore later
-how we might introduce universes to address that.
+deduction-style set of inference rules, which I'll give later. For now, suffice to say that in
+these rules will appear some substitutions like `[t/x]A`. Substitution does not preserve normal
+forms, so a critical piece of infrastructure in building our typechecker is a normalization
+procedure.
 
 ## Normalization by Evaluation
 
@@ -268,7 +245,8 @@ type tp_env = env
 
 Finally, since `quote` captures the checking mode of bidirectional typechecking as it traverses a
 value (normal term) together with its semantic type, we pair it with a separate `quote_neu` to
-traverse a neutral term, synthesizing a type from it and the typing environment.
+traverse a neutral term, synthesizing a type from it and the typing environment. (The following
+section will make more precise the idea of bidirectional typechecking.)
 
 ```ocaml
 let vvar l = VN (NVar l)
@@ -302,3 +280,80 @@ and quote_neu (d : lvl) (e : tp_env) : neu -> tm * vtp = function
         | _ -> failwith "ill-typed"
         end
 ```
+
+### Normalization
+
+A roundtrip through eval and quote brings a term into normal form.
+
+```ocaml
+let norm (t : tm) (tA : tp) : tm =
+    quote 0 [] (eval [] tA) (eval [] t)
+```
+
+## Bidirectional typechecking
+
+Bidirectional typechecking is a technique that exploits a duality within terms to reduce the amount
+of typing information required from the programmer. We divide the syntax of terms into _normal
+terms_ and _neutral terms,_ precisely as we did for values, giving a syntactic characterization of
+beta-normal terms.
+
+* **Normal terms** are associated with _constructors_ and are those terms whose typechecking is
+  also type-directed. In other words, we _check_ that a given normal term has a _given_ type.
+* **Neutral terms** are associated with _eliminators_ and are those terms from which their type may
+  be _synthesized._ In other words, we _infer_ the type of a neutral term in a given context.
+
+For example, in order to appropriately extend the context during typechecking, we classify a lambda
+abstraction as a normal term. Hence, its type is given, making the context extension
+straightforward to compute. In picking apart the given type of the lambda abstraction, we obtain
+the expected type of the abstraction's body, so we equally classify the abstraction body as normal.
+
+Dually, we expect a function application to be neutral. To infer the type of an application, we
+first infer the type of its subject -- requiring that the function be neutral assures
+beta-normality -- and insist that the type be a Pi-type `(x:A) -> B`. This in turn reveals the
+expected type `A` of the function's argument, so we let the argument be normal.
+
+Here's a BNF grammar.
+
+```
+Normal terms  t, A, B  ::= λx.t | () | (x:A) -> B | ⊤ | ★ | s
+Neutral terms       s  ::= x | s t
+```
+
+This exposition shows intuitively that typechecking beta-normal terms is some way easier. We begin
+by typechecking a normal term against its given type. The term, being a stack of introduction
+forms, is structurally aligned with its type. In doing so, we can easily extend the context at
+binding sites. Typechecking switches modes into type inference, when the normal term switches to a
+neutral term. Information stored in the context comes into play upon encountering a variable, and
+furthermore when inferring the type of the subject of a function application.
+
+Although we could encode normal and neutral terms as two separate OCaml types, as we did our
+semantic domain, I won't bother. Instead, typechecking will raise an exception if it encounters
+such situations.
+
+Crucially, since this calculus is dependently-typed,
+substitutions -- `[t/x]A` denotes the capture-avoiding substitution of all free occurrences of `x`
+in `A` with `t` -- will appear in these typing rules.
+
+I'll give only rules that differ from the those of the simply-typed lambda calculus.
+
+```
+    G, x:A |- t : B              G(x) = A
+---------------------------    ------------
+  G |- λx.t : (x:A) -> B        G |- x : A
+
+
+  G |- t : (x:A) -> B    G |- t' : A
+--------------------------------------
+         G |- t t' : [t'/x]B
+
+
+  G |- A : ★    G, x:A |- B : ★
+---------------------------------
+       G |- (x:A) -> B : ★
+
+--------------      --------------
+  G |- ★ : ★          G |- ⊤ : ★
+```
+
+Yes, that's the type-in-type rule, meaning that the resulting system is unsound. I'll explore later
+how we might introduce universes to address that.
