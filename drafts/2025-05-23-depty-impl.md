@@ -1,8 +1,8 @@
 ---
-title: Implementing dependent types. How hard could it be?
+title: 'Implementing dependent types: how hard could it be? (Part 1)'
 ---
 
-Short answer: not as hard as I thought.
+Short answer: hard, but not as hard as I thought.
 
 Type systems in which the types (of functions, typically) may _depend_ on terms
 are called _dependently-typed._ These systems exist on a spectrum, where restricted forms of
@@ -22,15 +22,14 @@ Let me be clear: _proving_ that every well-typed term in a dependently-typed lan
 normalized -- this is called the normalization property -- is very challenging. But that is not the
 goal of this post.
 
-In this post, I want to show you how we can _implement_ a normalization procedure using a powerful,
-extensible technique called _normalization by evaluation_ (NbE) and subsequently implement a
-typechecker for a small, dependently-typed language relying on this normalization procedure. I'll
-begin, as do many existing presentations of these ideas, with a tiny language in which virtually
-nothing of interest can be defined. I'll then scale up the language to include induction on natural
-numbers and equality, enabling us to use this language to express simple proofs about arithmetic.
-The typechecker will then act as a checker for these proofs. I'll comment on the (lack of)
-ergonomics in the resulting system and conclude with why we say that implementing dependent types
-is in fact challenging.
+In this series of posts, I want to show you how we can _implement_ a normalization procedure using
+a powerful, extensible technique called _normalization by evaluation_ (NbE) and subsequently
+implement a typechecker for a small, dependently-typed language relying on this normalization
+procedure. The plan for the series is the following.
+
+* Part 1: core syntax, evaluation, normal vs neutral terms, normalization.
+* Part 2: bidirectional typechecking, substitutions, semantic equality.
+* Part 3: scaling up the language: induction on natural numbers, identity type.
 
 ## The core calculus
 
@@ -83,9 +82,7 @@ contexts as a compromise to enable writing a pretty-printer that shows names.
 Our goal is to implement a typechecker for this syntax: a procedure on pairs of terms together with
 a context to decide the typing relation. That relation is defined inductively by a natural
 deduction-style set of inference rules, which I'll give later. For now, suffice to say that in
-these rules will appear some substitutions like `[t/x]A`. Substitution does not preserve normal
-forms, so a critical piece of infrastructure in building our typechecker is a normalization
-procedure.
+these rules will appear some substitutions like `[t/x]A`.
 
 ## Normalization by Evaluation
 
@@ -94,6 +91,13 @@ and that `A` contains a free variable `x`. Will `[t/x]A` be in normal form?
 
 Not necessarily! That's the central challenge in implementing our typechecker, which we will
 surmount by implementing a normalization procedure.
+
+<aside>
+
+Crucially, we have a problem when `t` is built from an introduction form and the target variable of
+the substitution is the subject of an elimination. The substitution then introduces a beta-redex.
+
+</aside>
 
 Normalization by Evaluation is a semantic approach to normalization. It is made up of two related
 procedures.
@@ -119,7 +123,7 @@ function body. The same line of reasoning leads to interpreting a Pi-type as an 
 types.
 
 ```ocaml
-and value =
+type value =
     | VLam of name * (value -> value)
     | VUnit
     | VPi of (name * vtp) * (value -> vtp)
@@ -134,10 +138,8 @@ We want to quote the body of the abstraction -- that is the output of the functi
 -- but to access the body, we must apply this OCaml function to some value. What value can we use?
 
 The resolution to this quandry lies in generalizing the syntax of values to explicitly account for
-open terms, while syntactically restricting the representation to allow only beta-normal forms: it
-isn't enough to just add a constructor for variables; once we introduce variables to the syntax,
-then e.g. `x (λx. y)`, an application in which a variable appears in the _head position,_ is also
-in beta-normal form.
+open terms. We might think to add merely a constructor for variables, but this isn't enough, as
+e.g.  `x (λx. y)` is an application that's in normal form.
 
 Rather than merely add variables, we add a separate syntax of so-called _neutral terms._ These are
 variables and elimination forms applied to neutral terms. Conceptually, a neutral term is a stack
@@ -145,7 +147,7 @@ of elimination forms that are ultimately blocked on a variable. In contrast, the
 I gave above corresponds to the introduction forms of the lambda-calculus.
 
 ```ocaml
-and value =
+type value =
     | VLam of name * (value -> value)
     | VUnit
     | VPi of vtp * (name * (value -> vtp))
@@ -183,8 +185,10 @@ accordingly.
 * **Elimination subject is neutral.** Reduction is ultimately blocked on a variable, so we extend
   the stack of blocked eliminations.
 
+The helper function `apply`, which interprets a function application, performs this check.
+
 ```ocaml
-and env = value list
+type env = value list
 
 let rec eval (e : env) (t : tm) : value =
     match t with
@@ -205,11 +209,13 @@ and apply v1 v2 = match v1 with
 ```
 
 <aside>
+
 Notice the anonymous function used in both the `Pi` and `Lam` cases is the same. We could easily
 rewrite `eval` (and `value`) in a
 [defunctionalized](/posts/2023-02-12-defunctionalizing-continuations) form -- that is, we could use
 a first-order representation of closures instead of using OCaml's closures -- leading to a strategy
 suitable for efficient implementation in a lower-level language.
+
 </aside>
 
 ### `quote`
@@ -221,7 +227,7 @@ the two. This dual procedure, called `quote`, transforms a semantic value back i
 What's conceptually tricky about `quote` is how we handle functions. Recall that `Lam (x, t)`
 evaluates to the (metalanguage) closure `fun v -> eval (v::e) t` where the (meta) free variable `e`
 is an environment providing values for the (object) free variables present in `t`. To quote this,
-we must apply the closure to a value. Thankfully, we have neutral terms at our disposal: we
+we must first apply the closure to a value. Thankfully, we have neutral terms at our disposal: we
 generate a variable, corresponding to the bound variable of the abstraction, to use as an argument.
 
 Since neutral variables use de Bruijn levels, the `quote` procedure tracks a current depth,
@@ -257,13 +263,13 @@ let rec quote (d : lvl) (e : tp_env) (vA : vtp) (v : value) : tm =
     | VStar, VTop -> Top
     | VStar, VStar -> Star
     | VStar, VPi (vA, (x, fB))->
-        Pi ((x, quote d e Star vA), quote (d+1) ((x, vA)::e) Star (fB (vvar d)))
+        Pi ((x, quote d e VStar vA), quote (d+1) ((x, vA)::e) VStar (fB (vvar d)))
     (* terms: *)
     | VTop, VUnit -> Unit
-    | VPi (vA, (x, fB)), VLam (y, f) ->
-        Lam (x, quote (d+1) (fB (vvar d)) (f (vvar d)))
+    | VPi (vA, (_x, fB)), VLam (x, f) ->
+        Lam (x, quote (d+1) ((x, vA)::e) (fB (vvar d)) (f (vvar d)))
     | VPi (vA, (x, fB)), VN n -> (* eta-expansion of neutral terms at function type *)
-        Lam (x, quote (d+1) (fB (vvar d)) (VN (NApp (n, vvar d))))
+        Lam (x, quote (d+1) ((x, vA)::e) (fB (vvar d)) (VN (NApp (n, vvar d))))
     | _, VN n -> quote_neu d e n |> fst
     | _ -> failwith "ill-typed"
 
@@ -290,70 +296,30 @@ let norm (t : tm) (tA : tp) : tm =
     quote 0 [] (eval [] tA) (eval [] t)
 ```
 
-## Bidirectional typechecking
+To enable normalization of open terms -- we will encounter open terms during typechecking -- it
+suffices to slightly generalize `norm`. I'll delay the discussion of that generalization until we
+get to implementing the typechecker, in Part 2 of the series.
 
-Bidirectional typechecking is a technique that exploits a duality within terms to reduce the amount
-of typing information required from the programmer. We divide the syntax of terms into _normal
-terms_ and _neutral terms,_ precisely as we did for values, giving a syntactic characterization of
-beta-normal terms.
+## Next steps
 
-* **Normal terms** are associated with _constructors_ and are those terms whose typechecking is
-  also type-directed. In other words, we _check_ that a given normal term has a _given_ type.
-* **Neutral terms** are associated with _eliminators_ and are those terms from which their type may
-  be _synthesized._ In other words, we _infer_ the type of a neutral term in a given context.
+In this post, we built a normalization procedure for a small, dependently-typed calculus by
+following the Normalization by Evaluation strategy. That strategy consists broadly in the following
+steps.
 
-For example, in order to appropriately extend the context during typechecking, we classify a lambda
-abstraction as a normal term. Hence, its type is given, making the context extension
-straightforward to compute. In picking apart the given type of the lambda abstraction, we obtain
-the expected type of the abstraction's body, so we equally classify the abstraction body as normal.
+1. Define a semantics into which the language's syntax is to be interpreted. In doing so, separate
+   the introduction forms (normal terms) from the elimination forms (neutral terms), giving rise to
+   a syntactic characterization of beta-normal forms.
+2. Implement an evaluation procedure `eval` that interprets the syntax into the semantics. This
+   eliminates all beta-redeces from a given term.
+3. Implement the evaluation procedure's inverse, called `quote`. This procedure converts a semantic
+   term back into a syntactic term. This is a type-directed procedure. Typing information is
+   crucially used to enable eta-expansion. This allows our system to identify as definitionally
+   equal the terms `f` and `λx. f x`.
+4. A roundtrip through `eval` and `quote` brings a term into normal form. This ultimately gives us
+   a way to compare types which may contain terms requiring evaluation, as is common in a
+   dependently-typed system.
 
-Dually, we expect a function application to be neutral. To infer the type of an application, we
-first infer the type of its subject -- requiring that the function be neutral assures
-beta-normality -- and insist that the type be a Pi-type `(x:A) -> B`. This in turn reveals the
-expected type `A` of the function's argument, so we let the argument be normal.
-
-Here's a BNF grammar.
-
-```
-Normal terms  t, A, B  ::= λx.t | () | (x:A) -> B | ⊤ | ★ | s
-Neutral terms       s  ::= x | s t
-```
-
-This exposition shows intuitively that typechecking beta-normal terms is some way easier. We begin
-by typechecking a normal term against its given type. The term, being a stack of introduction
-forms, is structurally aligned with its type. In doing so, we can easily extend the context at
-binding sites. Typechecking switches modes into type inference, when the normal term switches to a
-neutral term. Information stored in the context comes into play upon encountering a variable, and
-furthermore when inferring the type of the subject of a function application.
-
-Although we could encode normal and neutral terms as two separate OCaml types, as we did our
-semantic domain, I won't bother. Instead, typechecking will raise an exception if it encounters
-such situations.
-
-Crucially, since this calculus is dependently-typed,
-substitutions -- `[t/x]A` denotes the capture-avoiding substitution of all free occurrences of `x`
-in `A` with `t` -- will appear in these typing rules.
-
-I'll give only rules that differ from the those of the simply-typed lambda calculus.
-
-```
-    G, x:A |- t : B              G(x) = A
----------------------------    ------------
-  G |- λx.t : (x:A) -> B        G |- x : A
-
-
-  G |- t : (x:A) -> B    G |- t' : A
---------------------------------------
-         G |- t t' : [t'/x]B
-
-
-  G |- A : ★    G, x:A |- B : ★
----------------------------------
-       G |- (x:A) -> B : ★
-
---------------      --------------
-  G |- ★ : ★          G |- ⊤ : ★
-```
-
-Yes, that's the type-in-type rule, meaning that the resulting system is unsound. I'll explore later
-how we might introduce universes to address that.
+Equipped with the normalization procedure implemented in this post, we're ready to code up the
+typechecker for this small language. The central challenge in implementing the typechecker, as
+usual, will be the handling of variables and substitutions. I'll approach that challenge in a few
+different ways in the next post.
