@@ -89,6 +89,10 @@ def sum = fun l -> fold_list (fun x y -> x + y) l 0
 def n = sum list
 ```
 
+The main technical challenge that I tackled in Eval was to implement a compiler for this language
+into a flat bytecode, encoded in binary, with full support for pattern matching, closures, and
+recursion.
+
 ## [Apollo][]
 
 
