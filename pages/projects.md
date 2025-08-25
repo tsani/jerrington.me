@@ -2,6 +2,66 @@
 title: Projects
 ---------------
 
+## [Nutcalc](https://github.com/tsani/nutcalc)
+
+Nutcalc is an implementation of the
+[inductive model of food](/posts/2025-02-20-induction-on-food.html).
+It's a programming language and REPL for describing foods, meals, recipes, meal plans, and a food
+journal in a principled, uniform way.
+
+A demo is available [here](https://nutcalc.jerrington.me).
+
+Here's a quick sample of what a Nutcalc program looks like.
+
+```
+1 cup 'cooked white rice' weighs 158 g:
+- 0.4 g fat + 4.3 g protein + 45 g carbs
+- 1.9 mg iron
+
+1 large 'chicken breast' weighs 120 g:
+- 4.3 g fat + 37 g protein
+- 89 mg sodium + 102 mg cholesterol + 1.2 mg iron + 307 mg potassium
+
+100 g broccoli:
+- 0.4 g fat + 7 g carbs + 2.8 g protein
+- 33 mg sodium + 316 mg potassium
+
+1 x 'chicken broccoli rice':
+- 1 large 'chicken breast' + 2 cup 'cooked white rice' + 200 g broccoli
+
+# ...
+
+1 x Monday:
+- 1 x 'oatmeal breakfast'
+- 1 x 'eggs sausage bacon toast lunch'
+- 1 x 'chicken broccoli rice'
+- 1 x 'protein shake'
+
+1 x '2025-02-20':
+- 0.5 cup 'dry steel-cut oats' + 50 g walnuts + 2 cup '3.25% milk'
+- 4 x 'breakfast sausage' + 4 large egg + 2 slice toast + 2 tsp butter
+- 1 medium 'chicken break' + 1 medium 'chicken leg' + 2.5 cup 'cooked white rice' + 200 g broccoli
+```
+
+And we can load this into the REPL and query nutrition facts.
+
+```
+$ nutcalc -i journal.nut
+nutcalc> facts 1 x 'oatmeal breakfast'
+energy: 1122.83 kcal
+protein: 44.30 g
+fat: 46.57 g
+carbs: 131.62 g
+water: 150.60 g
+calcium: 602.41 mg
+iron: 4.35 mg
+potassium: 930.49 mg
+sodium: 84.34 mg
+zinc: 2.71 mg
+cholesterol: 30.12 mg
+nutcalc>
+```
+
 ## [Eval][]
 
 Eval is an implementation of a strongly and statically typed functional
