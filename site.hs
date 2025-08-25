@@ -17,15 +17,15 @@ main :: IO ()
 main = hakyll $ do
   -- PAGES --------------------------------------------------------------------
 
+  -- match "pages/index.md" $ do
+  --   route $ constRoute "index.html"
+  --   compile $ do
+  --     pandocCompiler
+  --       >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
+  --       >>= relativizeUrls
+
   match "pages/index.md" $ do
     route $ constRoute "index.html"
-    compile $ do
-      pandocCompiler
-        >>= loadAndApplyTemplate "templates/default.html" myDefaultContext
-        >>= relativizeUrls
-
-  match "pages/blog.md" $ do
-    route $ constRoute "blog.html"
     compile $ do
       posts <- recentFirst =<< loadAll "posts/*"
       let ctx = listField "posts" postCtx (return posts) <> myDefaultContext
