@@ -115,6 +115,7 @@ and synth (cG : ctx) (t : tm) : tp =
         | Pi ((x, tA), tB) ->
             check cG t tA;
             (* and now we need to compute and return [t/x]tB *)
+        end
 ```
 
 In the code above, there are two TODOs to resolve. The first one is easy. We'll insist that before
@@ -170,7 +171,7 @@ let rec ctx2env (cG : ctx) : env * int = match cG with
 ```
 
 In order to 'count backwards' to compute the correct levels, `ctx2env` also computes as a
-by-product the length of the context. This will come in handy later.
+by-product the length of the context.
 
 Next, let's fill in the second TODO of the typechecker, following the gameplan I outlined above.
 
@@ -290,6 +291,8 @@ and synth (d : lvl) (eG : tp_env) (t : tm) : vtp =
 There are two things that remain a bit unpleasant about this implementation. In the last case of
 `check`, we need to check that `vA` equals `vA'`, and we do so by quoting both and comparing as
 terms. It's a bit wasteful to _fully_ quote both values if it turns out they aren't equal though.
+When they _are_ equal, we still end up performing three traversals: once for each quote, and once
+more for `tm_eq`.
 
 We can do better by implementing an equality procedure directly on values. Essentially, the
 procedure does the job of quoting (and hence eta-expanding) both values as long as they match,

@@ -123,6 +123,8 @@ type value =
     | VPi of (name * vtp) * (value -> vtp)
     | VTop
     | VStar
+
+and vtp = value
 ```
 
 This syntax of values is good enough for closed terms, having no free variables, but it is
@@ -153,6 +155,7 @@ and neu =
     | NVar of lvl
     | NApp of neu * value
 
+and vtp = value
 and lvl = int
 ```
 
