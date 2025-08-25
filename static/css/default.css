@@ -22,7 +22,6 @@ pre {
     max-width: 100vw;
     margin-left: -1ex;
     padding: 1ex;
-    border: 1px solid #fff0f0;
 }
 
 pre > code {
@@ -35,7 +34,6 @@ pre > code {
 
 code {
     padding: 0 0.25em;
-    border: 1px solid #fff0f0;
 }
 
 a {
