@@ -155,7 +155,7 @@ To build the environment we need, consider that `t` lives in context `cG` and `t
 `(x, tA)::cG` -- those contexts tell us how many free variables appear in these terms. We need to
 convert the context `cG` into a 'dummy environment' `eG` that maps each variable back to itself.
 Then, we can evaluate `t` in the environment `eG` to get a value `v` to form the
-environment `(x, v)::cG` to finally evaluate `tB`. This will replace the variable `x` with `v`, as
+environment `(x, v)::eG` to finally evaluate `tB`. This will replace the variable `x` with `v`, as
 required!
 
 To convert a context into such a 'dummy environment', let's implement `ctx2env`.
@@ -203,6 +203,7 @@ Let's implement a helper `ctx2tyenv` that can at least leverage the `eG` we alre
 ```ocaml
 let rec ctx2tyenv (cG : ctx) (eG : env) : tp_env =
     match cG, eG with
+    | [], [] -> []
     | (x, tA)::cG, _::eG ->
         (* cG |- tA : ★
            and eG is the dummy env of cG *)
@@ -236,7 +237,7 @@ is likely to be yet another application. We end up repeatedly calling `ctx2env` 
 the same context `cG`, meaning we repeatedly evaluate the types in that context.
 
 Moreover, in the event of nested applications, notice that we quote `vB` only to get back another
-Pi-type on whose subterms we then redundantly use `eval` again!
+Pi-type on whose subterms we would then redundantly `eval` again!
 
 ## Leaning on the semantics
 
@@ -252,36 +253,39 @@ Crucially, the only one that remains as a raw, syntactic term is the term under 
 checking or synthesis. What's more, that's the only term we **can't** evaluate first, as we don't
 yet know whether it's well-typed!
 
-Besides representing everything that ought to be in normal form as a value, we'll also track the
-_length_ of the context as a separate parameter in `check` and `synth`. This comes in handy when we
-need to generate a variable in the case for abstractions.
+Besides representing everything that ought to be in normal form as a value, we'll also want to
+avoiding using `ctx2env` to generate the 'dummy' environment we need when calling `eval` during
+typechecking. To do so, the typechecker will also track a dummy environment. Whenever it goes under
+a binder, we will extend not only the typing environment but also the dummy environment. To extend
+the dummy environment, we need to generate a new variable whose level is the current length of the
+dummy environment. To avoid computing this length, we'll also track it as we go.
 
 ```ocaml
-let rec check (d : lvl) (eG : tp_env) (t : tm) (vA : vtp) : unit =
+let rec check (d : lvl) (e : env) (eG : tp_env) (t : tm) (vA : vtp) : unit =
     match vA, t with
     | VStar, Top -> ()
     | VStar, Star -> ()
     | VStar, Pi ((x, tA), tB) ->
-        check d eG tA VStar;
-        let vA = eval eG tA in
-        check (d+1) ((x, vA)::eG) tB VStar
+        check d e eG tA VStar;
+        let vA = eval e tA in
+        check (d+1) ((x, vvar d)::e) ((x, vA)::eG) tB VStar
     | VTop, Unit -> ()
     | VPi ((_, vA), fB), Lam (x, t) ->
-        check (d+1) ((x, vA)::eG) t (fB (vvar d))
+        check (d+1) ((x, vvar d)::e) ((x, vA)::eG) t (fB (vvar d))
     | vA, s ->
         let vA' = synth d eG s in
         let tA = quote d eG VStar vA in
         let tA' = quote d eG VStar vA' in
         if not (tm_eq tA tA') then failwith "type mismatch"
 
-and synth (d : lvl) (eG : tp_env) (t : tm) : vtp =
+and synth (d : lvl) (e : env) (eG : tp_env) (t : tm) : vtp =
     match t with
     | Var i -> List.nth eG i |> snd
     | App (s, t) ->
-        begin match synth d eG s with
+        begin match synth d e eG s with
         | VPi ((x, vA), fB) ->
-            check d eG t vA;
-            let v = eval eG t in
+            check d e eG t vA;
+            let v = eval e t in
             fB v
         | _ -> failwith "ill-typed: application subject not a function"
         end
@@ -503,29 +507,29 @@ and neu_eq (d : lvl) (eG : tp_env) (n1 : neu) (n2 : neu) : vtp option
         end
     | _ -> None
 
-let rec check (d : lvl) (eG : tp_env) (t : tm) (vA : vtp) : unit =
+let rec check (d : lvl) (e : env) (eG : tp_env) (t : tm) (vA : vtp) : unit =
     match vA, t with
     | VStar, Top -> ()
     | VStar, Star -> ()
     | VStar, Pi ((x, tA), tB) ->
-        check d eG tA VStar;
-        let vA = eval eG tA in
-        check (d+1) ((x, vA)::eG) tB VStar
+        check d e eG tA VStar;
+        let vA = eval e tA in
+        check (d+1) ((x, vvar d)::e) ((x, vA)::eG) tB VStar
     | VTop, Unit -> ()
     | VPi ((_, vA), fB), Lam (x, t) ->
-        check (d+1) ((x, vA)::eG) t (fB (vvar d))
+        check (d+1) ((x, vvar d)::e) ((x, vA)::eG) t (fB (vvar d))
     | vA, s ->
-        let vA' = synth d eG s in
+        let vA' = synth d e eG s in
         if not (val_eq d eG vA vA' VStar) then failwith "type mismatch"
 
-and synth (d : lvl) (eG : tp_env) (t : tm) : vtp =
+and synth (d : lvl) (e : env) (eG : tp_env) (t : tm) : vtp =
     match t with
     | Var i -> List.nth eG i |> snd
     | App (s, t) ->
         begin match synth d eG s with
         | VPi ((x, vA), fB) ->
-            check d eG t vA;
-            let v = eval eG t in
+            check d e eG t vA;
+            let v = eval e t in
             fB v
         | _ -> failwith "ill-typed: application subject not a function"
         end
@@ -537,9 +541,9 @@ type, both represented as syntax and assumed to be closed.
 
 ```ocaml
 let check_user (t : tm) (tA : tp) : unit =
-    check 0 [] tA VStar; (* check that the type is a valid type *)
+    check 0 [] [] tA VStar; (* check that the type is a valid type *)
     let vA = eval [] tA in (* evaluate it, to then guide checking of the user's program *)
-    check 0 [] t vA (* check the user's program *)
+    check 0 [] [] t vA (* check the user's program *)
 ```
 
 Depending on the situation, after evaluation, we might simply evaluate the user's program, or
